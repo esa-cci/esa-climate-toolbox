@@ -1,0 +1,12 @@
+name: ect
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  # Python
+  - python >=3.8
+  # Required
+  - xcube >= 0.12.1
+  - xcube-cci >= 0.9.9
+
+
