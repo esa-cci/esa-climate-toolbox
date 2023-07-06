@@ -49,7 +49,7 @@ build_script:
   - cd ..
   - git clone https://github.com/dcs4cop/xcube-cci.git
   - cd xcube-cci
-  - mamba install -c conda-forge lxml aiohttp nest-asyncio pydap=3.3
+  - mamba install -c conda-forge lxml aiohttp nest-asyncio pydap=3.3  gdal<3.6.4
   - pip install -e .
 
   # Environments created by mamba can't be referenced by name from conda
