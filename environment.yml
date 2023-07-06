@@ -8,5 +8,7 @@ dependencies:
   # Required
   - xcube >= 0.12.1
   - xcube-cci >= 0.9.9
-
+  # Test libs
+  - pytest
+  - pytest-cov
 

@@ -1,0 +1,66 @@
+version: '{build}'
+
+image:
+  - macOS
+  - Ubuntu2004
+
+configuration: Release
+
+platform:
+  - x64
+
+for:
+-
+  matrix:
+    only:
+      - image: macos
+  install:
+    - curl -L https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh > miniconda.sh
+    - bash miniconda.sh -b -p $HOME/miniconda
+-
+  matrix:
+    only:
+      - image: Ubuntu2004
+  install:
+    - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    - bash miniconda.sh -b -p $HOME/miniconda
+
+build_script:
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  # - conda update -q conda # makes travis build fail
+  # Useful for debugging any issues with conda
+  - conda info -a
+  - conda init bash
+  - export CONDA_BASE=$(conda info --base)
+  - source $CONDA_BASE/etc/profile.d/conda.sh
+
+  # Install mamba as a dramatically faster conda replacement. Specifying a
+  # fixed version makes the installation of mamba itself much faster, and
+  # avoids potential breakage due to changes in mamba behaviour.
+  - conda install -c conda-forge mamba=1.0.0
+
+  - git clone https://github.com/dcs4cop/xcube.git
+  - cd xcube
+  - mamba env create
+  - conda activate xcube
+  - pip install -e .
+  - cd ..
+  - git clone https://github.com/dcs4cop/xcube-cci.git
+  - cd xcube-cci
+  - mamba install -c conda-forge lxml aiohttp nest-asyncio pydap=3.3
+  - pip install -e .
+
+  # Environments created by mamba can't be referenced by name from conda
+  # (presumably a bug), so we use an explicit path instead.
+#  - mamba env create --prefix $HOME/mamba-env --file environment.yml
+  # install pytest for testing
+#  - mamba install --prefix $HOME/mamba-env pytest
+#  - conda activate $HOME/mamba-env
+  - cd ..
+  - conda list
+  - pip install -e .
+
+  # Run the test suite.
+  - pytest -v --cov=esa-climate-toolbox test
