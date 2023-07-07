@@ -1,3 +1,5 @@
+## Changes in 0.2 (in development)
+
 ## Changes in 0.1
 
 * Added registrations of `esa-cdc` and  `esa-climate-data-centre` to access 
