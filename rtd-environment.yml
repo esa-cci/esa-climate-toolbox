@@ -1,0 +1,22 @@
+name: rtd-ect
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  # Python
+  - python >=3.8
+  # Required
+  - gdal >=3.0,<3.6.3
+  - xcube >= 1.0.2
+  - xcube-cci >= 0.9.9
+  # Test libs
+  - pytest
+  - pytest-cov
+  # RTD specials
+  - pip:
+      - sphinx
+      - sphinx_rtd_theme
+      - sphinx-argparse
+      - sphinx-autodoc-annotation
+      - recommonmark
+      - mock

@@ -6,6 +6,9 @@ import sys
 src_root = os.path.abspath('../..')
 sys.path.insert(0, src_root)
 
+# noinspection PyUnresolvedReferences
+import sphinx_rtd_theme
+
 from esa_climate_toolbox.version import version
 
 # -- Project information
