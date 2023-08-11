@@ -10,7 +10,7 @@ from esa_climate_toolbox.version import version
 
 # -- Project information
 
-project = 'Lumache'
+project = 'ESA Climate Toolbox'
 copyright = '2023, Brockmann Consult GmbH'
 author = 'Brockmann Consult GmbH'
 
