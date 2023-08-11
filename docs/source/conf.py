@@ -1,5 +1,11 @@
 # Configuration file for the Sphinx documentation builder.
 
+import os
+import sys
+
+src_root = os.path.abspath('../..')
+sys.path.insert(0, src_root)
+
 from esa_climate_toolbox.version import version
 
 # -- Project information
