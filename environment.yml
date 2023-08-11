@@ -7,7 +7,7 @@ dependencies:
   - python >=3.8
   # Required
   - gdal >=3.0,<3.6.3
-  - xcube >= 0.12.1
+  - xcube >= 1.0.2
   - xcube-cci >= 0.9.9
   # Test libs
   - pytest
