@@ -15,7 +15,7 @@ for:
     only:
       - image: macos
   install:
-    - curl -L https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh > miniconda.sh
+    - curl -L https://repo.anaconda.com/miniconda/Miniconda3-py310_23.3.1-0-MacOSX-x86_64.sh > miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
 -
   matrix:
