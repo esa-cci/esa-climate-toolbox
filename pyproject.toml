@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling", "gdal>=3.0,<3.6.3"]
+build-backend = "hatchling.build"
+
+[project]
+name = "esa_climate_toolbox"
+version = "0.1"
+authors = [
+  { name="ESA Climate Toolbox Development Team" },
+]
+description = "The ESA Climate Toolbox is designed to provide access to CCI data from the ESA Climate Data Centre."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/esa-cci/esa-climate-toolbox"
+"Bug Tracker" = "https://github.com/esa-cci/esa-climate-toolbox/issues"
