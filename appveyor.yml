@@ -39,7 +39,7 @@ build_script:
   # Install mamba as a dramatically faster conda replacement. Specifying a
   # fixed version makes the installation of mamba itself much faster, and
   # avoids potential breakage due to changes in mamba behaviour.
-  - conda install -c conda-forge mamba=1.5.0
+  - conda install -c conda-forge mamba
 
   - git clone https://github.com/dcs4cop/xcube.git
   - cd xcube
