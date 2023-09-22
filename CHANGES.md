@@ -1,6 +1,7 @@
 ## Changes in 0.2 (in development)
 
 * Added documentation
+* Added example notebooks
 
 ## Changes in 0.1
 
