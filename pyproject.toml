@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling", "gdal>=3.0,<3.6.3"]
-build-backend = "hatchling.build"
+requires = ["setuptools", "setuptools-scm", "gdal>=3.0,<3.6.3"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "esa_climate_toolbox"
-version = "0.1"
+version = "0.2.dev0"
 authors = [
   { name="ESA Climate Toolbox Development Team" },
 ]
@@ -21,6 +21,9 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
+[project.entry-points."xcube_plugins"]
+    esa-climate-toolbox = "esa_climate_toolbox.plugin:init_plugin"
 
 [project.urls]
 "Homepage" = "https://github.com/esa-cci/esa-climate-toolbox"

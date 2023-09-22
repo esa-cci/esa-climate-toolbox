@@ -27,6 +27,7 @@ from esa_climate_toolbox.constants import CDC_SHORT_DATA_STORE_ID
 
 
 def init_plugin(ext_registry: extension.ExtensionRegistry):
+    """ESA Climate Toolbox extensions"""
     ext_registry.add_extension(
         loader=extension.import_component(
             'xcube_cci.dataaccess:CciOdpDataStore'),
