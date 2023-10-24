@@ -33,10 +33,10 @@ def init_plugin(ext_registry: extension.ExtensionRegistry):
             'xcube_cci.dataaccess:CciOdpDataStore'),
         point=EXTENSION_POINT_DATA_STORES,
         name=CDC_SHORT_DATA_STORE_ID,
-        description='ESA Climate Data Centre')
+        description='ESA Open Data Portal')
     ext_registry.add_extension(
         loader=extension.import_component(
             'xcube_cci.dataaccess:CciOdpDataStore'),
         point=EXTENSION_POINT_DATA_STORES,
         name=CDC_LONG_DATA_STORE_ID,
-        description='ESA Climate Data Centre')
+        description='ESA Open Data Portal')

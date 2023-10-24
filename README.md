@@ -4,18 +4,20 @@
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/esa-climate-toolbox/badges/license.svg
 )](https://anaconda.org/conda-forge/esa-climate-toolbox)
 
-# esa-climate-toolbox
+# ESA CCI Toolbox
 
-The ESA Climate Toolbox is designed to provide access to CCI data from the ESA Climate Data Centre. Also, it contains functions to operate on this data.
+The ESA CCI Toolbox is designed to provide access to CCI data from the ESA 
+Open Data Portal. 
+Also, it contains functions to operate on this data.
 
 ## Installation into a new environment with conda
 
-The ESA Climate Toolbox and all necessary dependencies are available
+The ESA CCI Toolbox and all necessary dependencies are available
 on [conda-forge](https://conda-forge.org/), and can be installed using the
 [conda package manager](https://docs.conda.io/projects/conda/en/latest/).
 The conda package manager itself can be obtained in the [miniconda
 distribution](https://docs.conda.io/en/latest/miniconda.html). 
-Once conda is installed, the ESA Climate Toolbox can be installed like this:
+Once conda is installed, the ESA CCI Toolbox can be installed like this:
 
 ```
 $ conda create --name ect --channel conda-forge esa-climate-toolbox
@@ -26,12 +28,12 @@ The name of the environment may be freely chosen.
 
 #### Installation into an existing environment with conda
 
-The ESA Climate Toolbox can also be installed into an existing conda 
+The ESA CCI Toolbox can also be installed into an existing conda 
 environment.
 To do so, execute this command with the existing environment activated:
 
 ```
-$ conda install --channel conda-forge xcube-cci
+$ conda install --channel conda-forge esa-climate-toolbox
 ```
 
 Any necessary dependencies will be installed or updated if they are not already 
@@ -39,7 +41,7 @@ installed in a compatible version.
 
 #### Installation into an existing environment from the repository
 
-If you want to install the ESA Climate Toolbox directly from the git repository 
+If you want to install the ESA CCI Toolbox directly from the git repository 
 (for example in order to use an unreleased version or to modify the code), 
 you can do so as follows:
 
@@ -53,7 +55,7 @@ $ pip install -e .
 
 ## Testing
 
-You can run the unit tests for the ESA Climate Toolbox by executing
+You can run the unit tests for the ESA CCI Toolbox by executing
 
 ```
 $ pytest
@@ -72,7 +74,7 @@ This will write a coverage report to `htmlcov/index.html`.
 
 ## Use
 
-Jupyter notebooks demonstrating the use of the ESA Climate Toolbox can be found
+Jupyter notebooks demonstrating the use of the ESA CCI Toolbox can be found
 in the `notebooks/` subdirectory of the repository.
 
 ## Releasing

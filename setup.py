@@ -36,10 +36,10 @@ with open('esa_climate_toolbox/version.py') as f:
 setup(
     name="esa_climate_toolbox",
     version=version,
-    description='A toolbox that provides access to data from the ESA Climate '
-                'Data Centre as well as functions to work with this data.',
+    description='A toolbox that provides access to data from the ESA Open '
+                'Data Portal as well as functions to work with this data.',
     license='MIT',
-    author='Climate Toolbox Development Team',
+    author='CCI Toolbox Development Team',
     packages=packages,
     include_package_data=True,
     install_requires=requirements,

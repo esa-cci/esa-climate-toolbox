@@ -3,6 +3,7 @@
 * Added documentation
 * Added example notebooks
 * Fixed registration of xcube plugins
+* Adjusted names
 
 ## Changes in 0.1
 

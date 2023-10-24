@@ -3,12 +3,12 @@ requires = ["setuptools", "setuptools-scm", "gdal>=3.0,<3.6.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "esa_climate_toolbox"
+name = "esa_cci_toolbox"
 version = "0.2.dev0"
 authors = [
-  { name="ESA Climate Toolbox Development Team" },
+  { name="ESA CCI Toolbox Development Team" },
 ]
-description = "The ESA Climate Toolbox is designed to provide access to CCI data from the ESA Climate Data Centre."
+description = "The ESA CCI Toolbox is designed to provide access to CCI data from the ESA Open Data Portal."
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
