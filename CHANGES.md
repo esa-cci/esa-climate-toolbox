@@ -1,3 +1,5 @@
+## Changes in 0.2.2 (in development)
+
 ## Changes in 0.2.1
 
 * Minor packaging update
