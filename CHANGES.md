@@ -1,4 +1,4 @@
-## Changes in 0.2 (in development)
+## Changes in 0.2
 
 * Added documentation
 * Added example notebooks
