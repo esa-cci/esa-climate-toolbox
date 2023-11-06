@@ -3,8 +3,8 @@ requires = ["setuptools", "setuptools-scm", "gdal>=3.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "esa_cci_toolbox"
-version = "0.2"
+name = "esa_climate_toolbox"
+version = "0.2.1"
 authors = [
   { name="ESA CCI Toolbox Development Team" },
 ]
