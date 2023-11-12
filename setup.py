@@ -29,13 +29,13 @@ packages = find_packages(exclude=["test", "test.*"])
 
 # Same effect as "from esa_climate_toolbox import version",
 # but avoids importing esa_climate_toolbox:
-version = None
+__version__ = None
 with open('esa_climate_toolbox/version.py') as f:
     exec(f.read())
 
 setup(
     name="esa_climate_toolbox",
-    version=version,
+    version=__version__,
     description='A toolbox that provides access to data from the ESA Open '
                 'Data Portal as well as functions to work with this data.',
     license='MIT',

@@ -19,5 +19,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .version import __version__
-__version__ = __version__
+
+__author__ = "Norman Fomferra (Brockmann Consult GmbH)"
+
+
+class _Undefined:
+    """
+    Represents the UNDEFINED value.
+    """
+
+    def __str__(self):
+        return "UNDEFINED"
+
+    def __repr__(self):
+        return "UNDEFINED"
+
+
+#: Singleton value used to indicate an undefined state.
+UNDEFINED = _Undefined()
