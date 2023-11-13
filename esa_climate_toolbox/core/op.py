@@ -24,8 +24,7 @@ Description
 ===========
 
 This modules provides classes and functions allowing to maintain *operations*.
-Operations can be called from the command-line interface,
-may be referenced from within processing workflows, or may be called remotely
+Operations may be referenced from within processing workflows or may be called remotely
 e.g. from graphical user interface or web frontend.
 An operation (:py:class:`Operation`) comprises a Python callable and some
 additional meta-information (:py:class:`OpMetaInfo`) that allows for automatic
