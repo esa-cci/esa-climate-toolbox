@@ -9,7 +9,7 @@ sys.path.insert(0, src_root)
 # noinspection PyUnresolvedReferences
 import sphinx_rtd_theme
 
-from esa_climate_toolbox.version import version
+from esa_climate_toolbox.version import __version__
 
 # -- Project information
 
@@ -17,7 +17,7 @@ project = 'ESA CCI Toolbox'
 copyright = '2023, Brockmann Consult GmbH'
 author = 'Brockmann Consult GmbH'
 
-release = version
+release = __version__
 
 # -- General configuration
 
