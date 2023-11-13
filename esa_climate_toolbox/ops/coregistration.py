@@ -88,13 +88,13 @@ def coregister(ds_primary: xr.Dataset,
     :param method_us: Interpolation method to use for upsampling.
     :param method_ds: Interpolation method to use for downsampling.
     :param monitor: a progress monitor.
-    :return: The replica dataset resampled on the grid of the master
+    :return: The replica dataset resampled on the grid of the primary
     """
     try:
         grids = (('replica', ds_replica['lat'].values, -90),
                  ('replica', ds_replica['lon'].values, -180),
-                 ('master', ds_primary['lat'].values, -90),
-                 ('master', ds_primary['lon'].values, -180))
+                 ('primary', ds_primary['lat'].values, -90),
+                 ('primary', ds_primary['lon'].values, -180))
     except KeyError:
         raise ValidationError(
             'Coregistration requires that both datasets are spatial datasets '
