@@ -9,6 +9,10 @@ configuration: Release
 platform:
   - x64
 
+environment:
+  # For the unit-tests, disable Numba JIT, otherwise Coverage wont reach the actual Python code
+  NUMBA_DISABLE_JIT: 1
+
 for:
 -
   matrix:
