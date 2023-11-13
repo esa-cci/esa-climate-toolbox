@@ -44,6 +44,9 @@ setup(
     include_package_data=True,
     install_requires=requirements,
     entry_points={
+        'esa_climate_toolbox_plugins': [
+            'esa_climate_toolbox_ops = esa_climate_toolbox.ops:ect_init'
+        ],
         'xcube_plugins': [
             'esa-climate-toolbox = esa_climate_toolbox.plugin:init_plugin',
         ]
