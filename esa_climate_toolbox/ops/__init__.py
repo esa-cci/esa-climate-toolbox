@@ -23,10 +23,11 @@
 Description
 ===========
 
-The ``ops`` package comprises all specific operation and processor implementations.
+The ``ops`` package comprises all specific operation and processor
+implementations.
 
 This is a plugin package automatically imported by the installation script's
-entry point ``cate_ops`` see the projects ``setup.py`` file).
+entry point ``esa_climate_toolbox_ops`` see the projects ``setup.py`` file).
 
 Verification
 ============
@@ -42,8 +43,8 @@ Functions
 """
 
 
-# We need ect_init being accessible to use by the plugin registering logic before any
-# attempt to import any of the submodules is made.
+# We need ect_init being accessible to use by the plugin registering logic
+# before any attempt to import any of the submodules is made.
 
 
 def ect_init():
@@ -62,6 +63,7 @@ from .resampling import upsample_2d
 from .subset import subset_spatial
 from .subset import subset_temporal
 from .subset import subset_temporal_index
+from.utility import merge
 
 __all__ = [
     # .resampling
@@ -77,5 +79,7 @@ __all__ = [
     # .subset
     'subset_spatial',
     'subset_temporal',
-    'subset_temporal_index'
+    'subset_temporal_index',
+    # .utility
+    'merge'
 ]

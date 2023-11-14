@@ -24,6 +24,8 @@ classifiers = [
 
 [project.entry-points."xcube_plugins"]
     esa-climate-toolbox = "esa_climate_toolbox.plugin:init_plugin"
+[project.entry-points."esa_climate_toolbox_plugins"]
+    esa-climate-esa_climate_toolbox_ops = "esa_climate_toolbox.ops:ect_init"
 
 [project.urls]
 "Homepage" = "https://github.com/esa-cci/esa-climate-toolbox"
