@@ -24,8 +24,6 @@ Description
 ===========
 
 This modules provides classes and functions allowing to maintain *operations*.
-Operations may be referenced from within processing workflows or may be called remotely
-e.g. from graphical user interface or web frontend.
 An operation (:py:class:`Operation`) comprises a Python callable and some
 additional meta-information (:py:class:`OpMetaInfo`) that allows for automatic
 input validation, input value conversion, monitoring, and inter-connection of
@@ -90,8 +88,8 @@ class Operation:
                 pass
 
         self._wrapped_op = wrapped_op
-        self._op_meta_info = op_meta_info or \
-                             OpMetaInfo.introspect_operation(wrapped_op)
+        self._op_meta_info = \
+            op_meta_info or OpMetaInfo.introspect_operation(wrapped_op)
         for attr_name in [
             '__module__', '__name__', '__qualname__', '__doc__', '__file__'
         ]:
@@ -251,7 +249,8 @@ class Operation:
 
 class OpRegistry:
     """
-    An operation registry allows for addition, removal, and retrieval of operations.
+    An operation registry allows for addition, removal, and retrieval of
+    operations.
     """
 
     def __init__(self):
