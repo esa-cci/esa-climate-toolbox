@@ -27,6 +27,9 @@ import os.path
 import sys
 
 # noinspection PyUnresolvedReferences
+from .op import list_operations
+from .op import get_op
+from .op import get_op_meta_info
 from .op import new_expression_op
 from .op import new_subprocess_op
 from .op import op
@@ -38,8 +41,6 @@ from .op import OP_REGISTRY
 
 # noinspection PyUnresolvedReferences
 from ..util.monitor import ChildMonitor
-from ..util.monitor import ConsoleMonitor
-from ..util.monitor import Monitor
 
 # noinspection PyUnresolvedReferences
 from ..util.opmetainf import OpMetaInfo
