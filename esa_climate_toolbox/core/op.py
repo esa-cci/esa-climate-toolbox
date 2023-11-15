@@ -27,7 +27,7 @@ This modules provides classes and functions allowing to maintain *operations*.
 An operation (:py:class:`Operation`) comprises a Python callable and some
 additional meta-information (:py:class:`OpMetaInfo`) that allows for automatic
 input validation, input value conversion, monitoring, and inter-connection of
-multiple operations using processing workflows and steps.
+multiple operations.
 
 Operations are registered in operation registries (:py:class:`OpRegistry`),
 the default operation registry is accessible via the global, read-only
@@ -409,10 +409,10 @@ def op(tags=UNDEFINED,
     :param version: An optional version string.
     :param res_pattern: An optional pattern that will be used to generate the
         names for data resources that are used to hold a reference to the
-        objects returned by the operation and that are cached in a Toolbox
-        workspace. Currently, the only pattern variable that is supported and
-        that must be present is ``{index}`` which will be replaced by an integer
-        number that is guaranteed to produce a unique resource name.
+        objects returned by the operation. Currently, the only pattern variable
+        that is supported and that must be present is ``{index}`` which will be
+        replaced by an integer number that is guaranteed to produce a unique
+        resource name.
     :param deprecated: An optional boolean or a string. If a string is used, it
         should explain why the operation has been deprecated and which new
         operation to use instead. If set to ``True``, the operation's doc-string
@@ -500,15 +500,11 @@ def op_input(input_name: str,
         the deprecation.
     :param position: The zero-based position of an input.
     :param context: If ``True``, the value of the operation input will be a
-        dictionary representing the current execution context. For example,
-        when the operation is executed from a workflow, the dictionary will
-        hold at least three entries: ``workflow`` provides the current workflow,
-        ``step`` is the currently executed step, and ``value_cache`` which is a
-        mapping from step identifiers to step outputs. If *context* is a string,
-        the value of the operation input will be the result of evaluating the
-        string as Python expression with the current execution context as local
-        environment. This means, *context* may be an expression such as
-        'value_cache', 'workspace.base_dir', 'step', 'step.id'.
+        dictionary representing the current execution context.  If *context* is
+        a string, the value of the operation input will be the result of
+        evaluating the string as Python expression with the current execution
+        context as local environment. This means, *context* may be an expression
+        such as 'value_cache', 'workspace.base_dir', 'step', 'step.id'.
     :param properties: Other properties (keyword arguments) that will be added
         to the meta-information of the named output.
     :param registry: Optional operation registry.
