@@ -241,7 +241,9 @@ def _get_fill_value(fill_value, src, out):
 # therefore all arg types must be either primitive scalars or numpy arrays.
 # Key-value args are not allowed.
 #
-@jit(nopython=True)
+# disabled jit while numba does not support masked arrays
+# https://github.com/numba/numba/issues/1834
+# @jit(nopython=False)
 def _resample_2d(
         src, mask, use_mask, ds_method, us_method, fill_value, mode_rank, out
 ):
@@ -293,7 +295,9 @@ def _resample_2d(
 # therefore all arg types must be either primitive scalars or numpy arrays.
 # Key-value args are not allowed.
 #
-@jit(nopython=True)
+# disabled jit while numba does not support masked arrays
+# https://github.com/numba/numba/issues/1834
+# @jit(nopython=False)
 def _upsample_2d(src, mask, use_mask, method, fill_value, out):
     src_w = src.shape[-1]
     src_h = src.shape[-2]
@@ -386,7 +390,9 @@ def _upsample_2d(src, mask, use_mask, method, fill_value, out):
 # therefore all arg types must be either primitive scalars or numpy arrays.
 # Key-value args are not allowed.
 #
-@jit(nopython=True)
+# disabled jit while numba does not support masked arrays
+# https://github.com/numba/numba/issues/1834
+# @jit(nopython=False)
 def _downsample_2d(src, mask, use_mask, method, fill_value, mode_rank, out):
     src_w = src.shape[-1]
     src_h = src.shape[-2]
