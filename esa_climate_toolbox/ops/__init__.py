@@ -33,8 +33,8 @@ Verification
 ============
 
 The module's unit-tests are located in
-`test/ops <https://github.com/esa-cci/esa-climate-toolbox/tree/main/test/ops>`_ and
-may be executed using
+`test/ops <https://github.com/esa-cci/esa-climate-toolbox/tree/main/test/ops>`_
+and may be executed using
 ``$ py.test test/ops/test_<MODULE>.py --cov=esa-climate-toolbox/ops/<MODULE>.py``
 for extra code coverage information.
 
@@ -63,23 +63,28 @@ from .resampling import upsample_2d
 from .subset import subset_spatial
 from .subset import subset_temporal
 from .subset import subset_temporal_index
+from .timeseries import tseries_mean
+from .timeseries import tseries_point
 from.utility import merge
 
 __all__ = [
-    # .resampling
-    'resample_2d',
-    'downsample_2d',
-    'upsample_2d',
+    # .coregistration
+    'coregister',
     # .normalize
     'normalize',
     'adjust_temporal_attrs',
     'adjust_spatial_attrs',
-    # .coregistration
-    'coregister',
+    # .resampling
+    'resample_2d',
+    'downsample_2d',
+    'upsample_2d',
     # .subset
     'subset_spatial',
     'subset_temporal',
     'subset_temporal_index',
+    # .timeseries
+    'tseries_point',
+    'tseries_mean',
     # .utility
     'merge'
 ]
