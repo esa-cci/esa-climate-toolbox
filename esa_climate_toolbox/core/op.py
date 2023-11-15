@@ -50,6 +50,7 @@ from ..util.process import ProcessOutputMonitor
 from ..util.tmpfile import del_temp_file
 from ..util.tmpfile import new_temp_file
 from ..util.misc import object_to_qualified_name
+from ..util.misc import to_list
 from ..version import __version__
 
 __author__ = "Norman Fomferra (Brockmann Consult GmbH)"
@@ -380,6 +381,68 @@ class _DefaultOpRegistry(OpRegistry):
 #: The default operation registry of type
 #: :py:class:`esa_climate_toolbox.core.op.OpRegistry`.
 OP_REGISTRY = _DefaultOpRegistry()
+
+
+def list_operations(op_registry: OpRegistry = OP_REGISTRY,
+                    include_qualified_name: bool = False):
+    op_regs = op_registry.op_registrations
+
+    def _is_op_selected(op_name: str,
+                        op_reg,
+                        tag_part: str,
+                        internal_only: bool,
+                        deprecated_only: bool):
+        if op_name.startswith('_'):
+            # do not list private operations
+            return False
+        if deprecated_only \
+                and not op_reg.op_meta_info.header.get('deprecated'):
+            # do not list non-deprecated operations
+            # if user wants to see what is deprecated
+            return False
+        tags = to_list(op_reg.op_meta_info.header.get('tags'))
+        if tags:
+            # Tagged operations
+            if internal_only:
+                if 'internal' not in tags:
+                    return False
+            else:
+                if 'internal' in tags:
+                    return False
+            if tag_part:
+                tag_part = tag_part.lower()
+                if isinstance(tags, list):
+                    return any(tag_part in tag.lower() for tag in tags)
+                elif isinstance(tags, str):
+                    return tag_part in tags.lower()
+        elif internal_only or tag_part:
+            # Untagged operations
+            return False
+        return True
+    if include_qualified_name:
+        return sorted(
+            [(op_name, op_reg.op_meta_info.qualified_name)
+             for op_name, op_reg in op_regs.items()
+             if _is_op_selected(op_name, op_reg, None, False, False)]
+        )
+    else:
+        return sorted(
+            [op_name for op_name, op_reg in op_regs.items()
+            if _is_op_selected(op_name, op_reg, None, False, False)]
+        )
+
+
+def get_op_meta_info(
+        op_name: str, op_registry: OpRegistry = OP_REGISTRY
+) -> Dict:
+    op = op_registry.get_op(op_name)
+    return op.op_meta_info.to_json_dict()
+
+
+def get_op(
+        op_name: str, op_registry: OpRegistry = OP_REGISTRY
+) -> Dict:
+    return op_registry.get_op(op_name)
 
 
 def op(tags=UNDEFINED,
