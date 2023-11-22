@@ -57,6 +57,7 @@ from .coregistration import coregister
 from .normalize import adjust_spatial_attrs
 from .normalize import adjust_temporal_attrs
 from .normalize import normalize
+from .outliers import detect_outliers
 from .resampling import downsample_2d
 from .resampling import resample_2d
 from .resampling import upsample_2d
@@ -74,6 +75,8 @@ __all__ = [
     'normalize',
     'adjust_temporal_attrs',
     'adjust_spatial_attrs',
+    # .outliers
+    'detect_outliers',
     # .resampling
     'resample_2d',
     'downsample_2d',
