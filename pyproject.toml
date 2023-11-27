@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
+requires = ["setuptools", "setuptools-scm", "aiohttp", "lxml", "nest-asyncio", "pydap==3.3"]
 build-backend = "setuptools.build_meta"
 
 [project]

@@ -19,9 +19,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-CDC_SHORT_DATA_STORE_ID = 'esa-cdc'
-CDC_LONG_DATA_STORE_ID = 'esa-climate-data-centre'
-ZARR_DATA_STORE_ID = 'esa-cdc-zarr'
+from xcube.core.timecoord import get_timestamps_from_string
 
-MONTHS = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY',
-          'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']
+from ..constants import MONTHS
+
+
+def get_time_strings_from_string(string: str) -> (str, str):
+    first_time, second_time = get_timestamps_from_string(string)
+    if first_time:
+        first_time = first_time.isoformat()
+    if second_time:
+        second_time = second_time.isoformat()
+    if not first_time:
+        for i, month in enumerate(MONTHS):
+            if month in string:
+                first_time = i + 1
+                break
+    return first_time, second_time

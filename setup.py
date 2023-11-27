@@ -42,6 +42,11 @@ setup(
     author='CCI Toolbox Development Team',
     packages=packages,
     include_package_data=True,
+    data_files=[('esa_climate_toolbox', [
+        'esa_climate_toolbox/ds/data/excluded_data_sources',
+        'esa_climate_toolbox/ds/data/dataset_states.json']
+                 )],
+
     install_requires=requirements,
     entry_points={
         'xcube_plugins': [

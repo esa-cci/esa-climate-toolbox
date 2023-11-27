@@ -6,8 +6,11 @@ dependencies:
   # Python
   - python >=3.8
   # Required
+  - aiohttp >= 3.6
+  - lxml >= 4.5
+  - nest-asyncio >= 1.3
+  - pydap == 3.3
   - xcube >= 1.3.0
-  - xcube-cci >= 0.9.9
   # Test libs
   - pytest
   - pytest-cov

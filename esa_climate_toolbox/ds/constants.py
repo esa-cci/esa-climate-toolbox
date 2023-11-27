@@ -19,9 +19,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-CDC_SHORT_DATA_STORE_ID = 'esa-cdc'
-CDC_LONG_DATA_STORE_ID = 'esa-climate-data-centre'
-ZARR_DATA_STORE_ID = 'esa-cdc-zarr'
+from ..constants import CDC_SHORT_DATA_STORE_ID
 
-MONTHS = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY',
-          'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']
+DATASET_OPENER_ID = f'dataset:zarr:{CDC_SHORT_DATA_STORE_ID}'
+DATA_ARRAY_NAME = 'var_data'
+OPENSEARCH_CEDA_URL = 'https://archive.opensearch.ceda.ac.uk/opensearch/request'
+CCI_ODD_URL = 'https://archive.opensearch.ceda.ac.uk/' \
+              'opensearch/description.xml?parentIdentifier=cci'
+
+# to test with opensearch test, use the following two lines
+# instead of the upper two
+# OPENSEARCH_CEDA_URL = "http://opensearch-test.ceda.ac.uk/opensearch/request"
+# CCI_ODD_URL = 'http://opensearch-test.ceda.ac.uk/' \
+#               'opensearch/description.xml?parentIdentifier=cci'
+
+DEFAULT_TILE_SIZE = 1000
+DEFAULT_RETRY_BACKOFF_MAX = 40  # milliseconds
+DEFAULT_RETRY_BACKOFF_BASE = 1.001
+DEFAULT_NUM_RETRIES = 200
+
+CCI_MAX_IMAGE_SIZE = 2500
+
+COMMON_COORD_VAR_NAMES = ['time', 'lat', 'lon', 'latitude', 'longitude',
+                          'latitude_centers', 'x', 'y', 'xc', 'yc']
+
+TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S"
