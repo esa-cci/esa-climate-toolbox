@@ -10,6 +10,7 @@ authors = [
 ]
 description = "The ESA CCI Toolbox is designed to provide access to CCI data from the ESA Open Data Portal."
 readme = "README.md"
+license = {file = "LICENSE"}
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python",
