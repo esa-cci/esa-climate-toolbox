@@ -51,10 +51,7 @@ build_script:
   - conda activate xcube
   - pip install -e .
   - cd ..
-  - git clone https://github.com/dcs4cop/xcube-cci.git
-  - cd xcube-cci
   - mamba install -c conda-forge lxml aiohttp nest-asyncio pydap=3.3
-  - pip install -e .
 
   # Environments created by mamba can't be referenced by name from conda
   # (presumably a bug), so we use an explicit path instead.
@@ -62,7 +59,6 @@ build_script:
   # install pytest for testing
 #  - mamba install --prefix $HOME/mamba-env pytest
 #  - conda activate $HOME/mamba-env
-  - cd ..
   - conda list
   - pip install -e .
 
