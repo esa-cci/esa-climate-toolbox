@@ -46,7 +46,7 @@ def configure_user_agent():
     """
     Sets proper Climate Toolbox HTTP User-Agent in 3rd-party HTTP libraries.
     Allows to mark HTTP requests sent from the ESA Climate Toolbox application
-    via 3rd-party libraries as a part of Cate application flow rather than
+    via 3rd-party libraries as a part of application flow rather than
     showing them as an independent calls.
     """
     import requests.utils

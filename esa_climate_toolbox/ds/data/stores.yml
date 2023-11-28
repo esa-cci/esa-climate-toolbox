@@ -25,5 +25,5 @@ local:
   title: "File Data Sources"
   description: >
     This data store represents
-    all the data sources in the file system made available to Cate.
+    all the data sources in the file system made available to the ESA Climate Toolbox.
     It contains any cached remote data sources or manually added files.

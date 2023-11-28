@@ -23,9 +23,9 @@
 Description
 ===========
 
-The ``cate.util`` package provides application-independent utility functions.
+The ``esa_climate_toolbox.util`` package provides application-independent utility functions.
 
-This package is independent of other ``cate.*``packages and can therefore be used stand-alone.
+This package is independent of other ``esa_climate_toolbox.*``packages and can therefore be used stand-alone.
 
 Verification
 ============

@@ -76,7 +76,7 @@ def get_data_stores_path() -> str:
 
     :return: Effectively reads the value of the configuration parameter
     ``data_stores_path``, if any. Otherwise return the default value
-    ``~/.cate/data_stores``.
+    ``~/.ect/data_stores``.
     """
     return get_config_path('data_stores_path',
                            os.path.join(DEFAULT_DATA_PATH, 'data_stores'))

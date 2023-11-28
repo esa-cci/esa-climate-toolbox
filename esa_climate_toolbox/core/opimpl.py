@@ -126,7 +126,6 @@ def _get_temporal_cf_attrs_from_var(ds: xr.Dataset, var_name: str = 'time') \
                 dim_max = var[0]
 
     # Make sure dim_min and dim_max are valid and are time instances
-    # See https://github.com/CCI-Tools/cate/issues/643
     if dim_var is None \
             or not _is_supported_time_dtype(dim_var.dtype):
         # Cannot determine temporal extent for dimension var_name
