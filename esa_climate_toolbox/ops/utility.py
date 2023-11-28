@@ -29,22 +29,12 @@ domain-independent utility functions.
 All operations in this module are tagged with the ``"utility"`` tag.
 
 """
-import numpy as np
-import pandas as pd
 import xarray as xr
-from datetime import timezone
 
 from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
-from esa_climate_toolbox.core.op import op_return
-from esa_climate_toolbox.core.types import Arbitrary
 from esa_climate_toolbox.core.types import DatasetLike
-from esa_climate_toolbox.core.types import DictLike
-from esa_climate_toolbox.core.types import Literal
-from esa_climate_toolbox.core.types import PointLike
-from esa_climate_toolbox.core.types import TimeLike
 from esa_climate_toolbox.core.types import ValidationError
-from esa_climate_toolbox.util.monitor import Monitor
 
 
 @op(tags=['utility'])
