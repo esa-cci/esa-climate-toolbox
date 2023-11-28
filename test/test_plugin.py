@@ -1,7 +1,7 @@
 import unittest
 
 from xcube.util.extension import ExtensionRegistry
-from xcube_cci.dataaccess import CciOdpDataStore
+from esa_climate_toolbox.ds.dataaccess import CciCdcDataStore
 
 from esa_climate_toolbox.plugin import init_plugin
 
@@ -26,7 +26,7 @@ class PluginTest(unittest.TestCase):
         store = ext_reg.get_component('xcube.core.store', 'esa-cdc')
 
         self.assertIsNotNone(store)
-        self.assertIsInstance(store(), CciOdpDataStore)
+        self.assertIsInstance(store(), CciCdcDataStore)
 
     def test_get_extension_long(self):
         ext_reg = ExtensionRegistry()
@@ -37,4 +37,4 @@ class PluginTest(unittest.TestCase):
                                       'esa-climate-data-centre'
                                       )
         self.assertIsNotNone(store)
-        self.assertIsInstance(store(), CciOdpDataStore)
+        self.assertIsInstance(store(), CciCdcDataStore)
