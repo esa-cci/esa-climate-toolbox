@@ -23,5 +23,8 @@ CDC_SHORT_DATA_STORE_ID = 'esa-cdc'
 CDC_LONG_DATA_STORE_ID = 'esa-climate-data-centre'
 ZARR_DATA_STORE_ID = 'esa-cdc-zarr'
 
+ECT_STORE_ID = 'cci-store'
+ECT_ZARR_STORE_ID = 'cci-zarr-store'
+
 MONTHS = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY',
           'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']

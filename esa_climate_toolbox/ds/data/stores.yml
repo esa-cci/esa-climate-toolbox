@@ -1,0 +1,29 @@
+cci-store:
+  store_id: "esa-cdc"
+  title: "CCI Climate Data Centre"
+  description: >
+    This data store represents the [ESA CCI Open Data Portal](http://cci.esa.int/data)
+    in the CCI Toolbox. It currently provides all CCI data that are published through
+    an OpenSearch interface. The store will be extended to also provide TIFF
+    and Shapefile Data.
+
+cci-zarr-store:
+  store_id: "esa-cdc-zarr"
+  title: "CCI Zarr Store (experimental)"
+  description: >
+    A data store that contains selected datasets from the CCI Open Data Portal
+    which have been converted to [Zarr format](https://zarr.readthedocs.io/)
+    and placed in [JASMIN](https://jasmin.ac.uk/) Object Storage.
+    Its datasets are expected to offer a much better access performance compared to the
+    CCI Open Data Portal Store that uses OPeNDAP as data transport protocol.
+    It is planned to further develop the CCI Zarr Store and extend it successively.
+
+local:
+  store_id: "file"
+  store_params:
+    root: null
+  title: "File Data Sources"
+  description: >
+    This data store represents
+    all the data sources in the file system made available to Cate.
+    It contains any cached remote data sources or manually added files.
