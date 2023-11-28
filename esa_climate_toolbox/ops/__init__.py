@@ -59,6 +59,7 @@ from .normalize import adjust_temporal_attrs
 from .normalize import normalize
 from .outliers import detect_outliers
 from .resampling import downsample_2d
+from .resampling import resample
 from .resampling import resample_2d
 from .resampling import upsample_2d
 from .subset import subset_spatial
@@ -78,6 +79,7 @@ __all__ = [
     # .outliers
     'detect_outliers',
     # .resampling
+    'resample',
     'resample_2d',
     'downsample_2d',
     'upsample_2d',

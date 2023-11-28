@@ -33,7 +33,15 @@ Components
 from __future__ import division
 
 import numpy as np
-from numba import jit
+import xarray as xr
+
+from xcube.core.gridmapping import GridMapping
+from xcube.core.resampling import resample_in_space
+
+from esa_climate_toolbox.core.op import op
+from esa_climate_toolbox.core.op import op_input
+from esa_climate_toolbox.core.types import DatasetLike
+
 
 #: Interpolation method for upsampling: Take nearest source grid cell,
 # even if it is invalid.
@@ -606,3 +614,123 @@ def _downsample_2d(src, mask, use_mask, method, fill_value, mode_rank, out):
         raise ValueError('invalid downsampling method')
 
     return out
+
+
+@op(tags=['geometric', 'resampling'])
+@op_input('ds', data_type=DatasetLike)
+@op_input('x_res', data_type=float)
+@op_input('y_res', data_type=float)
+@op_input('upsampling_float',
+          value_set=['nearest_neighbor', 'bilinear', '2nd-order spline',
+                     'cubic', '4th-order spline', '5th-order spline'],
+          default_value='bilinear')
+@op_input('upsampling_int',
+          value_set=['nearest_neighbor', 'bilinear', '2nd-order spline',
+                     'cubic', '4th-order spline', '5th-order spline'],
+          default_value='nearest_neighbor')
+@op_input('downsampling_float',
+          value_set=['nearest_neighbor', 'mean', 'min', 'max'],
+          default_value='mean')
+@op_input('downsampling_int',
+          value_set=['nearest_neighbor', 'mean', 'min', 'max'],
+          default_value='nearest_neighbor')
+def resample(
+        ds: DatasetLike.TYPE,
+        x_res: float,
+        y_res: float,
+        upsampling_float: str = 'bilinear',
+        upsampling_int: str = 'nearest_neighbor',
+        downsampling_float: str = 'mean',
+        downsampling_int: str = 'nearest_neighbor',
+) -> xr.Dataset:
+    """
+    Resample a dataset to the provided x- and y-resolution. The resolution must
+    be given in the units of the CRS.
+    It can be set which method to use to upsample integer or float variables
+    (in case the new resolution is finer than the old one) or to downsample
+    them (in case the new resolution is coarser).
+
+    :param ds: The input dataset.
+    :param x_res: The resolution in x-direction.
+    :param y_res: The resolution in y-direction.
+    :param upsampling_float: The upsampling method to be used for float values.
+        This value is only used when the new resolution is finer than the
+        previous one. Allowed values are 'nearest_neighbor', 'bilinear',
+        '2nd-order spline', 'cubic', '4th-order spline', and '5th-order spline'.
+        The default is 'bilinear'.
+    :param upsampling_int: The upsampling method to be used for integer and
+        boolean values.
+        This value is only used when the new resolution is finer than the
+        previous one. Allowed values are 'nearest_neighbor', 'bilinear',
+        '2nd-order spline', 'cubic', '4th-order spline', and '5th-order spline'.
+        The default is 'nearest_neighbor'.
+    :param downsampling_float: The downsampling method to be used for float
+        values.
+        This value is only used when the new resolution is coarser than the
+        previous one. Allowed values are 'nearest_neighbor', 'mean', 'min',
+        and 'max'.
+        The default is 'mean'.
+    :param downsampling_int: The downsampling method to be used for integer and
+        boolean values.
+        This value is only used when the new resolution is coarser than the
+        previous one. Allowed values are 'nearest_neighbor', 'mean', 'min',
+        and 'max'.
+        The default is 'nearest_neighbor'.
+    :return: A new dataset resampled to the new resolutions.
+    """
+
+    ds = DatasetLike.convert(ds)
+    source_gm = GridMapping.from_dataset(ds)
+    x_scale = source_gm.x_res / x_res
+    y_scale = source_gm.y_res / y_res
+
+    target_gm = source_gm.scale(xy_scale=(x_scale, y_scale))
+
+    var_configs = dict()
+
+    upsampling_values = ['nearest_neighbor', 'bilinear', '2nd-order spline',
+                         'cubic', '4th-order spline', '5th-order spline']
+    downsampling_values = {
+        'nearest_neighbor': None,
+        'mean': 'np.nanmean',
+        'min': 'np.nanmin',
+        'max': 'np.nanmax'
+    }
+
+    try:
+        usf = upsampling_values.index(upsampling_float)
+    except ValueError:
+        raise ValueError(f'Unknown upsampling value "{upsampling_float}"')
+    try:
+        usi = upsampling_values.index(upsampling_int)
+    except ValueError:
+        raise ValueError(f'Unknown upsampling value "{upsampling_int}"')
+    if downsampling_float not in downsampling_values.keys():
+        raise ValueError(f'Unknown downsampling value "{downsampling_float}"')
+    if downsampling_int not in downsampling_values.keys():
+        raise ValueError(f'Unknown downsampling value "{downsampling_int}"')
+    dsf = downsampling_values[downsampling_float]
+    dsi = downsampling_values[downsampling_int]
+
+    for k, var in ds.variables.items():
+        if np.issubdtype(var.dtype, np.integer) \
+                or np.issubdtype(var.dtype, bool):
+            var_config = dict(
+                spline_order=usi,
+                aggregator=dsi,
+                recover_nan=False,
+            )
+        else:
+            var_config = dict(
+                spline_order=usf,
+                aggregator=dsf,
+                recover_nan=True,
+            )
+        var_configs[k] = var_config
+
+    return resample_in_space(
+        dataset=ds,
+        source_gm=source_gm,
+        target_gm=target_gm,
+        var_configs=var_configs
+    )
