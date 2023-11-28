@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm", "aiohttp", "lxml", "nest-asyncio", "pydap==3.3"]
+requires = ["setuptools", "setuptools-scm", "aiohttp", "lxml", "nest-asyncio"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -27,6 +27,7 @@ classifiers = [
     esa-climate-toolbox = "esa_climate_toolbox.plugin:init_plugin"
 [project.entry-points."esa_climate_toolbox_plugins"]
     esa-climate-esa_climate_toolbox_ops = "esa_climate_toolbox.ops:ect_init"
+    esa-climate-esa_climate_toolbox_ds = "esa_climate_toolbox.ds:ect_init"
 
 [project.urls]
 "Homepage" = "https://github.com/esa-cci/esa-climate-toolbox"

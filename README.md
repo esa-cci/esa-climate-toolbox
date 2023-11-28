@@ -50,7 +50,7 @@ $ git clone https://github.com/esa-cci/esa-climate-toolbox.git
 $ cd esa-climate-toolbox
 $ conda env create
 $ conda activate ect
-$ python setup.py develop
+$ pip install -e .
 ```
 
 ## Testing
