@@ -54,6 +54,7 @@ setup(
         ],
         'esa_climate_toolbox_plugins': [
             'esa_climate_toolbox_ops = esa_climate_toolbox.ops:ect_init',
+            'esa_climate_toolbox_ds = esa_climate_toolbox.ds:ect_init',
         ],
     }
 )
