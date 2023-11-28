@@ -70,7 +70,7 @@ class DsTest(unittest.TestCase):
 class DsStoresTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        self._root = os.path.join(os.getcwd(), 'test_data')
+        self._root = os.path.join(os.path.dirname(__file__), 'test_data')
 
     def test_add_local_store_id_taken(self):
         with self.assertRaises(ValueError) as ve:
