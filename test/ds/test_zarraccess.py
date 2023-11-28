@@ -24,7 +24,7 @@ import unittest
 
 from xcube.core.store import DataStoreError
 from xcube.util.jsonschema import JsonObjectSchema
-from xcube_cci.zarraccess import CciZarrDataStore
+from esa_climate_toolbox.ds.zarraccess import CciZarrDataStore
 
 
 @unittest.skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
