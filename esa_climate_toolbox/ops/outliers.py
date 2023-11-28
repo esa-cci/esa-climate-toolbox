@@ -61,20 +61,21 @@ def detect_outliers(ds: xr.Dataset,
 
     :param ds: The dataset or dataframe for which to do outlier detection
     :param var: Variable or variables in the dataset to which to do outlier
-    detection. Note that when multiple variables are selected, absolute
-    threshold values might not make much sense. Wild cards can be used to
-    select multiple variables matching a pattern.
+        detection. Note that when multiple variables are selected, absolute
+        threshold values might not make much sense. Wild cards can be used to
+        select multiple variables matching a pattern.
     :param threshold_low: Values less or equal to this will be removed/masked
     :param threshold_high: Values greater or equal to this will be
         removed/masked
     :param quantiles: If True, threshold values are treated as quantiles,
-    otherwise as absolute values.
+        otherwise as absolute values.
     :param mask: If True, an ancillary variable containing flag values for
-    outliers will be added to the dataset. Otherwise, outliers will be replaced
-    with nan directly in the data variables.
+        outliers will be added to the dataset. Otherwise, outliers will be
+        replaced with nan directly in the data variables.
     :param monitor: A progress monitor.
     :return: The dataset with outliers masked or replaced with nan
     """
+
     ds = DatasetLike.convert(ds)
     # Create a list of variable names on which to perform outlier detection
     # based on the input comma separated list that can contain wildcards

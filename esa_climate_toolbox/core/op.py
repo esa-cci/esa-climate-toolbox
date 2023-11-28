@@ -385,6 +385,17 @@ OP_REGISTRY = _DefaultOpRegistry()
 
 def list_operations(op_registry: OpRegistry = OP_REGISTRY,
                     include_qualified_name: bool = False):
+    """
+    Lists the operations that are provided by the ESA Climate Toolbox.
+
+    :param op_registry: An optional OpRegistry, in case the default one should
+        not be used.
+    :param include_qualified_name: If true, a more expressive qualified name
+        will be returned along with the method name. Default is false.
+
+    :return: Either a list of the names of operations, or a list of tuples,
+        each consisting of the operation name and a qualified name
+    """
     op_regs = op_registry.op_registrations
 
     def _is_op_selected(op_name: str,
@@ -435,13 +446,33 @@ def list_operations(op_registry: OpRegistry = OP_REGISTRY,
 def get_op_meta_info(
         op_name: str, op_registry: OpRegistry = OP_REGISTRY
 ) -> Dict:
+    """
+    Returns meta information about an operation.
+
+    :param op_name: The name of the operation for which meta information shall
+        be provided.
+    :param op_registry: An optional OpRegistry, in case the default one should
+        not be used.
+
+    :return: A dictionary representation of an operator's meta info,
+        providing information about input parameters and the expected output.
+    """
     op = op_registry.get_op(op_name)
     return op.op_meta_info.to_json_dict()
 
 
 def get_op(
         op_name: str, op_registry: OpRegistry = OP_REGISTRY
-) -> Dict:
+) -> Operation:
+    """
+    Returns an operation.
+
+    :param op_name: The name of the operation.
+    :param op_registry: An optional OpRegistry, in case the default one should
+        not be used.
+
+    :return: An operation which may directly be called
+    """
     return op_registry.get_op(op_name)
 
 

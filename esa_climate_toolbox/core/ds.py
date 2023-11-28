@@ -87,10 +87,28 @@ class XcubeProgressObserver(ProgressObserver):
 
 
 def list_stores() -> List[str]:
+    """
+    Lists the names of the data stores which are provided by
+    Returns meta information about an operation.
+
+    :param op_name: The name of the operation for which meta information shall
+        be provided.
+    :param op_registry: An optional OpRegistry, in case the default one should
+        not be used.
+
+    :return: A dictionary representation of an operator's meta info,
+        providing information about input parameters and the expected output.
+    """
     return ECT_DATA_STORE_POOL.store_instance_ids
 
 
 def list_ecvs() -> List[str]:
+    """
+    Returns a list of names of essential climate variables served by the
+    ESA Climate Toolbox.
+
+    :return: A list of names of essential climate variables.
+    """
     store = ECT_DATA_STORE_POOL.get_store(ECT_STORE_ID)
     data_ids = store.list_data_ids()
     return list(set([data_id.split('.')[1] for data_id in data_ids]))
@@ -101,6 +119,19 @@ def list_ecv_datasets(
         data_type: xcube_store.DataTypeLike = None,
         include_attrs: Container[str] = None
 ) -> Union[List[str], List[Tuple[str, Dict[str, Any]]]]:
+    """
+    Returns the names of datasets for a given essential climate variable.
+
+    :param ecv: The name of the essential climate variable
+    :param data_type: A datatype that may be provided to restrict the search,
+        e.g., 'dataset' or 'geodataframe'
+    :param include_attrs: An optional list to retrieve
+        additional meta information if required.
+
+    :return: Either a list of dataset names for the given ecv, or a list of
+        tuples, each consisting of a name and a dictionary with additional
+        information.
+    """
     ecvs = list_ecvs()
     if ecv.upper() not in ecvs:
         raise ValueError(f'"{ecv}" is not an Essential Climate Variable '
@@ -135,6 +166,28 @@ def add_local_store(root: str, store_id: str = None, max_depth: int = 1,
                     read_only: bool = False, includes: str = None,
                     excludes: str = None, title: str = None,
                     description: str = None, persist: bool = True) -> str:
+    """
+    Registers a new data store in the ESA Climate Toolbox to access locally
+    stored data.
+
+    :param root: The path to the data.
+    :param store_id: The name the store should have. There must not already
+        be a store of the same name.
+    :param max_depth: The maximum level of sub-directories that will be
+        browsed for data. Default is 1, i.e., only the data located in the root
+        path will be considered.
+    :param read_only: Whether the store is read-only. Default is false.
+    :param includes: Allows to specify a pattern about which data shall be
+        served by the store (e.g., aerosol*.nc)
+    :param excludes: Allows to specify a pattern about which data shall not be
+        served by the store (e.g., aerosol*.zarr)
+    :param title: An optional title for the data store
+    :param description: An optional description of the data store
+    :param persist: Whether the data store shall be registered permanently,
+        otherwise it will only be for this session. Default is True.
+
+    :return: The id of the newly created store.
+    """
     if store_id is not None and \
             ECT_DATA_STORE_POOL.has_store_instance(store_id):
         raise ValueError(
@@ -165,6 +218,23 @@ def add_store(
         store_id: str = None, title: str = None, description: str = None,
         user_data: Any = None, persist: bool = True
 ) -> str:
+    """
+    Registers a new data store in the ESA Climate Toolbox. This function allows
+    to also specify non-local data stores.
+
+    :param store_type: The type of data store to create, e.g., 's3'.
+    :param store_params: A mapping containing store-specific parameters which
+        are required to initiate the store.
+    :param store_id: The name the store should have. There must not already
+        be a store of the same name.
+    :param title: An optional title for the data store
+    :param description: An optional description of the data store
+    :param user_data: Any additional user data
+    :param persist: Whether the data store shall be registered permanently,
+        otherwise it will only be for this session. Default is True.
+
+    :return: The id of the newly created store.
+    """
     if store_id is not None and \
             ECT_DATA_STORE_POOL.has_store_instance(store_id):
         raise ValueError(
@@ -184,6 +254,12 @@ def add_store(
 
 
 def get_store(store_id: str):
+    """
+    Returns the data store of the given name.
+    :param store_id: The name of the store should have.
+
+    :return: A data store
+    """
     return ECT_DATA_STORE_POOL.get_store(store_id)
 
 
@@ -192,6 +268,19 @@ def list_datasets(
         data_type: xcube_store.DataTypeLike = None,
         include_attrs: Container[str] = None
 ) -> Union[List[str], List[Tuple[str, Dict[str, Any]]]]:
+    """
+    Returns the names of datasets of a given store.
+
+    :param store_id: The name of the data store
+    :param data_type: A datatype that may be provided to restrict the search,
+        e.g., 'dataset' or 'geodataframe'
+    :param include_attrs: An optional list to retrieve
+        additional meta information if required.
+
+    :return: Either a list of the dataset names within the store, or a list of
+        tuples, each consisting of a name and a dictionary with additional
+        information.
+    """
     if store_id:
         return ECT_DATA_STORE_POOL.get_store(store_id).list_data_ids(
             data_type, include_attrs
@@ -204,6 +293,18 @@ def list_datasets(
 
 
 def remove_store(store_id: str, persist: bool = True):
+    """
+    Removes a store from the internal store registry. No actual data will be
+    deleted.
+
+    :param store_id: The name of the store to be removed
+    :param persist: Whether the data store shall be unregistered permanently,
+        otherwise it will only be for this session. Default is True.
+
+    :return: Either a list of dataset names for the given ecv, or a list of
+        tuples, each consisting of a name and a dictionary with additional
+        information.
+    """
     if store_id in [ECT_STORE_ID, ECT_ZARR_STORE_ID]:
         raise ValueError(f'Cannot remove essential store "{store_id}".')
     if store_id not in ECT_DATA_STORE_POOL.store_instance_ids:
@@ -214,10 +315,21 @@ def remove_store(store_id: str, persist: bool = True):
 
 
 def get_output_store_id() -> Optional[str]:
+    """
+    Returns the name of the store that by default will be used for writing.
+
+    :return: The id of the default output store.
+    """
     return _OUTPUT_STORE
 
 
 def set_output_store(store_id: str):
+    """
+    Specifies which store shall be the standard output store. This value is not
+    persisted and must be set every session.
+
+    :param store_id: The name of the store that shall be the output store.
+    """
     if store_id not in ECT_DATA_STORE_POOL.store_instance_ids:
         raise ValueError(f'Could not set "{store_id}" as default output store. '
                          f'Store is not registered.')
@@ -352,6 +464,15 @@ def open_data(dataset_id: str,
 
 
 def get_supported_formats(data: Any, store_id: str) -> List[str]:
+    """
+    Returns the list of formats to which the store at the given store_id may
+    write the given data.
+
+    :param data: The data which shall be written
+    :param store_id: The id of the store to which the data shall be written
+
+    :return: A list of supported output formats
+    """
     if store_id is not None and \
             store_id not in ECT_DATA_STORE_POOL.store_instance_ids:
         raise ValueError(f'Unknown Data Store "{store_id}".')
@@ -367,6 +488,24 @@ def write_data(
         format_id: str = None, replace: bool = False,
         monitor: Monitor = Monitor.NONE
 ) -> str:
+    """
+    Writes data
+
+    :param data: The data which shall be written
+    :param data_id: A data id under which the data shall be written to the store.
+        If not given, a data id will be created.
+    :param store_id: The id of the store to which the data shall be written.
+        If none is given, the data is written to the standard output store.
+    :param format_id:
+        A format that shall be used to write the data. If none is given, the
+        data will be written in the default format for the data type,
+        e.g., 'zarr' for datasets.
+    :param replace: Whether a dataset with the same id in the store shall be
+        replaced. If False, an exception will be raised. Default is False.
+    :param monitor: A monitor to measure the writing process
+
+    :return: The data id under which the data can be accessed from the store.
+    """
     if store_id is not None and \
             store_id not in ECT_DATA_STORE_POOL.store_instance_ids:
         raise ValueError(f'Unknown Data Store "{store_id}".')
@@ -416,12 +555,33 @@ def _get_data_type(data: Any) -> str:
 
 
 def get_search_params(store_id: str, data_type: str) -> Dict:
+    """
+    Returns potential search parameters that can be used to search for datasets
+    in a data store.
+
+    :param store_id: The id of the store which shall be searched for data
+    :param data_type: An optional data type to specify the type of data to be
+        searched
+
+    :return: A dictionary containing search parameters
+    """
     store = ECT_DATA_STORE_POOL.get_store(store_id)
     search_params = store.get_search_params_schema(data_type)
     return search_params.to_dict()
 
 
 def search(store_id: str, data_type: str = None, **search_params) -> List[Dict]:
+    """
+    Searches in a data store for data that meet the given search criteria.
+
+    :param store_id: The id of the store which shall be searched for data
+    :param data_type: An optional data type to specify the type of data to be
+        searched
+    :param search_params: Store-specific additional search parameters
+
+    :return: A list of dictionaries providing detailed information about the data
+        that meet the specified criteria.
+    """
     store = ECT_DATA_STORE_POOL.get_store(store_id)
     data_descriptors = list(store.search_data(
         data_type=data_type, **search_params

@@ -69,8 +69,8 @@ def merge(ds_1: DatasetLike.TYPE,
     * "equals": all values and dimensions must be the same.
     * "identical": all values, dimensions and attributes must be the same.
     * "no_conflicts": only values which are not null in both datasets must be
-        equal.
-      The returned dataset then contains the combination of all non-null values.
+        equal. The returned dataset then contains the combination of all
+        non-null values.
 
     :param ds_1: The first input dataset.
     :param ds_2: The second input dataset.

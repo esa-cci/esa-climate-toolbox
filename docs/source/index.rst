@@ -9,3 +9,10 @@ These pages shall serve to explain the purpose and usage of the Toolbox.
 They will be extended while the toolbox is extended with functionality.
 
 Also, the toolbox contains functions to operate on this data.
+
+.. toctree::
+   :caption: Table of Contents
+   :maxdepth: 1
+   :numbered:
+
+   api_reference

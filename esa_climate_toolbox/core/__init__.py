@@ -23,8 +23,22 @@
 The core API of the ESA Climate Toolbox.
 """
 
-import os.path
-import sys
+from .ds import add_local_store
+from .ds import add_store
+from .ds import find_data_store
+from .ds import get_output_store_id
+from .ds import get_store
+from .ds import get_search_params
+from .ds import get_supported_formats
+from .ds import list_datasets
+from .ds import list_ecvs
+from .ds import list_ecv_datasets
+from .ds import list_stores
+from .ds import open_data
+from .ds import remove_store
+from .ds import search
+from .ds import set_output_store
+from .ds import write_data
 
 # noinspection PyUnresolvedReferences
 from .op import list_operations
@@ -38,6 +52,9 @@ from .op import op_output
 from .op import op_return
 from .op import Operation
 from .op import OP_REGISTRY
+
+# noinspection PyUnresolvedReferences
+from ..util.monitor import Monitor
 
 # noinspection PyUnresolvedReferences
 from ..util.monitor import ChildMonitor
