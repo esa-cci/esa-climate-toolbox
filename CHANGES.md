@@ -1,4 +1,4 @@
-## Changes in 0.3 (in development)
+## Changes in 0.3
 
 * Integrated operation framework
 * Added operations:
