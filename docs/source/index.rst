@@ -15,4 +15,6 @@ Also, the toolbox contains functions to operate on this data.
    :maxdepth: 1
    :numbered:
 
+   introduction
+   about
    api_reference

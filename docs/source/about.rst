@@ -34,153 +34,70 @@ The ESA CCI Toolbox uses the concept of data stores as provided by the `xcube`_
 software package.
 This has the advantage that users may easily define their own stores to combine
 their own third-party data with the CCI data.
+Users may read more about stores in the documentation of the xcube
+`data store framework`_.
 
 The CCI toolbox comes with two pre-defined stores: The first one is the
+**Open Data Portal** store, which is denoted by the handle
+`esa-climate-data-centre` (or `esa-cdc` for short).
+It provides access to any data from the Open Data Portal.
 
-uses it in its `data store framework`_.
+The second data store is the Zarr store (`esa-cdc-zarr`), which allows to access
+datasets from the Open Data Portal that have been converted to the Zarr format.
+This has been done for selected datasets which were either frequently used or
+large in terms of data volume.
+Providing the data as zarr files allows for a more performant data access.
+The number of Zarr datasets will be constantly increased.
 
+Additionally, the CCI Toolbox allows to define output stores, to which operation
+results may be written.
 
-By default, Cate uses the `CCI Open Data Portal`_ (ODP) **remote data store**
-which provides access to all published CCI datasets.
-There is also a **local data store**, which is used to synchronise remote data
-or to add any other data sources to Cate [1]_.
-
-Data Sources
-------------
-
-A data store comprises multiple **data sources** which know each dataset's unique identifier and other descriptive
-information about the dataset. Each data source also knows about the available data access protocols, which may be
-direct file access, file download via HTTP, or access through OPeNDAP, or a Web Coverage Service (WCS).
-
-In Cate's CLI, ``cate ds`` is used to perform numerous dataset-related tasks. Type::
-
-    $ cate ds --help
-
-to get an overview of the supported sub-comands.
-
-For example, use::
-
-    $ cate ds list
-
-to list available data sources.
-
-In the GUI, the panel **DATA SOURCES** lets you query and open available data sources.
-
-Note that all remote CCI data source identifiers are prefixed by "esacci.", for example
-``esacci.SST.day.L4.SSTdepth.multi-sensor.multi-platform.OSTIA.1-0.r1``. Local data source identifiers are
-prefixed by "local.", for example ``local.SST_NAC_2010``.
-
+You can find detailed listings of the provided functionality in
+:doc:`api_reference`.
 
 Datasets
 --------
 
-You may **open datasets** from a data source just by providing the dataset's identifier. The underlying physical
-file structure or access protocol remains transparent. That way, Cate can also deal with datasets that don't fit
-into your computer's memory, Cate allows for *out-of-core* and *multi-core* processing.
-However, you can always **read datasets** directly from your local. e.g. NetCDF files or ESRI Shapefiles.
+Data Stores provide access to datasets. You may open datasets from a data store
+by providing the dataset's identifier.
+The ESA CCI Toolbox will only read in a dataset's metadata and basic structure,
+but not actual data until explicitly requested (e.g., during the application of
+an operation or saving).
+That way, the Toolbox can deal with datasets that don't fit into your
+computer's memory.
+The ESA CCI Toolbox allows for *out-of-core* and *multi-core* processing.
+However, you can always read datasets directly from your local storage, . e.g.,
+NetCDF files or ESRI Shapefiles.
 
-For Python programmers: it might be interesting for you that Cate does not invent new data structures for
-representing datasets in memory. Instead, opened datasets are represented by data structures defined by
+The ESA CCI Toolbox does not invent new data structures for representing
+datasets in memory.
+Instead, opened datasets are represented by data structures defined by
 the popular Python packages `xarray`_, `pandas`_, and `geopandas`_:
 
-* Gridded and raster datasets (based on NetCDF/CF or OPeNDAP) are represented by `xarray.Dataset` objects [2]_.
-  Dataset variables are represented by `NumPy`_-compatible `xarray.DataArray` objects.
-* Vector datasets (from ESRI Shapefiles, GeoJSON files) are represented by `geopandas.GeoDataFrame` objects.
-  Dataset variables are represented by pandas-compatible `geopandas.GeoSeries` objects.
-* Tabular data (from CSV, Excel files) are represented by `pandas.DataFrame` objects.
+* Gridded and raster datasets (based on NetCDF/CF or Zarr) are represented by
+  `xarray.Dataset` objects.
+  Dataset variables are represented by `NumPy`_-compatible `xarray.DataArray`
+  objects.
+* Vector datasets (from ESRI Shapefiles, GeoJSON files) are represented by
+  `geopandas.GeoDataFrame` objects.
+  Dataset variables are represented by pandas-compatible `geopandas.GeoSeries`
+  objects.
+* Tabular data (from CSV, Excel files) are represented by `pandas.DataFrame`
+  objects.
+
+Note that all remote CCI data set identifiers are prefixed by "esacci.", for
+example ``esacci.SST.day.L4.SSTdepth.multi-sensor.multi-platform.OSTIA.1-0.r1``.
 
 Functions and Operations
 ------------------------
 
-Cate provides numerous I/O, analysis, and processing **operations** that address typical climate analyses.
-They are available through all Cate interfaces, the Python API, the CLI, and the GUI.
+The ESA CCI Toolbox provides numerous I/O, analysis, and processing
+**operations** that address typical climate analyses.
+These *operations* are Python functions.
+The ESA CCI Toolbox has an operation registry where functions are registered.
+In addition to operations provided by the ESA CII Toolbox, the Python packages
+`xarray`_, `pandas`_, and `geopandas`_ provide a rich and powerful low-level
+data processing interface for the datasets opened through the Toolbox.
 
-For Python programmers: Theses *operations* are usual Python functions. The only difference is that Cate
-has an operation registry where functions to be published for use through the CLI and GUI are registered.
-In addition to operations provided by Cate, the Python packages `xarray`_, `pandas`_, and `geopandas`_
-provide a rich and powerful low-level data processing interface for the datasets opened through Cate.
-
-In Cate's CLI, ``cate op`` is used to perform numerous operation-related tasks. Type::
-
-    $ cate op --help
-
-to get an overview of the supported sub-commands. For example, use::
-
-    $ cate op list
-
-to list and query available operation.
-
-In the GUI, the panel OPERATIONS lets you query and apply all available operations. Applying an operation creates a
-new *workflow* step in the current *workspace*.
-
-
-.. _about_workspaces:
-
-Workflows, Resources, and Workspaces
-------------------------------------
-
-Using both the CLI and the GUI, users can work in interactive mode, which means that one command creates a
-certain state which provides a context for another command. In Cate, this can be done without actually storing any
-data to disk in-between two commands. For example the simple **workflow**
-
-1. open dataset ds1
-2. open dataset ds2
-3. get variable v1 of ds1
-4. get variable v2 of ds2
-5. compute v2b which is v2 on the same grid as v1
-6. compute c which is the correlation between v1 and v2b
-7. output c
-
-can be both executed the same way in the CLI and the GUI. Each step generates a new **resource**,
-e.g. ``ds1``, ``v2``. which can serve as input for a subsequent step. Only in the last step, data
-processing is actually triggered through the workflow, effectively computing and outputting the current
-value of resource ``c``. Currently, Cate workflow steps must refer to a Cate *operation*.
-Later versions of Cate will also support the following step types:
-
-* Python expressions with access to Cate Python API, xarray, pandas, geopandas, etc.
-* Python scripts with access to Cate Python API, xarray, pandas, geopandas, etc.
-* Any shell executables
-* Other workflows
-
-Workflows are also saved and reopened as part of a Cate **workspace**. A Cate workspace refers to a directory in the
-user's file system containing a ``.cate-workspace`` sub-directory, where Cate stores workspace-specific
-data such as the workspace's workflow. The workflow is saved as a JSON file within that sub-directory together
-with any other files serving as input or output for the workflow. Relative file paths used as operation parameters are
-resolved against the current workspace directory. If a workspace is closed, all of its in-memory resources are closed
-and released.
-
-The following figure :numref:`about_workspace_fig` shows the workspace with its contained workflow steps and the
-associated in-memory resource objects.
-
-.. _about_workspace_fig:
-
-.. figure:: _static/figures/about-workspace.png
-   :width:  1024px
-   :align: center
-
-   Cate's workspace/workflow concept
-
-In Cate's CLI, you'll find all workspace- and resource-related commands by using the ``cate ws`` and ``cate res``
-commands::
-
-    $ cate ws --help
-    $ cate res --help
-
-Using the CLI run command, workflows can be directly executed when given as a JSON-formatted text file::
-
-    $ cate run <my-workflow.json>
-
-More on workflows and its file format can be found in a dedicated chapter :doc:`workflows`.
-
-In Cate's GUI, workspace commands are available in the *File* menu. Furthermore
-
-* the panel WORKSPACE lists all available workspace resources and workflow steps, and
-* the panel VARIABLES lists the variables of a selected workspace resource.
-
-Both provide additional workspace-related commands.
-
-
-.. [1] Currently, only NetCDF files can be used as local data sources. In future releases, we will
-   support other formats such as ESRI Shapefiles and GeoTIFF.
-.. [2] Currently, only NetCDF and OPeNDAP sources can be represented by ``xarray.Dataset`` objects.
-   In future releases, we will support other generic formats such as GeoTIFF or HDF.
+You can find detailed listings of the provided functionality in
+:doc:`api_reference`.
