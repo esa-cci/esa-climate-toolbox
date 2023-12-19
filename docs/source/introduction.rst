@@ -1,4 +1,4 @@
-.. _ESA: http://www.esa.int/ESA
+.. _European Space Agency: http://www.esa.int/ESA
 .. _Climate Change Initiative: http://cci.esa.int/
 .. _GCOS: http://www.wmo.int/pages/prog/gcos/index.php
 .. _UNFCCC: http://unfccc.int/2860.php
@@ -12,7 +12,7 @@ Introduction
 Project Background
 ==================
 
-In 2009 the [European Space Agency](ESA_) launched the
+In 2009 the `European Space Agency`_ launched the
 `Climate Change Initiative`_ (CCI), a programme to respond to the need for
 climate-quality satellite data as expressed by GCOS_, the Global Climate
 Observing System that supports the UNFCCC_, the United Nations Framework
@@ -28,11 +28,11 @@ The CCI Toolbox provides tools that support visualisation, analysis and
 processing across CCI and other climate data products.
 With these two technical cross-cutting activities ESA is providing an interface
 between its CCI projects and the ECVs generated there, and the wider climate
-change user community (see following :numref:`toolbox_context`).
+change user community.
 
-.. _toolbox_context:
+.. _toolbox-context:
 
-.. figure:: _static/figures/toolbox_context.png
+.. figure:: _static/figures/toolbox-context.png
    :scale: 60 %
    :align: center
 
