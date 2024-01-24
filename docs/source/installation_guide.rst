@@ -35,4 +35,4 @@ You can run the unit tests for the ESA CCI Toolbox by executing
     $ pytest
 
 
-`<span style="background-color: lightyellow;">emphasized</span>` line
+in the '''esa-climate-toolbox repository'''.
