@@ -10,7 +10,7 @@ These pages shall serve to explain the purpose and usage of the Toolbox.
 
 .. toctree::
    :caption: Table of Contents
-   :maxdepth: 1
+   :maxdepth: 2
    :numbered:
 
    introduction

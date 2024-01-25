@@ -1,7 +1,8 @@
+
 ============
 Quick Start
 ============
 
 
-Project Background
+ESA CCI Toolbox Notebooks Setup
 ==================
