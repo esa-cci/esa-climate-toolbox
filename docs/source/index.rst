@@ -16,4 +16,5 @@ These pages shall serve to explain the purpose and usage of the Toolbox.
    introduction
    about
    installation_guide
+   quick_start
    api_reference

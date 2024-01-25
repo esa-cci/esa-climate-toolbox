@@ -28,7 +28,7 @@ subset of mature and validated ECV-related data products.
 
 .. _odp_:
 
-.. figure:: _static/figures/Open_data_portal_detailed2.png
+.. figure:: _static/figures/ODP_detail.png
    :scale: 35 %
    :align: center
 
