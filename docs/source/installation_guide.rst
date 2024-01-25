@@ -20,6 +20,7 @@ The name of the environment may be freely chosen.
 
 Installation into an existing environment
 ====
+The ESA CCI Toolbox can also be installed into an existing conda environment. To do so, execute this command with the existing environment activated:
 
 .. code-block::
 
@@ -40,9 +41,9 @@ If you want to install the ESA CCI Toolbox directly from the git repository (for
 
 Testing
 ----
-You can run the unit tests for the ESA CCI Toolbox by executing
+You can run the unit tests for the ESA CCI Toolbox by executing:
 
 .. code-block::
     $ pytest
 
-in the '''esa-climate-toolbox repository'''.
+in the esa-climate-toolbox repository.
