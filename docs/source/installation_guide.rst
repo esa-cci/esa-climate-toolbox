@@ -1,6 +1,6 @@
 .. _conda-forge: https://conda-forge.org/
 .. _conda package manager: https://docs.conda.io/projects/conda/en/latest/
-.. -miniconda: https://docs.conda.io/projects/conda/en/latest/
+.. _miniconda: https://docs.conda.io/projects/conda/en/latest/
 
 ==================
 Installation Guide
@@ -26,7 +26,6 @@ The ESA CCI Toolbox can also be installed into an existing conda environment. To
 
     $ mamba install -c conda-forge aiohttp  lxml nest-asyncio xcube "pydap==3.3"
     $ conda install --channel conda-forge esa-climate-toolbox
-
 Installation into a new environment from the repository
 ====
 If you want to install the ESA CCI Toolbox directly from the git repository (for example in order to use an unreleased version or to modify the code), you can do so as follows:
@@ -38,7 +37,6 @@ If you want to install the ESA CCI Toolbox directly from the git repository (for
     $ conda env create
     $ conda activate ect
     $ pip install -e .
-
 Testing
 ----
 You can run the unit tests for the ESA CCI Toolbox by executing:
