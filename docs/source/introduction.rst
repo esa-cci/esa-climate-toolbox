@@ -1,5 +1,5 @@
 .. _European Space Agency: http://www.esa.int/ESA
-.. _Climate Change Initiative: http://cci.esa.int/
+.. _Climate Change Initiative: https://climate.esa.int/en/
 .. _GCOS: https://gcos.wmo.int/en/home
 .. _UNFCCC: http://unfccc.int/2860.php
 .. _ECVs: https://climate.esa.int/en/projects/
