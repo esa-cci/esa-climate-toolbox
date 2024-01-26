@@ -28,9 +28,10 @@ Start Jupyter Lab:
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Notebooks:
 
+   notebooks/1 - ECT_General_Data_Access
+   notebooks/2 - ECT_Data_access_with_subsets
    notebooks/1-ECT_General_Data_Access
-
 1 - ESA CCI Toolbox data access with subsets
 ==================
