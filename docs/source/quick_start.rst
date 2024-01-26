@@ -27,8 +27,9 @@ Start Jupyter Lab:
 ==================
 
 .. nbgallery::
-   notebooks/1 - ECT_General_Data_Access
-   notebooks/2 - ECT_Data_access_with_subsets
+   notebooks/1-ECT_General_Data_Access
+
+   notebooks/2-ECT_Data_access_with_subsets
 
 
 
