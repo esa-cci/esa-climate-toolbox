@@ -6,7 +6,7 @@ Quick Start
 
 ESA CCI Toolbox Notebooks Setup
 ==================
-To run the Notebooks in this folder, you will need a Python environment with the ESA CCI Toolbox installed.
+To run the Notebooks you will need a Python environment with the ESA CCI Toolbox installed.
 For creating such an environment follow the instructions given in the **3.Installation guide**.
 Before using Jupyter Lab for the first time install the :code:`jupyterlab` and :code:`jupyterlab-geojson package`.
 
@@ -23,7 +23,14 @@ Start Jupyter Lab:
 
     (ect) $ jupyter-lab
 
-1 - ESA Climate Toolbox General Data Access
+1 - ESA CCI Toolbox General Data Access
 ==================
 
-notebooks/1 - ECT_General_Data_Acess
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   notebooks/1-ECT_General_Data_Access
+
+1 - ESA CCI Toolbox data access with subsets
+==================
