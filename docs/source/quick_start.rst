@@ -22,3 +22,6 @@ Start Jupyter Lab:
 .. code-block:: bash
 
     (ect) $ jupyter-lab
+
+ESA CCI Toolbox Notebooks Setup
+==================
