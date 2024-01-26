@@ -23,15 +23,12 @@ Start Jupyter Lab:
 
     (ect) $ jupyter-lab
 
-1 - ESA CCI Toolbox General Data Access
+1 - Running ESA CCI Toolbox
 ==================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Notebooks:
-
+.. nbgallery::
    notebooks/1 - ECT_General_Data_Access
    notebooks/2 - ECT_Data_access_with_subsets
-   notebooks/1-ECT_General_Data_Access
-1 - ESA CCI Toolbox data access with subsets
-==================
+
+
+
