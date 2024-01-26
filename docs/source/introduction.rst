@@ -29,7 +29,7 @@ subset of mature and validated ECV-related data products.
 .. _odp_:
 
 .. figure:: _static/figures/ODP_detail.png
-   :scale: 35 %
+   :scale: 30 %
    :align: center
 
    Snapshot from `CCI Open Data Portal`_ with some of the available ECVs
