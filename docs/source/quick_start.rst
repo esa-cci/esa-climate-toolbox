@@ -23,5 +23,7 @@ Start Jupyter Lab:
 
     (ect) $ jupyter-lab
 
-ESA CCI Toolbox Notebooks Setup
+1 - ESA Climate Toolbox General Data Access
 ==================
+
+notebooks/1 - ECT_General_Data_Acess
