@@ -14,4 +14,3 @@ dependencies:
   # Test libs
   - pytest
   - pytest-cov
-

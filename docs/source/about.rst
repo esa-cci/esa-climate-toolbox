@@ -6,8 +6,8 @@
 .. _NumPy: http://www.numpy.org/
 .. _JASMIN: http://www.jasmin.ac.uk/
 .. _xcube: https://github.com/dcs4cop/xcube
-.. _data store framework:
-    https://xcube.readthedocs.io/en/latest/dataaccess.html#data-store-framework
+.. _data store framework: https://xcube.readthedocs.io/en/latest/dataaccess.html#data-store-framework
+.. _Zarr format: https://zarr.readthedocs.io/en/stable/
 
 =========================
 About the ESA CCI Toolbox
@@ -38,12 +38,12 @@ Users may read more about stores in the documentation of the xcube
 `data store framework`_.
 
 The CCI toolbox comes with two pre-defined stores: The first one is the
-**Open Data Portal** store, which is denoted by the handle
+`CCI Open Data Portal`_ store, which is denoted by the handle
 `esa-climate-data-centre` (or `esa-cdc` for short).
 It provides access to any data from the Open Data Portal.
 
 The second data store is the Zarr store (`esa-cdc-zarr`), which allows to access
-datasets from the Open Data Portal that have been converted to the Zarr format.
+datasets from the Open Data Portal that have been converted to the `Zarr format`_.
 This has been done for selected datasets which were either frequently used or
 large in terms of data volume.
 Providing the data as zarr files allows for a more performant data access.
