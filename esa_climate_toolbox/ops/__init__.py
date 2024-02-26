@@ -53,7 +53,20 @@ def ect_init():
     pass
 
 
+from .aggregate import climatology
+from .aggregate import reduce
+from .aggregate import temporal_aggregation
+from .anomaly import anomaly_external
+from .anomaly import anomaly_internal
+from .arithmetics import arithmetics
+from .arithmetics import diff
 from .coregistration import coregister
+from .data_frame import aggregate_statistics
+from .data_frame import data_frame_max
+from .data_frame import data_frame_min
+from .data_frame import data_frame_subset
+from .data_frame import find_closest
+from .data_frame import query
 from .normalize import adjust_spatial_attrs
 from .normalize import adjust_temporal_attrs
 from .normalize import normalize
@@ -70,8 +83,25 @@ from .timeseries import tseries_point
 from.utility import merge
 
 __all__ = [
+    # aggregation
+    'climatology',
+    'reduce',
+    'temporal_aggregation',
+    # anomaly
+    'anomaly_external',
+    'anomaly_internal',
+    # arithmetics
+    'arithmetics',
+    'diff',
     # .coregistration
     'coregister',
+    # data frame
+    'aggregate_statistics',
+    'data_frame_max',
+    'data_frame_min',
+    'data_frame_subset',
+    'find_closest',
+    'query',
     # .normalize
     'normalize',
     'adjust_temporal_attrs',

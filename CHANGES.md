@@ -1,5 +1,21 @@
 ## Changes in 0.3.1 (in development)
 
+* Added operations:
+  * `aggregate_statistics`: 
+    Aggregates data frame columns into statistical measures
+  * `anomaly_external`: Calculates anomaly with external reference data
+  * `anomaly_internal`: Calculates anomaly using a dataset's mean
+  * `arithmetics`: Applies arithmetic operations
+  * `climatology`: Creates a 'mean over years' dataset
+  * `data_frame_max`: Selects a data frame's maximum record
+  * `data_frame_min`: Selects a data frame's minimum record
+  * `data_frame_subset`: Creates a variable or spatial subset of a dataframe
+  * `diff`: Calculates the difference of two datasets
+  * `find_closest`: Find data frame records closest to a given location
+  * `query`: Query records from a dataframe
+  * `reduce`: Reduces a dataset's variables
+  * `temporal_aggregation`: Aggregates a dataset
+
 ## Changes in 0.3
 
 * Integrated operation framework
