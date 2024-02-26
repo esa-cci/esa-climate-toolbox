@@ -53,10 +53,48 @@ Reading and Writing Data
 Operations
 ==========
 
+Aggregation
+-----------
+
+.. autofunction:: esa_climate_toolbox.ops.climatology
+
+.. autofunction:: esa_climate_toolbox.ops.reduce
+
+.. autofunction:: esa_climate_toolbox.ops.temporal_aggregation
+
+Anomalies
+---------
+
+.. autofunction:: esa_climate_toolbox.ops.anomaly_external
+
+.. autofunction:: esa_climate_toolbox.ops.anomaly_internal
+
+Arithmetics
+-----------
+
+.. autofunction:: esa_climate_toolbox.ops.arithmetic
+
+.. autofunction:: esa_climate_toolbox.ops.diff
+
 Coregistration
 --------------
 
 .. autofunction:: esa_climate_toolbox.ops.coregister
+
+Data Frames
+-----------
+
+.. autofunction:: esa_climate_toolbox.ops.aggregate_statistics
+
+.. autofunction:: esa_climate_toolbox.ops.data_frame_max
+
+.. autofunction:: esa_climate_toolbox.ops.data_frame_min
+
+.. autofunction:: esa_climate_toolbox.ops.data_frame_subset
+
+.. autofunction:: esa_climate_toolbox.ops.find_closest
+
+.. autofunction:: esa_climate_toolbox.ops.query
 
 
 Resampling
