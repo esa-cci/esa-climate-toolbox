@@ -1,8 +1,9 @@
 .. _European Space Agency: http://www.esa.int/ESA
-.. _Climate Change Initiative: http://cci.esa.int/
-.. _GCOS: http://www.wmo.int/pages/prog/gcos/index.php
+.. _Climate Change Initiative: https://climate.esa.int/en/
+.. _GCOS: https://gcos.wmo.int/en/home
 .. _UNFCCC: http://unfccc.int/2860.php
 .. _ECVs: https://climate.esa.int/en/projects/
+.. _CCI Open Data Portal: https://climate.esa.int/en/odp/#/dashboard
 
 ============
 Introduction
@@ -20,10 +21,18 @@ Convention on Climate Change.
 
 In the ESA CCI programme **Essential Climate Variables** (ECVs_) are produced
 by individual expert teams, and cross-cutting activities provide coordination,
-harmonisation and support. The **CCI Toolbox** and the **CCI Open Data Portal**
+harmonisation and support. The **CCI Toolbox** and the `CCI Open Data Portal`_
 are the two main technical support projects within the programme.
 The CCI Open Data Portal provides a single point of harmonised access to a
 subset of mature and validated ECV-related data products.
+
+.. _odp_:
+
+.. figure:: _static/figures/ODP_detail.png
+   :scale: 30 %
+   :align: center
+
+   Snapshot from `CCI Open Data Portal`_ with some of the available ECVs
 The CCI Toolbox provides tools that support visualisation, analysis and
 processing across CCI and other climate data products.
 With these two technical cross-cutting activities ESA is providing an interface

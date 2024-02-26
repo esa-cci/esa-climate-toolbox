@@ -19,3 +19,4 @@ dependencies:
       - sphinx-autodoc-annotation
       - recommonmark
       - mock
+      - nbsphinx
