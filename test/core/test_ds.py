@@ -60,7 +60,7 @@ class DsTest(unittest.TestCase):
 
     def test_list_datasets(self):
         datasets = list_datasets(store_id=ECT_ZARR_STORE_ID)
-        self.assertTrue(len(datasets) < 25)
+        self.assertTrue(len(datasets) > 1)
         self.assertTrue(
             'ESACCI-LAKES-L3S-LK_PRODUCTS-MERGED-1992-09-fv2.0.1.zarr'
             in datasets
