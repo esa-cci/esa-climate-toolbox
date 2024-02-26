@@ -78,7 +78,7 @@ def aggregate_statistics(df: DataFrameLike.TYPE,
     :param df: The (Geo)DataFrame to be analysed
     :param var_names: Variables to be aggregated ('None' uses all aggregatable columns)
     :param aggregate_geometry: Aggregate (union like) the geometry and add it
-    to the resulting GeoDataFrame
+        to the resulting GeoDataFrame
     :param monitor: Monitor for progress bar
     :return: returns either DataFrame or GeoDataFrame. Keeps input data type
     """
@@ -208,14 +208,14 @@ def query(df: DataFrameLike.TYPE, query_expr: str) -> pd.DataFrame:
 
     The geometric relationship tests are
     * ``@almost_equals(geom)`` - does a feature's geometry almost equal
-        the given ``geom``;
+    the given ``geom``;
     * ``@contains(geom)`` - does a feature's geometry contain the given ``geom``;
     * ``@crosses(geom)`` - does a feature's geometry cross the given ``geom``;
     * ``@disjoint(geom)`` - does a feature's geometry not at all intersect
-        the given ``geom``;
+    the given ``geom``;
     * ``@intersects(geom)`` - does a feature's geometry intersect with given ``geom``;
     * ``@touches(geom)`` - does a feature's geometry have a point in common with
-        given ``geom`` but does not intersect it;
+    given ``geom`` but does not intersect it;
     * ``@within(geom)`` - is a feature's geometry contained within given ``geom``.
 
     The *geom* argument may be a point ``"<lon>, <lat>"`` text string,
