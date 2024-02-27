@@ -32,3 +32,6 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/esa-cci/esa-climate-toolbox"
 "Bug Tracker" = "https://github.com/esa-cci/esa-climate-toolbox/issues"
+
+[tool.setuptools]
+include-package-data = true
