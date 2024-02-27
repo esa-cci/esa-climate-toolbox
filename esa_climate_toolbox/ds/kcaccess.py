@@ -1,5 +1,5 @@
 # The MIT License (MIT)
-# Copyright (c) 2023 ESA Climate Change Initiative
+# Copyright (c) 2023-2024 ESA Climate Change Initiative
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,13 +19,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-CDC_SHORT_DATA_STORE_ID = 'esa-cdc'
-CDC_LONG_DATA_STORE_ID = 'esa-climate-data-centre'
-ZARR_DATA_STORE_ID = 'esa-cdc-zarr'
-KERCHUNK_DATA_STORE_ID = 'esa-cdc-kc'
+import json
+import os.path
 
-ECT_STORE_ID = 'cci-store'
-ECT_ZARR_STORE_ID = 'cci-zarr-store'
+from xcube.core.store import get_data_store_class
 
-MONTHS = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY',
-          'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER']
+ReferenceDataStore = get_data_store_class('reference')
+
+
+class CciKerchunkDataStore(ReferenceDataStore):
+
+    def __init__(self):
+        kc_refs_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            'data/kc_refs.json'
+        )
+        with open(kc_refs_path, 'r') as fp:
+            kc_refs = json.load(fp)
+        super().__init__(kc_refs, target_options=dict(compression=None))
