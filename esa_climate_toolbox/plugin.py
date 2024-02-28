@@ -24,8 +24,8 @@ from xcube.util import extension
 
 from esa_climate_toolbox.constants import CDC_LONG_DATA_STORE_ID
 from esa_climate_toolbox.constants import CDC_SHORT_DATA_STORE_ID
+from esa_climate_toolbox.constants import KC_DATA_STORE_ID
 from esa_climate_toolbox.constants import ZARR_DATA_STORE_ID
-from esa_climate_toolbox.constants import KERCHUNK_DATA_STORE_ID
 
 
 def init_plugin(ext_registry: extension.ExtensionRegistry):
@@ -72,7 +72,7 @@ def init_plugin(ext_registry: extension.ExtensionRegistry):
         loader=extension.import_component(
             'esa_climate_toolbox.ds.kcaccess:CciKerchunkDataStore'),
         point=EXTENSION_POINT_DATA_STORES,
-        name=KERCHUNK_DATA_STORE_ID,
+        name=KC_DATA_STORE_ID,
         description='xarray.Dataset in Kerchunk references format'
                     ' from ESA CCI Object Storage'
     )

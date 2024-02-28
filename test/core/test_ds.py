@@ -6,6 +6,7 @@ from xcube.core.new import new_cube
 from xcube.core.store import DataStore
 
 from esa_climate_toolbox.constants import ECT_STORE_ID
+from esa_climate_toolbox.constants import ECT_KC_STORE_ID
 from esa_climate_toolbox.constants import ECT_ZARR_STORE_ID
 
 from esa_climate_toolbox.core.ds import add_local_store
@@ -23,8 +24,9 @@ class DsTest(unittest.TestCase):
 
     def test_list_stores(self):
         provided_stores = list_stores()
-        self.assertIn('cci-store', provided_stores)
-        self.assertIn('cci-zarr-store', provided_stores)
+        self.assertIn(ECT_STORE_ID, provided_stores)
+        self.assertIn(ECT_KC_STORE_ID, provided_stores)
+        self.assertIn(ECT_ZARR_STORE_ID, provided_stores)
 
     def test_list_ecvs(self):
         ecvs = list_ecvs()
@@ -54,11 +56,18 @@ class DsTest(unittest.TestCase):
         self.assertIn(expected_zarr_file, lakes_datasets)
 
     def test_get_store(self):
-        store = get_store('cci-store')
+        store = get_store(store_id=ECT_STORE_ID)
         self.assertIsNotNone(store)
         self.assertIsInstance(store, DataStore)
 
     def test_list_datasets(self):
+        datasets = list_datasets(store_id=ECT_KC_STORE_ID)
+        self.assertTrue(len(datasets) > 1)
+        self.assertTrue(
+            'ESACCI-LC-L4-PFT-Map-300m-P1Y-1992-2020-v2.0.8-kr1.1'
+            in datasets
+        )
+
         datasets = list_datasets(store_id=ECT_ZARR_STORE_ID)
         self.assertTrue(len(datasets) > 1)
         self.assertTrue(
