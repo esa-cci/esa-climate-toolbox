@@ -974,11 +974,13 @@ class CciChunkStore(RemoteChunkStore):
         try:
             start = self._time_ranges[0][0].strftime(TIMESTAMP_FORMAT)
             end = self._time_ranges[0][1].strftime(TIMESTAMP_FORMAT)
+        except AttributeError:
+            start = self._time_ranges[0][0]
+            end = self._time_ranges[0][1]
         except ValueError:
             start = self._time_ranges[0][0]
             end = self._time_ranges[0][1]
-        return self._cci_cdc.get_variable_data(dataset_id, variable_dict, start,
-                                               end)
+        return self._cci_cdc.get_variable_data(dataset_id, variable_dict, start, end)
 
     def get_encoding(self, var_name: str) -> Dict[str, Any]:
         encoding_dict = {
