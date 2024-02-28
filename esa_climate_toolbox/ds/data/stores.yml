@@ -18,6 +18,17 @@ cci-zarr-store:
     CCI Open Data Portal Store that uses OPeNDAP as data transport protocol.
     It is planned to further develop the CCI Zarr Store and extend it successively.
 
+cci-kerchunk-store:
+  store_id: "esa-cdc-kc"
+  title: "CCI Kerchunk Store (experimental)"
+  description: >
+    A data store that contains selected datasets from the CCI Open Data Portal
+    which have been converted to [Zarr format](https://zarr.readthedocs.io/)
+    and placed in [JASMIN](https://jasmin.ac.uk/) Object Storage.
+    Its datasets are expected to offer a much better access performance compared to the
+    CCI Open Data Portal Store that uses OPeNDAP as data transport protocol.
+    It is planned to further develop the CCI Zarr Store and extend it successively.
+
 local:
   store_id: "file"
   store_params:
