@@ -37,12 +37,13 @@ def ect_init():
     dir_path = os.path.dirname(os.path.abspath(__file__))
     default_stores_file = os.path.join(dir_path, 'data/stores.yml')
 
+    configured_store_configs = {}
     if os.path.exists(STORES_CONF_FILE):
         with open(STORES_CONF_FILE, 'r') as fp:
-            store_configs = yaml.safe_load(fp)
-    else:
-        with open(default_stores_file, 'r') as fp:
-            store_configs = yaml.safe_load(fp)
+            configured_store_configs = yaml.safe_load(fp)
+    with open(default_stores_file, 'r') as fp:
+        default_store_configs = yaml.safe_load(fp)
+    store_configs = configured_store_configs | default_store_configs
 
     for store_name, store_config in store_configs.items():
         store_id = store_config.get('store_id')
