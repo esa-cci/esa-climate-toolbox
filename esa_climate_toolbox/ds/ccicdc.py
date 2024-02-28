@@ -441,7 +441,8 @@ class CciCdc:
                  num_retries: int = DEFAULT_NUM_RETRIES,
                  retry_backoff_max: int = DEFAULT_RETRY_BACKOFF_MAX,
                  retry_backoff_base: float = DEFAULT_RETRY_BACKOFF_BASE,
-                 user_agent: str = None
+                 user_agent: str = None,
+                 data_type: str = 'dataset'
                  ):
         self._opensearch_url = endpoint_url
         self._opensearch_description_url = endpoint_description_url
@@ -450,6 +451,7 @@ class CciCdc:
         self._retry_backoff_max = retry_backoff_max
         self._retry_backoff_base = retry_backoff_base
         self._headers = {'User-Agent': user_agent} if user_agent else None
+        self._data_type = data_type
         self._drs_ids = None
         self._data_sources = {}
         self._features = {}
@@ -458,6 +460,16 @@ class CciCdc:
                                 'data/excluded_data_sources')
         with open(eds_file, 'r') as eds:
             self._excluded_data_sources = eds.read().split('\n')
+        dataset_states_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            'data/dataset_states.json'
+        )
+        with open(dataset_states_file, 'r') as fp:
+            self._dataset_states = json.load(fp)
+
+    def _is_valid_dataset(self, data_id: str):
+        return self._dataset_states.get(data_id, {}).get('data_type', 'dataset') \
+               == self._data_type
 
     def close(self):
         pass
@@ -566,6 +578,12 @@ class CciCdc:
             for excluded_data_source in self._excluded_data_sources:
                 if excluded_data_source in self._drs_ids:
                     self._drs_ids.remove(excluded_data_source)
+            to_be_removed = []
+            for drs_id in self._drs_ids:
+                if drs_id in self._excluded_data_sources or not self._is_valid_dataset(drs_id):
+                    to_be_removed.append(drs_id)
+            self._drs_ids = [drs_id for drs_id in self._drs_ids
+                             if drs_id not in to_be_removed]
             return self._drs_ids
         if not self._data_sources:
             self._data_sources = {}
@@ -589,9 +607,12 @@ class CciCdc:
             json_dict.get('metadata_url', None)
         )
         drs_ids = self._get_as_list(meta_info, 'drs_id', 'drs_ids')
-        for excluded_data_source in self._excluded_data_sources:
-            if excluded_data_source in drs_ids:
-                drs_ids.remove(excluded_data_source)
+        to_be_removed = []
+        for drs_id in drs_ids:
+            if drs_id in self._excluded_data_sources or not self._is_valid_dataset(
+                    drs_id):
+                to_be_removed.append(drs_id)
+        drs_ids = [drs_id for drs_id in drs_ids if drs_id not in to_be_removed]
         for drs_id in drs_ids:
             drs_meta_info = copy.deepcopy(meta_info)
             drs_variables = drs_meta_info.get('variables', {}).get(drs_id, None)
@@ -709,6 +730,8 @@ class CciCdc:
                end_date: Optional[str] = None,
                bbox: Optional[Tuple[float, float, float, float]] = None,
                cci_attrs: Optional[Mapping[str, str]] = None) -> List[str]:
+        if cci_attrs is None:
+            cci_attrs = {}
         candidate_names = []
         if not self._data_sources and 'ecv' not in cci_attrs \
                 and 'frequency' not in cci_attrs \
@@ -1076,15 +1099,15 @@ class CciCdc:
         return feature_list[0][2]
 
     def get_data_chunk(
-            self, request: Dict, dim_indexes: Tuple
-    ) -> Optional[bytes]:
+            self, request: Dict, dim_indexes: Tuple, to_bytes: bool = True
+    ) -> Optional[Union[bytes, np.array]]:
         data_chunk = self._run_with_session(
-            self._get_data_chunk, request, dim_indexes
+            self._get_data_chunk, request, dim_indexes, to_bytes
         )
         return data_chunk
 
     async def _get_data_chunk(
-            self, session, request: Dict, dim_indexes: Tuple
+            self, session, request: Dict, dim_indexes: Tuple, to_bytes: bool = True
     ) -> Optional[bytes]:
         var_name = request['varNames'][0]
         opendap_url = await self._get_opendap_url(session, request)
@@ -1103,8 +1126,14 @@ class CciCdc:
         )
         if data is None:
             return None
-        data = np.array(data, copy=False, dtype=data_type)
-        return data.flatten().tobytes()
+        if data_type == 'bytes1024':
+            if data.size > 1:
+                data = [d.decode() for d in data]
+        else:
+            data = np.array(data, copy=False, dtype=data_type)
+        if to_bytes:
+            return data.flatten().tobytes()
+        return data
 
     async def _fetch_data_source_list_json(self, session, base_url, query_args,
                                            max_wanted_results=100000) -> Dict:

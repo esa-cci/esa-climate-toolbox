@@ -19,6 +19,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from abc import abstractmethod
 import json
 import os
 from typing import Any, Iterator, List, Tuple, Optional, Dict, Union, Container
@@ -27,6 +28,7 @@ import pyproj
 import xarray as xr
 
 from xcube.core.normalize import normalize_dataset
+from xcube.core.store import GEO_DATA_FRAME_TYPE
 from xcube.core.store import DATASET_TYPE
 from xcube.core.store import DataDescriptor
 from xcube.core.store import DataOpener
@@ -34,6 +36,7 @@ from xcube.core.store import DataStore
 from xcube.core.store import DataStoreError
 from xcube.core.store import DataType
 from xcube.core.store import DatasetDescriptor
+from xcube.core.store import GeoDataFrameDescriptor
 from xcube.core.store import VariableDescriptor
 from xcube.util.jsonschema import JsonArraySchema
 from xcube.util.jsonschema import JsonBooleanSchema
@@ -42,14 +45,17 @@ from xcube.util.jsonschema import JsonIntegerSchema
 from xcube.util.jsonschema import JsonNumberSchema
 from xcube.util.jsonschema import JsonObjectSchema
 from xcube.util.jsonschema import JsonStringSchema
+
 from .ccicdc import CciCdc
 from .chunkstore import CciChunkStore
 from .constants import CCI_ODD_URL
+from .constants import DATAFRAME_OPENER_ID
 from .constants import DATASET_OPENER_ID
 from .constants import DEFAULT_NUM_RETRIES
 from .constants import DEFAULT_RETRY_BACKOFF_BASE
 from .constants import DEFAULT_RETRY_BACKOFF_MAX
 from .constants import OPENSEARCH_CEDA_URL
+from .dataframeaccess import DataFrameAccessor
 from .normalize import normalize_coord_names
 from .normalize import normalize_dims_description
 from .normalize import normalize_variable_dims_description
@@ -108,6 +114,11 @@ class CciCdcDataOpener(DataOpener):
     def dataset_names(self) -> List[str]:
         return self._cci_cdc.dataset_names
 
+    @classmethod
+    @abstractmethod
+    def get_data_types(cls) -> Tuple[DataType, ...]:
+        pass
+
     def has_data(self, data_id: str) -> bool:
         return data_id in self.dataset_names
 
@@ -120,7 +131,7 @@ class CciCdcDataOpener(DataOpener):
             )
         return data_descriptors
 
-    def describe_data(self, data_id: str) -> DatasetDescriptor:
+    def describe_data(self, data_id: str) -> GeoDataFrameDescriptor:
         self._assert_valid_data_id(data_id)
         try:
             ds_metadata = self._cci_cdc.get_dataset_metadata(data_id)
@@ -132,6 +143,121 @@ class CciCdcDataOpener(DataOpener):
             )
 
     # noinspection PyArgumentList
+    @abstractmethod
+    def _get_data_descriptor_from_metadata(self,
+                                           data_id: str,
+                                           metadata: dict) -> DatasetDescriptor:
+        pass
+
+    def _get_variable_descriptors(self,
+                                  var_names: List[str],
+                                  var_infos: dict,
+                                  time_dim_name: str,
+                                  normalize_dims: bool = True) \
+            -> Dict[str, VariableDescriptor]:
+        var_descriptors = {}
+        for var_name in var_names:
+            if var_name in var_infos:
+                var_info = var_infos[var_name]
+                var_dtype = var_info['data_type']
+                var_dims = self._normalize_var_dims(
+                    var_info['dimensions'], time_dim_name) \
+                    if normalize_dims else var_info['dimensions']
+                var_descriptors[var_name] = VariableDescriptor(
+                    var_name, var_dtype, var_dims, attrs=var_info
+                )
+            else:
+                var_descriptors[var_name] = VariableDescriptor(
+                    var_name, '', ''
+                )
+        return var_descriptors
+
+    @staticmethod
+    def _remove_irrelevant_metadata_attributes(attrs: dict):
+        to_remove_list = []
+        for attribute in attrs:
+            if attribute not in _RELEVANT_METADATA_ATTRIBUTES:
+                to_remove_list.append(attribute)
+        for to_remove in to_remove_list:
+            attrs.pop(to_remove)
+
+    def search_data(self, **search_params) -> Iterator[DatasetDescriptor]:
+        search_result = self._cci_cdc.search(**search_params)
+        data_descriptors = self._describe_data(search_result)
+        return iter(data_descriptors)
+
+    def get_open_data_params_schema(
+            self, data_id: str = None
+    ) -> JsonObjectSchema:
+        if data_id is None:
+            return self._get_open_data_params_schema()
+        self._assert_valid_data_id(data_id)
+        dsd = self.describe_data(data_id)
+        return self._get_open_data_params_schema(dsd)
+
+    @abstractmethod
+    def _get_open_data_params_schema(
+            self,
+            dsd: DatasetDescriptor = None
+    ) -> JsonObjectSchema:
+        pass
+
+    @abstractmethod
+    def open_data(self, data_id: str, **open_params) -> Any:
+        pass
+
+    def _assert_valid_data_id(self, data_id: str):
+        if data_id not in self.dataset_names:
+            raise DataStoreError(f'Cannot describe metadata of '
+                                 f'data resource "{data_id}", '
+                                 f'as it cannot be accessed by '
+                                 f'data accessor "{self._id}".')
+
+    def _normalize_dataset(self, ds: xr.Dataset) -> xr.Dataset:
+        if self._normalize_data:
+            return normalize_dataset(ds)
+        return ds
+
+    def _normalize_dims(self, dims: dict) -> dict:
+        if self._normalize_data:
+            return normalize_dims_description(dims)
+        return dims.copy()
+
+    def _normalize_var_dims(self, var_dims: List[str], time_dim_name: str) \
+            -> Optional[List[str]]:
+        if self._normalize_data:
+            return normalize_variable_dims_description(var_dims)
+        new_var_dims = var_dims.copy()
+        if time_dim_name not in new_var_dims and len(new_var_dims) > 0:
+            new_var_dims.insert(0, time_dim_name)
+        return new_var_dims
+
+    def _normalize_var_infos(self, var_infos: Dict[str, Dict[str, Any]]) -> \
+            Dict[str, Dict[str, Any]]:
+        if self._normalize_data:
+            return normalize_var_infos(var_infos.copy())
+        return var_infos
+
+    def _normalize_coord_names(self, coord_names: List[str]):
+        if self._normalize_data:
+            return normalize_coord_names(coord_names.copy())
+        return coord_names
+
+
+class CciCdcDatasetOpener(CciCdcDataOpener):
+
+    def __init__(self, normalize_data: bool = True, **cdc_params):
+        super().__init__(
+            CciCdc(**cdc_params, data_type='dataset'),
+            DATASET_OPENER_ID,
+            DATASET_TYPE,
+            normalize_data=normalize_data,
+        )
+
+    @classmethod
+    def get_data_types(cls) -> Tuple[DataType, ...]:
+        return DATASET_TYPE,
+
     def _get_data_descriptor_from_metadata(self,
                                            data_id: str,
                                            metadata: dict) -> DatasetDescriptor:
@@ -232,55 +358,22 @@ class CciCdcDataOpener(DataOpener):
         descriptor.open_params_schema = data_schema
         return descriptor
 
-    def _get_variable_descriptors(self,
-                                  var_names: List[str],
-                                  var_infos: dict,
-                                  time_dim_name: str,
-                                  normalize_dims: bool = True) \
-            -> Dict[str, VariableDescriptor]:
-        var_descriptors = {}
-        for var_name in var_names:
-            if var_name in var_infos:
-                var_info = var_infos[var_name]
-                var_dtype = var_info['data_type']
-                var_dims = self._normalize_var_dims(
-                    var_info['dimensions'], time_dim_name) \
-                    if normalize_dims else var_info['dimensions']
-                var_descriptors[var_name] = VariableDescriptor(
-                    var_name, var_dtype, var_dims, attrs=var_info
-                )
-            else:
-                var_descriptors[var_name] = VariableDescriptor(
-                    var_name, '', ''
-                )
-        return var_descriptors
+    def open_data(self, data_id: str, **open_params) -> Any:
+        cci_schema = self.get_open_data_params_schema(data_id)
+        cci_schema.validate_instance(open_params)
+        cube_kwargs, open_params = cci_schema.process_kwargs_subset(
+            open_params, ('variable_names',
+                          'time_range',
+                          'bbox')
+        )
+        chunk_store = CciChunkStore(self._cci_cdc, data_id, cube_kwargs)
+        ds = xr.open_zarr(chunk_store, consolidated=False)
+        ds.zarr_store.set(chunk_store)
+        ds = self._normalize_dataset(ds)
+        return ds
 
-    @staticmethod
-    def _remove_irrelevant_metadata_attributes(attrs: dict):
-        to_remove_list = []
-        for attribute in attrs:
-            if attribute not in _RELEVANT_METADATA_ATTRIBUTES:
-                to_remove_list.append(attribute)
-        for to_remove in to_remove_list:
-            attrs.pop(to_remove)
-
-    def search_data(self, **search_params) -> Iterator[DatasetDescriptor]:
-        search_result = self._cci_cdc.search(**search_params)
-        data_descriptors = self._describe_data(search_result)
-        return iter(data_descriptors)
-
-    def get_open_data_params_schema(
-            self, data_id: str = None
-    ) -> JsonObjectSchema:
-        if data_id is None:
-            return self._get_open_data_params_schema()
-        self._assert_valid_data_id(data_id)
-        dsd = self.describe_data(data_id)
-        return self._get_open_data_params_schema(dsd)
-
-    @staticmethod
     def _get_open_data_params_schema(
-            dsd: DatasetDescriptor = None
+            self, dsd: DatasetDescriptor = None
     ) -> JsonObjectSchema:
         # noinspection PyUnresolvedReferences
         dataset_params = dict(
@@ -320,67 +413,127 @@ class CciCdcDataOpener(DataOpener):
         )
         return cci_schema
 
+
+class CciCdcDataFrameOpener(CciCdcDataOpener):
+
+    def __init__(self, **cdc_params):
+        super().__init__(
+            CciCdc(**cdc_params, data_type='geodataframe'),
+            DATAFRAME_OPENER_ID,
+            GEO_DATA_FRAME_TYPE
+        )
+
+    @classmethod
+    def get_data_types(cls) -> Tuple[DataType, ...]:
+        return GEO_DATA_FRAME_TYPE,
+
+    def _get_data_descriptor_from_metadata(self,
+                                           data_id: str,
+                                           metadata: dict) -> GeoDataFrameDescriptor:
+        ds_metadata = metadata.copy()
+        temporal_resolution = get_temporal_resolution_from_id(data_id)
+        dataset_info = self._cci_cdc.get_dataset_info(data_id, ds_metadata)
+        bbox = dataset_info['bbox']
+        crs = dataset_info['crs']
+        temporal_coverage = (
+            dataset_info['temporal_coverage_start'].split('T')[0]
+            if dataset_info['temporal_coverage_start'] else None,
+            dataset_info['temporal_coverage_end'].split('T')[0]
+            if dataset_info['temporal_coverage_end'] else None
+        )
+        feature_schema = self._get_feature_schema(ds_metadata)
+        descriptor = GeoDataFrameDescriptor(data_id,
+                                            data_type=self._data_type,
+                                            crs=crs,
+                                            bbox=bbox,
+                                            time_range=temporal_coverage,
+                                            time_period=temporal_resolution,
+                                            feature_schema=feature_schema)
+        data_schema = self._get_open_data_params_schema(descriptor)
+        descriptor.open_params_schema = data_schema
+        return descriptor
+
+    @staticmethod
+    def _get_feature_schema(metadata: dict):
+        int_data_types = ['uint8', 'uint16', 'uint32', 'int8', 'int16', 'int32']
+        features = dict()
+        for var_name, var_dict in metadata.get("variable_infos", {}).items():
+            dt = var_dict.get("datatype")
+            if var_name in ["lat", "lon", "latitude", "longitude"]:
+                continue
+            if dt == "float32" or dt == "float64":
+                features[var_name] = JsonNumberSchema()
+            elif dt in int_data_types:
+                features[var_name] = JsonIntegerSchema()
+            else:
+                features[var_name] = JsonObjectSchema()
+        features["time"] = JsonDateSchema()
+        features["geometry"] = JsonStringSchema(pattern="POINT(* *)")
+        feature_schema = JsonObjectSchema(
+            properties=dict(**features),
+            required=[
+            ],
+            additional_properties=False
+        )
+        return feature_schema
+
     def open_data(self, data_id: str, **open_params) -> Any:
         cci_schema = self.get_open_data_params_schema(data_id)
         cci_schema.validate_instance(open_params)
-        cube_kwargs, open_params = cci_schema.process_kwargs_subset(
+        frame_kwargs, open_params = cci_schema.process_kwargs_subset(
             open_params, ('variable_names',
                           'time_range',
                           'bbox')
         )
-        chunk_store = CciChunkStore(self._cci_cdc, data_id, cube_kwargs)
-        ds = xr.open_zarr(chunk_store, consolidated=False)
-        ds.zarr_store.set(chunk_store)
-        ds = self._normalize_dataset(ds)
-        return ds
+        data_frame_accessor = DataFrameAccessor(self._cci_cdc, data_id, frame_kwargs)
+        return data_frame_accessor.get_geodataframe()
 
-    def _assert_valid_data_id(self, data_id: str):
-        if data_id not in self.dataset_names:
-            raise DataStoreError(f'Cannot describe metadata of '
-                                 f'data resource "{data_id}", '
-                                 f'as it cannot be accessed by '
-                                 f'data accessor "{self._id}".')
-
-    def _normalize_dataset(self, ds: xr.Dataset) -> xr.Dataset:
-        if self._normalize_data:
-            return normalize_dataset(ds)
-        return ds
-
-    def _normalize_dims(self, dims: dict) -> dict:
-        if self._normalize_data:
-            return normalize_dims_description(dims)
-        return dims.copy()
-
-    def _normalize_var_dims(self, var_dims: List[str], time_dim_name: str) \
-            -> Optional[List[str]]:
-        if self._normalize_data:
-            return normalize_variable_dims_description(var_dims)
-        new_var_dims = var_dims.copy()
-        if time_dim_name not in new_var_dims and len(new_var_dims) > 0:
-            new_var_dims.insert(0, time_dim_name)
-        return new_var_dims
-
-    def _normalize_var_infos(self, var_infos: Dict[str, Dict[str, Any]]) -> \
-            Dict[str, Dict[str, Any]]:
-        if self._normalize_data:
-            return normalize_var_infos(var_infos.copy())
-        return var_infos
-
-    def _normalize_coord_names(self, coord_names: List[str]):
-        if self._normalize_data:
-            return normalize_coord_names(coord_names.copy())
-        return coord_names
-
-
-class CciCdcDatasetOpener(CciCdcDataOpener):
-
-    def __init__(self, normalize_data: bool = True, **cdc_params):
-        super().__init__(
-            CciCdc(**cdc_params),
-            DATASET_OPENER_ID,
-            DATASET_TYPE,
-            normalize_data=normalize_data,
+    def _get_open_data_params_schema(
+            self,
+            gfd: GeoDataFrameDescriptor = None
+    ) -> JsonObjectSchema:
+        # noinspection PyUnresolvedReferences
+        geodataframe_params = dict()
+        if gfd:
+            feature_schema = gfd.feature_schema.to_dict()
+            var_names = list(feature_schema.get("properties", {}).keys())
+            var_names.remove("geometry")
+            var_names.remove("time")
+            geodataframe_params["variable_names"] = JsonArraySchema(
+                items=JsonStringSchema(enum=var_names)
+            )
+        if gfd:
+            min_date = gfd.time_range[0] if gfd.time_range else None
+            max_date = gfd.time_range[1] if gfd.time_range else None
+            if min_date or max_date:
+                geodataframe_params['time_range'] = \
+                    JsonDateSchema.new_range(min_date, max_date)
+        else:
+            geodataframe_params['time_range'] = JsonDateSchema.new_range(None, None)
+        if gfd:
+            try:
+                if pyproj.CRS.from_string(gfd.crs).is_geographic:
+                    min_lon = gfd.bbox[0] if gfd and gfd.bbox else -180
+                    min_lat = gfd.bbox[1] if gfd and gfd.bbox else -90
+                    max_lon = gfd.bbox[2] if gfd and gfd.bbox else 180
+                    max_lat = gfd.bbox[3] if gfd and gfd.bbox else 90
+                    bbox = JsonArraySchema(items=(
+                        JsonNumberSchema(minimum=min_lon, maximum=max_lon),
+                        JsonNumberSchema(minimum=min_lat, maximum=max_lat),
+                        JsonNumberSchema(minimum=min_lon, maximum=max_lon),
+                        JsonNumberSchema(minimum=min_lat, maximum=max_lat))
+                    )
+                    geodataframe_params['bbox'] = bbox
+            except pyproj.exceptions.CRSError:
+                # do not set bbox then
+                pass
+        cci_schema = JsonObjectSchema(
+            properties=dict(**geodataframe_params),
+            required=[
+            ],
+            additional_properties=False
         )
+        return cci_schema
 
 
 class CciCdcDataStore(DataStore):
@@ -394,10 +547,17 @@ class CciCdcDataStore(DataStore):
                            'retry_backoff_max', 'retry_backoff_base',
                            'user_agent')
         )
-        self._dataset_opener = CciCdcDatasetOpener(
+        dataset_opener = CciCdcDatasetOpener(
             normalize_data=normalize_data,
             **cdc_kwargs
         )
+        dataframe_opener = CciCdcDataFrameOpener(
+            **cdc_kwargs
+        )
+        self._openers = {
+            DATASET_OPENER_ID: dataset_opener,
+            DATAFRAME_OPENER_ID: dataframe_opener
+        }
         dataset_states_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             'data/dataset_states.json'
@@ -433,28 +593,46 @@ class CciCdcDataStore(DataStore):
 
     @classmethod
     def get_data_types(cls) -> Tuple[str, ...]:
-        return DATASET_TYPE.alias,
+        return DATASET_TYPE.alias, GEO_DATA_FRAME_TYPE.alias
 
     def get_data_types_for_data(self, data_id: str) -> Tuple[str, ...]:
         if self.has_data(data_id, data_type=DATASET_TYPE):
             return DATASET_TYPE.alias,
+        if self.has_data(data_id, data_type=GEO_DATA_FRAME_TYPE):
+            return GEO_DATA_FRAME_TYPE.alias,
         raise DataStoreError(
             f'Data resource {data_id!r} does not exist in store'
         )
 
-    def _get_opener(
+    def _get_openers(
             self, opener_id: str = None, data_type: str = None
-    ) -> CciCdcDataOpener:
+    ) -> List[CciCdcDataOpener]:
         self._assert_valid_opener_id(opener_id)
         self._assert_valid_data_type(data_type)
-        return self._dataset_opener
+        if opener_id is not None:
+            opener = self._openers[opener_id]
+            if data_type is not None:
+                opener_types = opener.get_data_types()
+                for opener_type in opener_types:
+                    if opener_type.is_super_type_of(data_type):
+                        return [opener]
+                raise ValueError(f"Opener '{opener_id}' is not compataible with "
+                                 f"data type '{data_type}'.")
+        if data_type is not None:
+            if DATASET_TYPE.is_super_type_of(data_type):
+                return [self._openers[DATASET_OPENER_ID]]
+            if GEO_DATA_FRAME_TYPE.is_super_type_of(data_type):
+                return [self._openers[DATAFRAME_OPENER_ID]]
+        return list(self._openers.values())
 
     def get_data_ids(self,
                      data_type: str = None,
                      include_attrs: Container[str] = None) -> \
             Union[Iterator[str], Iterator[Tuple[str, Dict[str, Any]]]]:
-        data_ids = self._get_opener(data_type=data_type).dataset_names
-
+        openers = self._get_openers(data_type=data_type)
+        data_ids = []
+        for opener in openers:
+            data_ids.extend(opener.dataset_names)
         for data_id in data_ids:
             if include_attrs is None:
                 yield data_id
@@ -467,19 +645,31 @@ class CciCdcDataStore(DataStore):
                 yield data_id, attrs
 
     def has_data(self, data_id: str, data_type: str = None) -> bool:
-        return self._get_opener(data_type=data_type).has_data(data_id)
+        openers = self._get_openers(data_type=data_type)
+        for opener in openers:
+            if opener.has_data(data_id):
+                return True
+        return False
 
     def describe_data(
             self, data_id: str, data_type: str = None
     ) -> DataDescriptor:
-        return self._get_opener(data_type=data_type).describe_data(data_id)
+        openers = self._get_openers(data_type=data_type)
+        for opener in openers:
+            if opener.has_data(data_id):
+                return opener.describe_data(data_id)
+        raise ValueError(f"No opener provides data with id {data_id}")
 
     @classmethod
     def get_search_params_schema(
             cls, data_type: str = None
     ) -> JsonObjectSchema:
         cls._assert_valid_data_type(data_type)
-        data_ids = CciCdc().dataset_names
+        if data_type is not None:
+            data_ids = CciCdc(data_type=data_type).dataset_names
+        else:
+            data_ids = CciCdc(data_type=DATASET_TYPE.alias).dataset_names + \
+                       CciCdc(data_type=GEO_DATA_FRAME_TYPE.alias).dataset_names
         ecvs = set([data_id.split('.')[1] for data_id in data_ids])
         frequencies = set(
             [data_id.split('.')[2].replace('-days', ' days').
@@ -523,12 +713,13 @@ class CciCdcDataStore(DataStore):
     def search_data(
             self, data_type: str = None, **search_params
     ) -> Iterator[DatasetDescriptor]:
-        if not self._is_valid_data_type(data_type):
-            return iter([])
         search_schema = self.get_search_params_schema()
         search_schema.validate_instance(search_params)
-        opener = self._get_opener(data_type=data_type)
-        return opener.search_data(**search_params)
+        openers = self._get_openers(data_type=data_type)
+        desc_iterators = []
+        for opener in openers:
+            desc_iterators.extend(opener.search_data(**search_params))
+        return desc_iterators
 
     def get_data_opener_ids(
             self, data_id: str = None, data_type: str = None,
@@ -538,31 +729,49 @@ class CciCdcDataStore(DataStore):
                 and not self.has_data(data_id, data_type=data_type):
             raise DataStoreError(f'Data resource {data_id!r}'
                                  f' is not available.')
-        if data_type is not None \
-                and not DATASET_TYPE.is_super_type_of(data_type):
+        if data_type is None:
+            return list(self._openers.keys())
+        opener_ids = []
+        for opener_id, opener in self._openers.items():
+            for opener_data_type in opener.get_data_types():
+                if opener_data_type.is_super_type_of(data_type):
+                    opener_ids.append(opener_id)
+                    break
+        if len(opener_ids) == 0:
             raise DataStoreError(f'Data resource {data_id!r}'
                                  f' is not available as type {data_type!r}.')
-        return DATASET_OPENER_ID,
+        return tuple(opener_ids)
 
     def get_open_data_params_schema(
             self, data_id: str = None, opener_id: str = None
     ) -> JsonObjectSchema:
-        return self._get_opener(opener_id=opener_id). \
-            get_open_data_params_schema(data_id)
+        openers = self._get_openers(opener_id=opener_id)
+        if data_id is not None:
+            for opener in openers:
+                if opener.has_data(data_id):
+                    return opener.get_open_data_params_schema(data_id)
+            raise ValueError(f"No schema for '{data_id}' with provided opener ids.")
+        # TODO find solution for when neither data id nor opener id have been provided
+        # Have less specific schema?
+        return openers[0].get_open_data_params_schema(data_id)
 
     def open_data(
             self, data_id: str, opener_id: str = None, **open_params
     ) -> xr.Dataset:
-        return self._get_opener(opener_id=opener_id).open_data(
-            data_id, **open_params
-        )
+        openers = self._get_openers(opener_id=opener_id)
+        for opener in openers:
+            if opener.has_data(data_id):
+                return opener.open_data(data_id, **open_params)
+        raise ValueError(f"Could not open data '{data_id}'. No opener found.")
 
     ############################################################################
     # Implementation helpers
 
     @classmethod
     def _is_valid_data_type(cls, data_type: str) -> bool:
-        return data_type is None or DATASET_TYPE.is_super_type_of(data_type)
+        return data_type is None \
+               or DATASET_TYPE.is_super_type_of(data_type) \
+               or GEO_DATA_FRAME_TYPE.is_super_type_of(data_type)
 
     @classmethod
     def _assert_valid_data_type(cls, data_type):
@@ -571,10 +780,9 @@ class CciCdcDataStore(DataStore):
                 f'Data type must be {DATASET_TYPE!r},'
                 f' but got {data_type!r}')
 
-    @staticmethod
-    def _assert_valid_opener_id(opener_id):
-        if opener_id is not None and opener_id != DATASET_OPENER_ID:
+    def _assert_valid_opener_id(self, opener_id):
+        if opener_id is not None and opener_id not in list(self._openers.keys()):
             raise DataStoreError(
-                f'Data opener identifier must be {DATASET_OPENER_ID!r},'
-                f' but got {opener_id!r}'
+                f'Data opener identifier must be {DATASET_OPENER_ID!r} or '
+                f'{DATAFRAME_OPENER_ID!r}, but got {opener_id!r}'
             )

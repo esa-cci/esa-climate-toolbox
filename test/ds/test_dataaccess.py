@@ -6,11 +6,14 @@ from unittest import skipIf
 
 from xcube.core.gridmapping import GridMapping
 from xcube.core.normalize import normalize_dataset
-from xcube.core.store import DataStoreError, DATASET_TYPE
+from xcube.core.store import DATASET_TYPE
+from xcube.core.store import DataStoreError
+from xcube.core.store import GEO_DATA_FRAME_TYPE
 from xcube.core.store.descriptor import DatasetDescriptor
 from xcube.core.verify import assert_cube
 
 from esa_climate_toolbox.ds.dataaccess import CciCdcDataStore
+from esa_climate_toolbox.ds.dataaccess import CciCdcDataFrameOpener
 from esa_climate_toolbox.ds.dataaccess import CciCdcDatasetOpener
 from esa_climate_toolbox.ds.dataaccess import get_temporal_resolution_from_id
 
@@ -34,6 +37,7 @@ OZONE_MON_SCIAMACHY_ID = 'esacci.OZONE.mon.L3.LP.SCIAMACHY.Envisat.' \
 SEAICE_ID = 'esacci.SEAICE.day.L4.SICONC.multi-sensor.multi-platform.' \
             'AMSR_25kmEASE2.2-1.NH'
 SST_ID = 'esacci.SST.day.L4.SSTdepth.multi-sensor.multi-platform.OSTIA.1-1.r1'
+GHG_DS_ID = "esacci.GHG.satellite-orbit-frequency.L2.CH4.SCIAMACHY.Envisat.IMAP.v7-2.r1"
 
 class DataAccessTest(unittest.TestCase):
 
@@ -537,7 +541,7 @@ class CciOdpDatasetOpenerNormalizeTest(unittest.TestCase):
         self.assertEqual(
             f'Cannot describe metadata of data resource '
             f'"{AEROSOL_DAY_ENVISAT_ID}", as it cannot be accessed by '
-            f'data accessor "dataset:zarr:cciodp".', f'{dse.exception}')
+            f'data accessor "dataset:zarr:esa-cdc".', f'{dse.exception}')
 
     @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
             'ECT_DISABLE_WEB_TESTS = 1')
@@ -629,6 +633,24 @@ def user_agent(ext: str = "") -> str:
     )
 
 
+class CciCdcDataFrameOpenerTest(unittest.TestCase):
+
+    def setUp(self) -> None:
+        self._opener = CciCdcDataFrameOpener()
+
+    def test_dataset_names(self):
+        ds_names = self._opener.dataset_names
+        self.assertTrue(len(ds_names) > 10)
+
+    def test_get_dataset_types(self):
+        data_types = self._opener.get_data_types()
+        self.assertEqual(1, len(data_types))
+        self.assertEqual(GEO_DATA_FRAME_TYPE, data_types[0])
+
+    def test_has_data(self):
+        self.assertTrue(self._opener.has_data(GHG_DS_ID))
+
+
 class CciCdcDataStoreTest(unittest.TestCase):
 
     def setUp(self) -> None:
@@ -646,7 +668,7 @@ class CciCdcDataStoreTest(unittest.TestCase):
         self.assertTrue('user_agent' in cci_store_params_schema['properties'])
 
     def test_get_data_types(self):
-        self.assertEqual(('dataset',), CciCdcDataStore.get_data_types())
+        self.assertEqual(('dataset', "geodataframe"), CciCdcDataStore.get_data_types())
 
     def test_get_data_types_for_data(self):
         data_types_for_data = self.store.get_data_types_for_data(
@@ -685,7 +707,7 @@ class CciCdcDataStoreTest(unittest.TestCase):
         geodataframe_search_result = \
             list(self.store.search_data('geodataframe'))
         self.assertIsNotNone(geodataframe_search_result)
-        self.assertEqual(0, len(geodataframe_search_result))
+        self.assertTrue(len(geodataframe_search_result) > 20)
 
 
 class CciDataNormalizationTest(unittest.TestCase):
