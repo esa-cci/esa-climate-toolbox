@@ -486,7 +486,7 @@ class CciCdcTest(unittest.TestCase):
     @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
             'ECT_DISABLE_WEB_TESTS = 1')
     def test_search_product_version(self):
-        cci_cdc = CciCdc()
+        cci_cdc = CciCdc(data_type="geodataframe")
         v238_sources = cci_cdc.search(
             start_date='1990-05-01',
             end_date='2021-08-01',
@@ -514,7 +514,7 @@ class CciCdcTest(unittest.TestCase):
     @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
             'ECT_DISABLE_WEB_TESTS = 1')
     def test_search_sensor(self):
-        cci_cdc = CciCdc()
+        cci_cdc = CciCdc(data_type="geodataframe")
         sciamachy_sources = cci_cdc.search(
             start_date='1990-05-01',
             end_date='2021-08-01',

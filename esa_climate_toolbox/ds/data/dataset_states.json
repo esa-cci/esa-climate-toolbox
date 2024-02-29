@@ -444,89 +444,94 @@
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Sentinel-3 SYN Burned Area Grid product, version 1.0"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CH4.SCIAMACHY.Envisat.IMAP.v7-2.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from SCIAMACHY generated with the IMAP-DOAS algorithm (CH4_SCI_IMAP), v7.2"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CH4.SCIAMACHY.Envisat.WFMD.v4-0.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from SCIAMACHY generated with the WFMD algorithm (CH4_SCI_WFMD), version 4.0"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CH4.TANSO-FTS.GOSAT.EMMA.ch4_v1-2.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 Merged Product generated with the EMMA algorithm (CH4_EMMA), version 1.2"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CH4.TANSO-FTS.GOSAT.OCFP.v2-1.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from GOSAT generated with the OCFP (UoL-FP) algorithm (CH4_GOS_OCFP), version 2.1"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CH4.TANSO-FTS.GOSAT.OCPR.v7-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from GOSAT generated with the OCPR (UoL-PR) Proxy algorithm (CH4_GOS_OCPR), v7.0"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CH4.TANSO-FTS.GOSAT.SRFP.v2-3-8.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from GOSAT generated with the SRFP (RemoTeC) Full Physics algorithm (CH4_GOS_SRFP), version 2.3.8"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CH4.TANSO-FTS.GOSAT.SRPR.v2-3-8.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from GOSAT generated with the SRPR (RemoTeC) Proxy Retrieval algorithm (CH4_GOS_SRPR), version 2.3.8"
     },
-    "esacci.GHG.satellite-orbit-frequency.L2.CH4.TROPOMI.Sentinel-5P.WFMD.v1-2.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
-        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged methane from Sentinel-5P, generated with the WFM-DOAS algorithm, version 1.2"
-    },
-    "esacci.GHG.satellite-orbit-frequency.L2.CO2.OCO.OCO-2.FOCAL.v09.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
-        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged carbon dioxide from OCO-2 generated with the FOCAL algorithm, version 09"
-    },
-    "esacci.GHG.satellite-orbit-frequency.L2.CO2.OCO.OCO-2.UNSPECIFIED.v08.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
-        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged carbon dioxide from OCO-2 generated with the FOCAL algorithm, version 08"
-    },
     "esacci.GHG.satellite-orbit-frequency.L2.CO2.SCIAMACHY.Envisat.BESD.v02-01-02.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CO2 from SCIAMACHY generated with the BESD algorithm (CO2_SCI_BESD), v02.01.02"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CO2.SCIAMACHY.Envisat.WFMD.v4-0.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CO2 from SCIAMACHY generated with the WFMD algorithm (CO2_SCI_WFMD), v4.0"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CO2.TANSO-FTS.GOSAT.EMMA.v2-2c.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
-    },
-    "esacci.GHG.satellite-orbit-frequency.L2.CO2.TANSO-FTS.GOSAT.OCFP.v7-0-1.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
-        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG CCI): Column-averaged CO2 from GOSAT generated with the OCFP (UoL-FP) algorithm (CO2_GOS_OCFP), v7.0"
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CO2.TANSO-FTS.GOSAT.SRFP.v2-3-8.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CO2 from GOSAT generated with the SRFP (RemoTeC) algorithm (CO2_GOS_SRFP), v2.3.8"
-    },
-    "esacci.GHG.satellite-orbit-frequency.L2.CO2.multi-sensor.multi-platform.EMMA.v2-2a.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
-        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
-    },
-    "esacci.GHG.satellite-orbit-frequency.L2.CO2.multi-sensor.multi-platform.EMMA.v2-2b.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
-        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
     },
     "esacci.ICESHEETS.mon.IND.GMB.GRACE-instrument.GRACE.VARIOUS.1-3.greenland_gmb_time_series": {
         "data_type": "dataset",
@@ -2625,23 +2630,42 @@
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Southern hemisphere sea ice thickness from the CryoSat-2 satellite on a monthly grid (L3C), v2.0"
     },
     "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.RA-2.Envisat.NH.2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Northern hemisphere sea ice thickness from Envisat on the satellite swath (L2P), v2.0"
     },
     "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.RA-2.Envisat.SH.2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Southern hemisphere sea ice thickness from Envisat on the satellite swath (L2P), v2.0"
     },
     "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.SIRAL.CryoSat-2.NH.2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Northern hemisphere sea ice thickness from CryoSat-2   on the satellite swath (L2P), v2.0"
     },
     "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.SIRAL.CryoSat-2.SH.2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Southern hemisphere sea ice thickness from CryoSat-2 on the satellite swath (L2P), v2.0"
     },
         "esacci.SEALEVEL.10-days.L3.SLA.multi-sensor.multi-platform.NE_ATL.1-1.r1": {
@@ -2733,49 +2757,87 @@
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Time series of gridded Sea Level Anomalies (SLA), Version 2.0"
     },
-        "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.AltiKa.SARAL.UNSPECIFIED.v2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+    "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.AltiKa.SARAL.UNSPECIFIED.v2-0.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
     "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.GFO-RA.GFO.UNSPECIFIED.v2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
     "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.Poseidon-2.Jason-1.UNSPECIFIED.v2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
     "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.Poseidon-3.Jason-2.UNSPECIFIED.v2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
     "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.RA-2.Envisat.UNSPECIFIED.v2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
     "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.RA.ERS-1.UNSPECIFIED.v2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
     "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.RA.ERS-2.UNSPECIFIED.v2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
     "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.SIRAL.CryoSat-2.UNSPECIFIED.v2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
     "esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.SSALT.Topex-Poseidon.UNSPECIFIED.v2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
     "esacci.SEALEVEL.unspecified.L3.SLA.multi-sensor.multi-platform.MED_SEA.1-1.r1": {

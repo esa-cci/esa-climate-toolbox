@@ -19,8 +19,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 import bisect
 import copy
 import itertools
@@ -33,15 +31,16 @@ from abc import abstractmethod, ABCMeta
 from collections.abc import MutableMapping
 from numcodecs import Blosc
 from typing import Iterator, Any, List, Dict, Tuple, Callable, Iterable, \
-    KeysView, Mapping, Union
+    KeysView, Mapping
 
 import numpy as np
 import pandas as pd
 
 from .ccicdc import CciCdc
-from ..constants import MONTHS
 from .constants import COMMON_COORD_VAR_NAMES
 from .constants import TIMESTAMP_FORMAT
+from .timerangegetter import extract_time_range_as_strings
+from .timerangegetter import TimeRangeGetter
 
 _MIN_CHUNK_SIZE = 512 * 512
 _MAX_CHUNK_SIZE = 2048 * 2048
@@ -127,9 +126,11 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 astype('datetime64[s]').astype(np.int64)
             time_coverage_start = self._time_ranges[0][0]
             time_coverage_end = self._time_ranges[-1][1]
-            cube_params['time_range'] = (self._extract_time_range_as_strings(
-                cube_params.get('time_range',
-                                self.get_default_time_range(data_id))))
+            cube_params['time_range'] = (extract_time_range_as_strings(
+                cube_params.get(
+                    'time_range', self.get_default_time_range(data_id)
+                )
+            ))
 
         self._vfs = {}
         self._var_name_to_ranges = {}
@@ -553,27 +554,6 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
     def _is_of_acceptable_chunk_size(cls, size: int):
         return _MIN_CHUNK_SIZE <= size <= _MAX_CHUNK_SIZE
 
-    @classmethod
-    def _extract_time_as_string(
-            cls, time_value: Union[pd.Timestamp, str]
-    ) -> str:
-        if isinstance(time_value, str):
-            time_value = pd.to_datetime(time_value, utc=True)
-        return time_value.tz_localize(None).isoformat()
-
-    @classmethod
-    def _extract_time_range_as_strings(
-            cls, time_range: Union[Tuple, List]
-    ) -> (str, str):
-        if isinstance(time_range, tuple):
-            time_start, time_end = time_range
-        else:
-            time_start = time_range[0]
-            time_end = time_range[1]
-        return \
-            cls._extract_time_as_string(time_start),\
-            cls._extract_time_as_string(time_end)
-
     @abstractmethod
     def get_time_ranges(
             self, cube_id: str, cube_params: Mapping[str, Any]
@@ -587,12 +567,6 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
     @abstractmethod
     def get_all_variable_names(self) -> List[str]:
         pass
-
-    # def get_spatial_lat_res(self):
-    #     return self._cube_config.spatial_res
-
-    # def get_spatial_lon_res(self):
-    #     return self._cube_config.spatial_res
 
     @abstractmethod
     def get_dimensions(self) -> Dict[str, int]:
@@ -873,83 +847,18 @@ class CciChunkStore(RemoteChunkStore):
         if dataset_id not in self._cci_cdc.dataset_names:
             raise ValueError(f'Data ID {dataset_id} not provided by CDC.')
         self._metadata = self._cci_cdc.get_dataset_metadata(dataset_id)
+        self._time_range_getter = TimeRangeGetter(self._cci_cdc, self._metadata)
         super().__init__(dataset_id,
                          cube_params,
                          observer=observer,
                          trace_store_calls=trace_store_calls)
 
-    def _extract_time_range_as_datetime(
-            self, time_range: Union[Tuple, List]
-    ) -> (datetime, datetime, str, str):
-        iso_start_time, iso_end_time = self._extract_time_range_as_strings(
-            time_range)
-        start_time = datetime.strptime(iso_start_time, TIMESTAMP_FORMAT)
-        end_time = datetime.strptime(iso_end_time, TIMESTAMP_FORMAT)
-        return start_time, end_time, iso_start_time, iso_end_time
-
     def get_time_ranges(self, dataset_id: str,
                         cube_params: Mapping[str, Any]) -> List[Tuple]:
-        start_time, end_time, iso_start_time, iso_end_time = \
-            self._extract_time_range_as_datetime(
-                cube_params.get('time_range',
-                                self.get_default_time_range(dataset_id)))
-        time_period = dataset_id.split('.')[2]
-        if time_period == 'day':
-            start_time = datetime(year=start_time.year, month=start_time.month,
-                                  day=start_time.day)
-            end_time = datetime(year=end_time.year, month=end_time.month,
-                                day=end_time.day,
-                                hour=23, minute=59, second=59)
-            delta = relativedelta(days=1)
-        elif time_period == 'month' or time_period == 'mon':
-            start_time = datetime(year=start_time.year, month=start_time.month,
-                                  day=1)
-            end_time = datetime(year=end_time.year, month=end_time.month, day=1)
-            delta = relativedelta(months=1)
-            end_time += delta
-        elif time_period == 'year' or time_period == 'yr':
-            start_time = datetime(year=start_time.year, month=1, day=1)
-            end_time = datetime(year=end_time.year, month=12, day=31)
-            delta = relativedelta(years=1)
-        elif time_period == 'climatology':
-            return [(i + 1, i + 1) for i, month in enumerate(MONTHS)]
-        else:
-            end_time = end_time.replace(hour=23, minute=59, second=59)
-            end_time_str = datetime.strftime(end_time, TIMESTAMP_FORMAT)
-            iso_end_time = self._extract_time_as_string(end_time_str)
-            request_time_ranges = self._cci_cdc.get_time_ranges_from_data(
-                dataset_id, iso_start_time, iso_end_time)
-            return request_time_ranges
-        request_time_ranges = []
-        this = start_time
-        while this < end_time:
-            after = this + delta
-            pd_this = pd.Timestamp(datetime.strftime(this, TIMESTAMP_FORMAT))
-            pd_next = pd.Timestamp(datetime.strftime(after, TIMESTAMP_FORMAT))
-            request_time_ranges.append((pd_this, pd_next))
-            this = after
-        return request_time_ranges
+        return self._time_range_getter.get_time_ranges(dataset_id, cube_params)
 
     def get_default_time_range(self, ds_id: str):
-        temporal_start = self._metadata.get('temporal_coverage_start', None)
-        temporal_end = self._metadata.get('temporal_coverage_end', None)
-        if not temporal_start or not temporal_end:
-            time_ranges = self._cci_cdc.get_time_ranges_from_data(ds_id)
-            if not temporal_start:
-                if len(time_ranges) == 0:
-                    raise ValueError(
-                        "Could not determine temporal start of dataset. "
-                        "Please use 'time_range' parameter."
-                    )
-                temporal_start = time_ranges[0][0]
-            if not temporal_end:
-                if len(time_ranges) == 0:
-                    raise ValueError(
-                        "Could not determine temporal end of dataset. "
-                        "Please use 'time_range' parameter."
-                    )
-                temporal_end = time_ranges[-1][1]
-        return temporal_start, temporal_end
+        return self._time_range_getter.get_default_time_range(ds_id)
 
     def get_all_variable_names(self) -> List[str]:
         return [variable['var_id'] for variable in self._metadata['variables']]
@@ -974,11 +883,13 @@ class CciChunkStore(RemoteChunkStore):
         try:
             start = self._time_ranges[0][0].strftime(TIMESTAMP_FORMAT)
             end = self._time_ranges[0][1].strftime(TIMESTAMP_FORMAT)
+        except AttributeError:
+            start = self._time_ranges[0][0]
+            end = self._time_ranges[0][1]
         except ValueError:
             start = self._time_ranges[0][0]
             end = self._time_ranges[0][1]
-        return self._cci_cdc.get_variable_data(dataset_id, variable_dict, start,
-                                               end)
+        return self._cci_cdc.get_variable_data(dataset_id, variable_dict, start, end)
 
     def get_encoding(self, var_name: str) -> Dict[str, Any]:
         encoding_dict = {
