@@ -64,7 +64,7 @@ from .constants import OPENSEARCH_CEDA_URL
 from .constants import COMMON_COORD_VAR_NAMES
 from .constants import TIMESTAMP_FORMAT
 
-from ..util.time import get_time_strings_from_string
+from esa_climate_toolbox.util.time import get_time_strings_from_string
 
 _LOG = logging.getLogger('xcube')
 ODD_NS = {'os': 'http://a9.com/-/spec/opensearch/1.1/',
