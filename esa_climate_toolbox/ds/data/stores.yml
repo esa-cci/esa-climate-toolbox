@@ -1,5 +1,5 @@
-cci-store:
-  store_id: "esa-cdc"
+esa-cci:
+  store_id: "esa-cci"
   title: "CCI Climate Data Centre"
   description: >
     This data store represents the [ESA CCI Open Data Portal](http://cci.esa.int/data)
@@ -7,8 +7,8 @@ cci-store:
     an OpenSearch interface. The store will be extended to also provide TIFF
     and Shapefile Data.
 
-cci-zarr-store:
-  store_id: "esa-cdc-zarr"
+esa-cci-zarr:
+  store_id: "esa-cci-zarr"
   title: "CCI Zarr Store (experimental)"
   description: >
     A data store that contains selected datasets from the CCI Open Data Portal
@@ -18,8 +18,8 @@ cci-zarr-store:
     CCI Open Data Portal Store that uses OPeNDAP as data transport protocol.
     It is planned to further develop the CCI Zarr Store and extend it successively.
 
-cci-kerchunk-store:
-  store_id: "esa-cdc-kc"
+esa-cci-kc:
+  store_id: "esa-cci-kc"
   title: "CCI Kerchunk Store (experimental)"
   description: >
     Some datasets offered by the Open Data Portal are provided via 
