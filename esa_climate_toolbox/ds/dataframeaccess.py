@@ -53,7 +53,6 @@ class DataFrameAccessor:
         self._time_chunking = 1
         tr = TimeRangeGetter(self._cci_cdc, self._metadata)
         self._time_ranges = tr.get_time_ranges(self._df_id, gdf_params)
-        self._request_time_range = gdf_params.get("time_range")
 
     def request_time_range(self, time_index: int) -> Tuple:
         start_index = time_index * self._time_chunking
