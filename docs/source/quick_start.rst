@@ -34,9 +34,10 @@ Jupyter Notebooks
    notebooks/1-ECT_Finding_Data
    notebooks/2-ECT_General_Data_Access
    notebooks/3-ECT_Data_Access_with_Subsets
-   notebooks/4-ECT_Zarr_Access
-   notebooks/5-ECT_Kerchunk_Access
-   notebooks/6-ECT_Finding_Operations
-   notebooks/7-ECT_Using_Operations
+   notebooks/4-ECT_Access_Vector_Data
+   notebooks/5-ECT_Zarr_Access
+   notebooks/6-ECT_Kerchunk_Access
+   notebooks/7-ECT_Finding_Operations
+   notebooks/8-ECT_Using_Operations
 
 
