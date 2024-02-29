@@ -47,6 +47,7 @@ setup(
             'esa_climate_toolbox/ds/data/excluded_data_sources',
             'esa_climate_toolbox/ds/data/dataset_states.json',
             'esa_climate_toolbox/ds/data/stores.yml'
+            'esa_climate_toolbox/ds/data/kc_refs.json'
             ]
     )],
     install_requires=requirements,

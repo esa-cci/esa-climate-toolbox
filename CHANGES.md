@@ -1,5 +1,12 @@
 ## Changes in 0.3.1 (in development)
 
+* Added new data store `cci-kerchunk-store` 
+  (and corresponding xcube data store `esa-cdc-kc`) that allows performant 
+  accessing of selected datasets of the ESA Climate Data Centre using a 
+  Zarr view of the original NetCDF files. This approach is made possible by 
+  using the [kerchunk](https://fsspec.github.io/kerchunk/) package. Also 
+  added new Notebook that demonstrates usage of the new data store.
+
 * Added operations:
   * `aggregate_statistics`: 
     Aggregates data frame columns into statistical measures
