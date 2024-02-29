@@ -25,6 +25,13 @@
   * esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.SIRAL.CryoSat-2.UNSPECIFIED.v2-0.r1
   * esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.SSALT.Topex-Poseidon.UNSPECIFIED.v2-0.r1
 
+* Added new data store `cci-kerchunk-store` 
+  (and corresponding xcube data store `esa-cdc-kc`) that allows performant 
+  accessing of selected datasets of the ESA Climate Data Centre using a 
+  Zarr view of the original NetCDF files. This approach is made possible by 
+  using the [kerchunk](https://fsspec.github.io/kerchunk/) package. Also 
+  added new Notebook that demonstrates usage of the new data store.
+
 * Added operations:
   * `aggregate_statistics`: 
     Aggregates data frame columns into statistical measures

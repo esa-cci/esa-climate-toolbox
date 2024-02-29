@@ -13,7 +13,7 @@ we have also assembled them here to provide you with an overview.
 ESA CCI Toolbox Notebooks Setup
 ===============================
 Before using Jupyter Lab for the first time install the :code:`jupyterlab` and
-:code:`jupyterlab-geojson package`.
+:code:`jupyterlab-geojson` packages.
 
 .. code-block:: bash
 
@@ -33,9 +33,9 @@ Jupyter Notebooks
 
    notebooks/1-ECT_General_Data_Access
    notebooks/2-ECT_Data_Access_with_Subsets
-   notebooks/3-Zarr_Access
+   notebooks/3.1-Zarr_Access
+   notebooks/3.2-Kerchunk_Access
    notebooks/4-Finding_Operations
    notebooks/5-Using Operations
-
 
 
