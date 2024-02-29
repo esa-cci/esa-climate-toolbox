@@ -72,7 +72,7 @@ Anomalies
 Arithmetics
 -----------
 
-.. autofunction:: esa_climate_toolbox.ops.arithmetic
+.. autofunction:: esa_climate_toolbox.ops.arithmetics
 
 .. autofunction:: esa_climate_toolbox.ops.diff
 
