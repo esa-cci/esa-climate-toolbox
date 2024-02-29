@@ -10,6 +10,7 @@ from xcube.core.store import DATASET_TYPE
 from xcube.core.store import DataStoreError
 from xcube.core.store import GEO_DATA_FRAME_TYPE
 from xcube.core.store.descriptor import DatasetDescriptor
+from xcube.core.store.descriptor import GeoDataFrameDescriptor
 from xcube.core.verify import assert_cube
 
 from esa_climate_toolbox.ds.dataaccess import CciCdcDataStore
@@ -647,8 +648,60 @@ class CciCdcDataFrameOpenerTest(unittest.TestCase):
         self.assertEqual(1, len(data_types))
         self.assertEqual(GEO_DATA_FRAME_TYPE, data_types[0])
 
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
     def test_has_data(self):
         self.assertTrue(self._opener.has_data(GHG_DS_ID))
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_describe_data(self):
+        descriptor = self._opener.describe_data(GHG_DS_ID)
+        self.assertIsNotNone(descriptor)
+        self.assertIsInstance(descriptor, GeoDataFrameDescriptor)
+        self.assertEqual(GHG_DS_ID, descriptor.data_id)
+        self.assertEqual("WGS84", descriptor.crs)
+        self.assertAlmostEqual(-180, descriptor.bbox[0], 1)
+        self.assertAlmostEqual(-90, descriptor.bbox[1], 1)
+        self.assertAlmostEqual(180, descriptor.bbox[2], 1)
+        self.assertAlmostEqual(90, descriptor.bbox[3], 1)
+        self.assertEqual("2003-01-08", descriptor.time_range[0])
+        self.assertEqual("2012-04-08", descriptor.time_range[1])
+        var_list = {
+            'solar_zenith_angle', 'sensor_zenith_angle', 'time', 'pressure_levels',
+            'pressure_weight', 'xch4_raw', 'xch4', 'h2o_ecmwf', 'xch4_prior',
+            'xco2_prior', 'xco2_retrieved', 'xch4_uncertainty', 'xch4_averaging_kernel',
+            'ch4_profile_apriori', 'xch4_quality_flag', 'dry_airmass_layer',
+            'surface_elevation', 'surface_temperature', 'chi2_ch4', 'chi2_co2',
+            'xco2_macc', 'xco2_CT2015', 'xch4_v71', 'geometry'
+        }
+        self.assertEqual(
+            var_list, set(descriptor.feature_schema.properties.keys())
+        )
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_get_open_data_params_schema(self):
+        schema = self._opener.get_open_data_params_schema(GHG_DS_ID).to_dict()
+        self.assertIsNotNone(schema)
+        self.assertEqual(
+            ["variable_names", "time_range", "bbox"],
+            list(schema.get("properties").keys())
+        )
+        var_list = {
+            'solar_zenith_angle', 'sensor_zenith_angle', 'pressure_levels',
+            'pressure_weight', 'xch4_raw', 'xch4', 'h2o_ecmwf', 'xch4_prior',
+            'xco2_prior', 'xco2_retrieved', 'xch4_uncertainty', 'xch4_averaging_kernel',
+            'ch4_profile_apriori', 'xch4_quality_flag', 'dry_airmass_layer',
+            'surface_elevation', 'surface_temperature', 'chi2_ch4', 'chi2_co2',
+            'xco2_macc', 'xco2_CT2015', 'xch4_v71'
+        }
+        self.assertEqual(
+            var_list,
+            set(
+                schema.get("properties").get("variable_names").get("items").get("enum")
+            )
+        )
 
 
 class CciCdcDataStoreTest(unittest.TestCase):
