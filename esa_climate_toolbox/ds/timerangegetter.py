@@ -30,7 +30,7 @@ from typing import Union
 
 from esa_climate_toolbox.ds.ccicdc import CciCdc
 
-from ..constants import MONTHS
+from esa_climate_toolbox.constants import MONTHS
 from .constants import TIMESTAMP_FORMAT
 
 

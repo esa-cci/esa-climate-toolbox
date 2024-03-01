@@ -28,7 +28,6 @@ import shapely
 
 from esa_climate_toolbox.ds.ccicdc import CciCdc
 from esa_climate_toolbox.ds.timerangegetter import TimeRangeGetter
-from esa_climate_toolbox.core.types import GeoDataFrame
 
 
 class DataFrameAccessor:
@@ -134,3 +133,108 @@ class DataFrameAccessor:
         gdf['time'] = gdf['time'].astype(str)
         for feature in gdf.iterfeatures():
             yield feature
+
+
+# this class is originally from esa_climate_toolbox.core.types
+# it is duplicated here to avoid circular imports
+class GeoDataFrame:
+    """
+    Proxy for a ``geopandas.GeoDataFrame`` that holds an iterable of features
+    or a feature collection for fastest possible streaming of GeoJSON features.
+
+    Important note: although GeoDataFrame is not inherited from
+    geopandas.GeoDataFrame it is an instance of that type meaning that::
+
+        isinstance(GeoDataFrame(...), geopandas.GeoDataFrame) == True
+
+    It also has all attributes of a geopandas.GeoDataFrame.
+    This allows us using the proxy for operation parameters
+    of type parameters pandas.DataFrame and geopandas.GeoDataFrame.
+    """
+
+    _OWN_PROPERTY_SET = {
+        "_features",
+        "features",
+        "_lazy_data_frame",
+        "lazy_data_frame",
+        "close",
+    }
+
+    @classmethod
+    def from_features(cls, features):
+        """
+        Create GeoDataFrame from an iterable of features
+        or a feature collection.
+
+        :param features: iterable of features or a feature collection,
+            e.g., an open ``fiona.Collection`` instance.
+        :return: An instance of a ``GeoDataFrame`` proxy.
+        """
+        return cls(features)
+
+    def __init__(self, features):
+        if features is None:
+            raise ValueError('features must not be None')
+        self._features = features
+        self._lazy_data_frame = None
+
+    @property
+    def features(self):
+        return self._features
+
+    @property
+    def lazy_data_frame(self):
+        features = self._features
+        if features is not None and self._lazy_data_frame is None:
+            crs = features.crs if hasattr(features, 'crs') else None
+            self._lazy_data_frame = gpd.GeoDataFrame.from_features(
+                features, crs=crs
+            )
+
+        return self._lazy_data_frame
+
+    def close(self):
+        """
+        In the ESA Climate Toolbox, closable resources are closed when removed
+        from the resources cache. Therefore we provide a close method here,
+        although geopandas.GeoDataFrame doesn't have one.
+        """
+        try:
+            self._features.close()
+        except AttributeError:
+            pass
+        self._features = None
+        self._lazy_data_frame = None
+
+    def __setattr__(self, key, value):
+        if key in GeoDataFrame._OWN_PROPERTY_SET:
+            object.__setattr__(self, key, value)
+        else:
+            self.lazy_data_frame.__setattr__(key, value)
+
+    def __getattribute__(self, item):
+        if item in GeoDataFrame._OWN_PROPERTY_SET:
+            return object.__getattribute__(self, item)
+        else:
+            return getattr(self.lazy_data_frame, item)
+
+    def __getattr__(self, item):
+        if item in GeoDataFrame._OWN_PROPERTY_SET:
+            return object.__getattribute__(self, item)
+        else:
+            return getattr(self.lazy_data_frame, item)
+
+    def __getitem__(self, item):
+        return self.lazy_data_frame.__getitem__(item)
+
+    def __setitem__(self, key, value):
+        return self.lazy_data_frame.__setitem__(key, value)
+
+    def __str__(self):
+        return str(self.lazy_data_frame)
+
+    def __repr__(self):
+        return repr(self.lazy_data_frame)
+
+    def __len__(self):
+        return len(self._features)

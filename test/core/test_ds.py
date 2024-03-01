@@ -51,7 +51,7 @@ class DsTest(unittest.TestCase):
         lakes_datasets = list_ecv_datasets('Lakes')
         expected_zarr_file = (
             'ESACCI-LAKES-L3S-LK_PRODUCTS-MERGED-1992-09-fv2.0.1.zarr',
-            'cci-zarr-store'
+            ECT_ZARR_STORE_ID
         )
         self.assertIn(expected_zarr_file, lakes_datasets)
 

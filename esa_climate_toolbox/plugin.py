@@ -22,9 +22,12 @@
 from xcube.constants import EXTENSION_POINT_DATA_STORES
 from xcube.util import extension
 
+from esa_climate_toolbox.constants import CCI_DATA_STORE_ID
 from esa_climate_toolbox.constants import CDC_LONG_DATA_STORE_ID
 from esa_climate_toolbox.constants import CDC_SHORT_DATA_STORE_ID
+from esa_climate_toolbox.constants import KC_CCI_DATA_STORE_ID
 from esa_climate_toolbox.constants import KC_DATA_STORE_ID
+from esa_climate_toolbox.constants import ZARR_CCI_DATA_STORE_ID
 from esa_climate_toolbox.constants import ZARR_DATA_STORE_ID
 
 
@@ -63,10 +66,23 @@ def init_plugin(ext_registry: extension.ExtensionRegistry):
     )
     ext_registry.add_extension(
         loader=extension.import_component(
-            'esa_climate_toolbox.ds.zarraccess:CciZarrDataStore'),
+            'esa_climate_toolbox.ds.dataaccess:CciCdcDataStore'),
         point=EXTENSION_POINT_DATA_STORES,
-        name=ZARR_DATA_STORE_ID,
-        description='xarray.Dataset in Zarr format from ESA CCI Object Storage'
+        name=CCI_DATA_STORE_ID,
+        description='ESA Open Data Portal',
+        data_store_notices=[dict(id='dataCompleteness',
+                                 title='Data Completeness',
+                                 content=data_completeness_content,
+                                 intent='warning',
+                                 icon='warning-sign')]
+    )
+    ext_registry.add_extension(
+        loader=extension.import_component(
+            'esa_climate_toolbox.ds.kcaccess:CciKerchunkDataStore'),
+        point=EXTENSION_POINT_DATA_STORES,
+        name=KC_CCI_DATA_STORE_ID,
+        description='xarray.Dataset in Kerchunk references format'
+                    ' from ESA CCI Object Storage'
     )
     ext_registry.add_extension(
         loader=extension.import_component(
@@ -75,4 +91,18 @@ def init_plugin(ext_registry: extension.ExtensionRegistry):
         name=KC_DATA_STORE_ID,
         description='xarray.Dataset in Kerchunk references format'
                     ' from ESA CCI Object Storage'
+    )
+    ext_registry.add_extension(
+        loader=extension.import_component(
+            'esa_climate_toolbox.ds.zarraccess:CciZarrDataStore'),
+        point=EXTENSION_POINT_DATA_STORES,
+        name=ZARR_CCI_DATA_STORE_ID,
+        description='xarray.Dataset in Zarr format from ESA CCI Object Storage'
+    )
+    ext_registry.add_extension(
+        loader=extension.import_component(
+            'esa_climate_toolbox.ds.zarraccess:CciZarrDataStore'),
+        point=EXTENSION_POINT_DATA_STORES,
+        name=ZARR_DATA_STORE_ID,
+        description='xarray.Dataset in Zarr format from ESA CCI Object Storage'
     )
