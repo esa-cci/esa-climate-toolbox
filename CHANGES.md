@@ -1,4 +1,4 @@
-## Changes in 0.4.1 (in development)
+## Changes in 0.4.1
 
 * Updated list of dataset states
 * Fixed internal build process
