@@ -1,6 +1,13 @@
 ## Changes in 0.4.0 (in development)
 
-* Added opener `"datafame:geojson:esa-cdc"` to `esa-cdc` data store.
+* Added store aliases `esa-cci` and `esa-cci-zarr` and renamed default stores to have
+  the same names.
+
+* Ensure default stores will always be included in store registry.
+
+* Updated documentation
+
+* Added opener `"datafame:geojson:esa-cdc"` to `esa-cci` data store.
   The following datasets can now be opened:
   * esacci.GHG.satellite-orbit-frequency.L2.CH4.SCIAMACHY.Envisat.IMAP.v7-2.r1
   * esacci.GHG.satellite-orbit-frequency.L2.CH4.TANSO-FTS.GOSAT.EMMA.ch4_v1-2.r1
@@ -24,9 +31,10 @@
   * esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.RA.ERS-2.UNSPECIFIED.v2-0.r1
   * esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.SIRAL.CryoSat-2.UNSPECIFIED.v2-0.r1
   * esacci.SEALEVEL.satellite-orbit-frequency.L1.UNSPECIFIED.SSALT.Topex-Poseidon.UNSPECIFIED.v2-0.r1
+  Also added notebook that opens one of these datasets.
 
-* Added new data store `cci-kerchunk-store` 
-  (and corresponding xcube data store `esa-cdc-kc`) that allows performant 
+* Added new data store `esa-cci-kc` 
+  (and corresponding xcube data store `esa-cci-kc`) that allows performant 
   accessing of selected datasets of the ESA Climate Data Centre using a 
   Zarr view of the original NetCDF files. This approach is made possible by 
   using the [kerchunk](https://fsspec.github.io/kerchunk/) package. Also 
