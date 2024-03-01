@@ -533,6 +533,26 @@
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CO2 from GOSAT generated with the SRFP (RemoTeC) algorithm (CO2_GOS_SRFP), v2.3.8"
     },
+    "esacci.GHG.satellite-orbit-frequency.L2.CO2.multi-sensor.multi-platform.EMMA.v2-2a.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
+    },
+    "esacci.GHG.satellite-orbit-frequency.L2.CO2.multi-sensor.multi-platform.EMMA.v2-2b.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
+    },
     "esacci.ICESHEETS.mon.IND.GMB.GRACE-instrument.GRACE.VARIOUS.1-3.greenland_gmb_time_series": {
         "data_type": "dataset",
         "verification_flags": [],
