@@ -1,3 +1,5 @@
+## Changes in 0.4.1 (in development)
+
 ## Changes in 0.4
 
 * Added store aliases `esa-cci` and `esa-cci-zarr` and renamed default stores to have
