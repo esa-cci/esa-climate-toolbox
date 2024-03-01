@@ -1,5 +1,8 @@
 ## Changes in 0.4.1 (in development)
 
+* Updated list of dataset states
+* Fixed internal build process
+
 ## Changes in 0.4
 
 * Added store aliases `esa-cci` and `esa-cci-zarr` and renamed default stores to have
