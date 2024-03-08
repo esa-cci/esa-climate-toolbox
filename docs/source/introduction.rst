@@ -29,23 +29,15 @@ subset of mature and validated ECV-related data products.
 .. _odp_:
 
 .. figure:: _static/figures/ODP_detail.png
-   :scale: 30 %
+   :scale: 75 %
    :align: center
 
-   Snapshot from `CCI Open Data Portal`_ with some of the available ECVs
+   Snapshot from `CCI Open Data Portal`_ with the available ECVs
 The CCI Toolbox provides tools that support visualisation, analysis and
 processing across CCI and other climate data products.
 With these two technical cross-cutting activities ESA is providing an interface
 between its CCI projects and the ECVs generated there, and the wider climate
 change user community.
-
-.. _toolbox-context:
-
-.. figure:: _static/figures/toolbox-context.png
-   :scale: 60 %
-   :align: center
-
-   CCI Toolbox context
 
 Key Objectives
 ==============
