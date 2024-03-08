@@ -2,7 +2,7 @@
 .. _Climate Change Initiative: https://climate.esa.int/en/
 .. _GCOS: https://gcos.wmo.int/en/home
 .. _UNFCCC: http://unfccc.int/2860.php
-.. _ECVs: https://climate.esa.int/en/projects/
+.. _Essential Climate Variables: https://climate.esa.int/en/projects/
 .. _CCI Open Data Portal: https://climate.esa.int/en/odp/#/dashboard
 
 ============
@@ -13,15 +13,21 @@ Introduction
 Project Background
 ==================
 
-In 2009 the `European Space Agency`_ launched the
-`Climate Change Initiative`_ (CCI), a programme to respond to the need for
-climate-quality satellite data as expressed by GCOS_, the Global Climate
-Observing System that supports the UNFCCC_, the United Nations Framework
-Convention on Climate Change.
+ESA's Climate Change Initiative is a major research and development effort that
+generates global, decades-long satellite data records to track and understand key
+aspects of the Earth climate system, and known as `Essential Climate Variables`_.
 
-In the ESA CCI programme **Essential Climate Variables** (ECVs_) are produced
-by individual expert teams, and cross-cutting activities provide coordination,
-harmonisation and support. The **CCI Toolbox** and the `CCI Open Data Portal`_
+The Programme enables a community of over 500 experts from across Europe to exploit
+the Earth observation archive and data from operating satellite missions to craft
+high-quality data products that strengthen scientific understanding climate and
+underpin the models and climate services used to inform support ESA Member States
+to take climate action and report progress towards the Paris Agreement goals.
+
+These data records support the United Nations Framework Convention on Climate Change
+and the International Panel on Climate Change to monitor, assess and address changes
+to Earth's climate system.
+
+The CCI Toolbox and the `CCI Open Data Portal`_
 are the two main technical support projects within the programme.
 The CCI Open Data Portal provides a single point of harmonised access to a
 subset of mature and validated ECV-related data products.
@@ -33,6 +39,7 @@ subset of mature and validated ECV-related data products.
    :align: center
 
    Snapshot from `CCI Open Data Portal`_ with the available ECVs
+
 The CCI Toolbox provides tools that support visualisation, analysis and
 processing across CCI and other climate data products.
 With these two technical cross-cutting activities ESA is providing an interface
