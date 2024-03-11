@@ -25,6 +25,8 @@ Start Jupyter Lab:
 
     (ect) $ jupyter-lab
 
+.. _jupyter_notebooks:
+
 Jupyter Notebooks
 =============================
 
