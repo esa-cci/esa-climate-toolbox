@@ -1,15 +1,36 @@
 ESACCI-BIOMASS-L4-AGB-MERGED-100m-2010-2018-fv2.0.zarr, esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.MERGED.1-0.r1
+ESACCI-BIOMASS-L4-AGB-MERGED-100m-2010-2020-fv4.0.zarr, esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.MERGED.4-0.r1
 ESACCI-GHG-L2-CH4-SCIAMACHY-WFMD-2002-2011-fv1.zarr, esacci.GHG.satellite-orbit-frequency.L2.CH4.SCIAMACHY.Envisat.WFMD.v4-0.r1
+ESACCI-GHG-L2-CO2-OCO-2-FOCAL-2014-2021-v10.zarr, esacci.GHG.satellite-orbit-frequency.L2.CO2.OCO.OCO-2.FOCAL.v10-1.r1
 ESACCI-GHG-L2-CO2-SCIAMACHY-WFMD-2002-2012-fv1.zarr, esacci.GHG.satellite-orbit-frequency.L2.CO2.SCIAMACHY.Envisat.WFMD.v4-0.r1
-ESACCI-ICESHEETS_Antarctica_GMB-2002-2016-v1.1.zarr
+ESACCI-ICESHEETS_Antarctica_GMB-2002-2016-v1.1.zarr,
 ESACCI-ICESHEETS_Greenland_GMB-2003-2016-v1.1.zarr, esacci.ICESHEETS.yr.Unspecified.GMB.GRACE-instrument.GRACE.UNSPECIFIED.1-5.greenland_gmb_mass_trends
 ESACCI-L3C_CLOUD-CLD_PRODUCTS-AVHRR_NOAA-1982-2016-fv3.0.zarr, esacci.CLOUD.mon.L3C.CLD_PRODUCTS.multi-sensor.multi-platform.AVHRR-PM.3-0.r1
-ESACCI-L3C_SNOW-SWE-1979-2018-fv1.0.zarr, esacci.SNOW.day.L3C.SWE.multi-sensor.multi-platform.MERGED.1-0.r1
+ESACCI-L3C_SNOW-SWE-1979-2018-fv1.0.zarr
+ESACCI-L3C_SNOW-SWE-1979-2020-fv2.0.zarr, esacci.SNOW.day.L3C.SWE.multi-sensor.multi-platform.MERGED.2-0.r1
 ESACCI-L4_GHRSST-SST-GMPE-GLOB_CDR2.0-1981-2016-v02.0-fv01.0.zarr, esacci.SST.day.L4.SSTskin.Unspecified.Unspecified.GMPE.2-0.r1
 ESACCI-LC-L4-LCCS-Map-300m-P1Y-1992-2015-v2.0.7b.zarr, esacci.LC.yr.L4.LCCS.multi-sensor.multi-platform.Map.2-0-7.r1
 ESACCI-LST-L3C-LST-MODISA-0.01deg_1DAILY_DAY-2002-2018-fv3.00.zarr, esacci.LST.day.L3C.LST.MODIS.Aqua.MODISA.3-00.DAY
 ESACCI-LST-L3C-LST-MODISA-0.01deg_1DAILY_NIGHT-2002-2018-fv3.00.zarr, esacci.LST.day.L3C.LST.MODIS.Aqua.MODISA.3-00.NIGHT
+ESACCI-LST-L3S-LST-IRCDR_-0.01deg_1DAILY_DAY-1995-2020-fv3.00.zarr
+ESACCI-LST-L3S-LST-IRCDR_-0.01deg_1DAILY_NIGHT-1995-2020-fv3.00.zarr
+ESACCI-LST-L3S-LST-IRCDR_-0.01deg_1MONTHLY_DAY-1995-2020-fv3.00.zarr
+ESACCI-LST-L3S-LST-IRCDR_-0.01deg_1MONTHLY_NIGHT-1995-2020-fv3.00.zarr
 ESACCI-OC-L3S-IOP-MERGED-1M_MONTHLY_4km_GEO_PML_OCx_QAA-1997-2020-fv5.0.zarr, esacci.OC.mon.L3S.IOP.multi-sensor.multi-platform.MERGED.4-2.geographic
+ESACCI-OC-L3S-IOP-MERGED-1M_MONTHLY_4km_GEO_PML_OCx_QAA-1997-2022-fv6.0.zarr, esacci.OC.mon.L3S.IOP.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-IOP-MERGED-1D_DAILY_4km_GEO_PML_OCx_QAA-1997-2022-fv6.0.zarr, esacci.OC.day.L3S.IOP.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-IOP-MERGED-1Y_YEARLY_4km_GEO_PML_OCx_QAA-1997-2022-fv6.0.zarr, esacci.OC.yr.L3S.IOP.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-IOP-MERGED-5D_DAILY_4km_GEO_PML_OCx_QAA-2022-fv6.0.zarr, esacci.OC.5-days.L3S.IOP.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-IOP-MERGED-8D_DAILY_4km_GEO_PML_OCx_QAA-1997-2022-fv6.0.zarr, esacci.OC.8-days.L3S.IOP.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-OC_PRODUCTS-MERGED-1M_MONTHLY_4km_GEO_PML_OCx_QAA-1997-2022-fv6.0.zarr, esacci.OC.mon.L3S.OC_PRODUCTS.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-OC_PRODUCTS-MERGED-1Y_YEARLY_4km_GEO_PML_OCx_QAA-1997-2022-fv6.0.zarr, esacci.OC.yr.L3S.OC_PRODUCTS.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-OC_PRODUCTS-MERGED-5D_DAILY_4km_GEO_PML_OCx_QAA-1997-2022-fv6.0.zarr, esacci.OC.5-days.L3S.OC_PRODUCTS.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-OC_PRODUCTS-MERGED-8D_DAILY_4km_GEO_PML_OCx_QAA-2022-fv6.0.zarr, esacci.OC.8-days.L3S.OC_PRODUCTS.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-RRS-MERGED-1M_MONTHLY_4km_GEO_PML_RRS-1997-2022-fv6.0.zarr, esacci.OC.mon.L3S.RRS.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-RRS-MERGED-1Y_YEARLY_4km_GEO_PML_RRS-1997-2022-fv6.0.zarr, esacci.OC.yr.L3S.OC_PRODUCTS.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-RRS-MERGED-1D_DAILY_4km_GEO_PML_RRS-1997-2022-fv6.0.zarr, esacci.OC.day.L3S.RRS.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-RRS-MERGED-5D_DAILY_4km_GEO_PML_RRS-1997-2022-fv6.0.zarr, esacci.OC.5-days.L3S.RRS.multi-sensor.multi-platform.MERGED.6-0.geographic
+ESACCI-OC-L3S-RRS-MERGED-8D_DAILY_4km_GEO_PML_RRS-1997-2022-fv6.0.zarr, esacci.OC.8-days.L3S.RRS.multi-sensor.multi-platform.MERGED.6-0.geographic
 ESACCI-PERMAFROST-L4-ALT-MODISLST-AREA4_PP-1997-2018-fv02.0.zarr, esacci.PERMAFROST.yr.L4.ALT.multi-sensor.multi-platform.ERA5_MODISLST_BIASCORRECTED.02-0.r1
 ESACCI-SEAICE-L3C-SITHICK-RA2_ENVISAT-NH25KMEASE2-2002-2012-fv2.0.zarr, esacci.SEAICE.mon.L3C.SITHICK.RA-2.Envisat.NH25KMEASE2.2-0.r1
 ESACCI-SEAICE-L3C-SITHICK-SIRAL_CRYOSAT2-NH25KMEASE2-2010-2017-fv2.0.zarr, esacci.SEAICE.mon.L3C.SITHICK.SIRAL.CryoSat-2.NH25KMEASE2.2-0.r1
@@ -17,3 +38,4 @@ ESACCI-SEAICE-L4-SICONC-AMSR_50.0kmEASE2-NH-2002-2017-fv2.1.zarr, esacci.SEAICE.
 ESACCI-SEALEVEL-IND-MSLTR-MERGED-1993-2016-fv02.zarr, esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-0.r1
 ESACCI-SEALEVEL-L4-MSLA-MERGED-1993-2015-fv02.zarr, esacci.SEALEVEL.mon.L4.MSLA.multi-sensor.multi-platform.MERGED.2-0.r1
 ESACCI-SOILMOISTURE-L3S-SSMV-COMBINED-1978-2020-fv05.3.zarr, esacci.SOILMOISTURE.day.L3S.SSMV.multi-sensor.multi-platform.COMBINED.05-2.r1
+ESACCI-SOILMOISTURE-L3S-SSMV-COMBINED-1978-2021-fv07.1.zarr, esacci.SOILMOISTURE.day.L3S.SSMV.multi-sensor.multi-platform.COMBINED.v07-1.r1
