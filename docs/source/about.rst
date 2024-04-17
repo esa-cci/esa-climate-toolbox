@@ -4,6 +4,7 @@
 .. _pandas: http://pandas.pydata.org/
 .. _geopandas: http://geopandas.org/
 .. _NumPy: http://www.numpy.org/
+.. _references format: https://fsspec.github.io/kerchunk/spec.html
 .. _JASMIN: http://www.jasmin.ac.uk/
 .. _xcube: https://github.com/dcs4cop/xcube
 .. _data store framework: https://xcube.readthedocs.io/en/latest/dataaccess.html#data-store-framework
@@ -37,22 +38,26 @@ their own third-party data with the CCI data.
 Users may read more about stores in the documentation of the xcube
 `data store framework`_.
 
-The CCI toolbox comes with two pre-defined stores: The first one is the
-`CCI Open Data Portal`_ store, which is denoted by the handle
-`esa-climate-data-centre` (or `esa-cdc` for short).
+The CCI toolbox comes with three pre-defined stores: The first one is the
+`CCI Open Data Portal`_ store, which is denoted by the handle `esa-cci`.
 It provides access to any data from the Open Data Portal.
 
-The second data store is the Zarr store (`esa-cdc-zarr`), which allows to access
+The second data store is the Zarr store (`esa-cci-zarr`), which allows to access
 datasets from the Open Data Portal that have been converted to the `Zarr format`_.
 This has been done for selected datasets which were either frequently used or
 large in terms of data volume.
 Providing the data as zarr files allows for a more performant data access.
 The number of Zarr datasets will be constantly increased.
 
+The third data store is the Kerchunk Store (`esa-cci-kc`), which accesses datasets
+that are offered by the Open Data Portal via the `references format`_.
+This format allows to access the files with a similar performance as the
+Zarr data store.
+
 Additionally, the CCI Toolbox allows to define output stores, to which operation
 results may be written.
 
-You can find detailed listings of the provided functionality in
+You can find detailed listings of the provided functionality in the
 :doc:`api_reference`.
 
 Datasets
