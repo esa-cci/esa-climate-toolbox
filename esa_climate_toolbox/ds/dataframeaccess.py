@@ -102,6 +102,11 @@ class DataFrameAccessor:
             gdf_data[var_name] = list(self._cci_cdc.get_data_chunk(
                 request, dim_indexes=(), to_bytes=False
             ))
+        shift = False
+        for lon_var in ["longitude", "lon"]:
+            if lon_var in var_names:
+                if max(gdf_data[lon_var]) > 180.0:
+                    shift = True
         if 'longitude' in var_names and 'latitude' in var_names:
             gdf = gpd.GeoDataFrame(
                 gdf_data,
@@ -114,6 +119,8 @@ class DataFrameAccessor:
                 geometry=gpd.points_from_xy(gdf_data['lon'], gdf_data['lat'])
             )
             gdf = gdf.drop(['lon', 'lat'], axis=1)
+        if shift:
+            gdf["geometry"] = gdf["geometry"].translate(xoff=-180.0)
         if self._spatial_subset_area:
             gdf["geometry"] = gdf.intersection(self._spatial_subset_area)
             gdf = gdf[~gdf["geometry"].is_empty]
