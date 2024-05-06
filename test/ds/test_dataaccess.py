@@ -17,6 +17,7 @@ from esa_climate_toolbox.ds.dataaccess import CciCdcDataStore
 from esa_climate_toolbox.ds.dataaccess import CciCdcDataFrameOpener
 from esa_climate_toolbox.ds.dataaccess import CciCdcDatasetOpener
 from esa_climate_toolbox.ds.dataaccess import get_temporal_resolution_from_id
+from esa_climate_toolbox.ds.dataaccess import CciCdcVectorDataCubeOpener
 
 AEROSOL_DAY_ID = 'esacci.AEROSOL.day.L3.AAI.multi-sensor.multi-platform.' \
                  'MSAAI.1-7.r1'
@@ -702,6 +703,16 @@ class CciCdcDataFrameOpenerTest(unittest.TestCase):
                 schema.get("properties").get("variable_names").get("items").get("enum")
             )
         )
+
+
+class CciCdcCciCdcVectorDataCubeOpenerTest(unittest.TestCase):
+
+    def setUp(self) -> None:
+        self._opener = CciCdcVectorDataCubeOpener()
+
+    def test_dataset_names(self):
+        ds_names = self._opener.dataset_names
+        self.assertTrue(len(ds_names) > 10)
 
 
 class CciCdcDataStoreTest(unittest.TestCase):

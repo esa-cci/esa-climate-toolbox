@@ -23,6 +23,7 @@ from esa_climate_toolbox.constants import CDC_SHORT_DATA_STORE_ID
 
 DATAFRAME_OPENER_ID = f'dataframe:geojson:{CDC_SHORT_DATA_STORE_ID}'
 DATASET_OPENER_ID = f'dataset:zarr:{CDC_SHORT_DATA_STORE_ID}'
+VECTORDATACUBE_OPENER_ID = f'vectordatacube::{CDC_SHORT_DATA_STORE_ID}'
 DATA_ARRAY_NAME = 'var_data'
 OPENSEARCH_CEDA_URL = 'https://archive.opensearch.ceda.ac.uk/opensearch/request'
 CCI_ODD_URL = 'https://archive.opensearch.ceda.ac.uk/' \

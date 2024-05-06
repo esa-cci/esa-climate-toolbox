@@ -55,11 +55,14 @@ from .constants import DEFAULT_NUM_RETRIES
 from .constants import DEFAULT_RETRY_BACKOFF_BASE
 from .constants import DEFAULT_RETRY_BACKOFF_MAX
 from .constants import OPENSEARCH_CEDA_URL
+from .constants import VECTORDATACUBE_OPENER_ID
 from .dataframeaccess import DataFrameAccessor
 from .normalize import normalize_coord_names
 from .normalize import normalize_dims_description
 from .normalize import normalize_variable_dims_description
 from .normalize import normalize_var_infos
+from .vdcaccess import VectorDataCubeDescriptor
+from .vdcaccess import VECTOR_DATA_CUBE_TYPE
 
 _RELEVANT_METADATA_ATTRIBUTES = \
     ['ecv', 'institute', 'processing_level', 'product_string',
@@ -536,6 +539,163 @@ class CciCdcDataFrameOpener(CciCdcDataOpener):
         return cci_schema
 
 
+class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
+
+    def __init__(self, normalize_data: bool = True, **cdc_params):
+        super().__init__(
+            CciCdc(**cdc_params, data_type='vectordatacube'),
+            VECTORDATACUBE_OPENER_ID,
+            VECTOR_DATA_CUBE_TYPE,
+            normalize_data=normalize_data,
+        )
+    @classmethod
+    def get_data_types(cls) -> Tuple[DataType, ...]:
+        return VECTOR_DATA_CUBE_TYPE,
+
+    def _get_data_descriptor_from_metadata(
+            self, data_id: str, metadata: dict
+    ) -> VectorDataCubeDescriptor:
+        ds_metadata = metadata.copy()
+        # is_climatology = \
+        #     ds_metadata.get('time_frequency', '') == 'climatology' and \
+        #     'AEROSOL' in data_id
+        dims = self._normalize_dims(ds_metadata.get('dimensions', {}))
+        bounds_dim_name = None
+        for dim_name, dim_size in dims.items():
+            if dim_size == 2:
+                bounds_dim_name = dim_name
+                break
+        if not bounds_dim_name:
+            bounds_dim_name = 'bnds'
+            dims['bnds'] = 2
+        temporal_resolution = get_temporal_resolution_from_id(data_id)
+        dataset_info = self._cci_cdc.get_dataset_info(data_id, ds_metadata)
+        # spatial_resolution = dataset_info['y_res']
+        # if spatial_resolution <= 0:
+        #     spatial_resolution = None
+        bbox = dataset_info['bbox']
+        crs = dataset_info['crs']
+        # only use date parts of times
+        # if is_climatology:
+        #     temporal_coverage = None
+        # else:
+        temporal_coverage = (
+            dataset_info['temporal_coverage_start'].split('T')[0]
+            if dataset_info['temporal_coverage_start'] else None,
+            dataset_info['temporal_coverage_end'].split('T')[0]
+            if dataset_info['temporal_coverage_end'] else None
+        )
+        var_infos = self._normalize_var_infos(
+            ds_metadata.get('variable_infos', {})
+        )
+        coord_names = self._normalize_coord_names(dataset_info['coord_names'])
+        time_dim_name = 'time'
+        var_descriptors = self._get_variable_descriptors(
+            dataset_info['var_names'], var_infos, time_dim_name
+        )
+        coord_descriptors = self._get_variable_descriptors(coord_names,
+                                                           var_infos,
+                                                           time_dim_name,
+                                                           normalize_dims=False)
+        if 'time' not in coord_descriptors.keys() and \
+                't' not in coord_descriptors.keys():
+            # if is_climatology:
+            #     coord_descriptors['month'] = VariableDescriptor(
+            #         'month', dtype='int8', dims=('month',)
+            #     )
+            # else:
+            time_attrs = {
+                "units": "seconds since 1970-01-01T00:00:00Z",
+                "calendar": "proleptic_gregorian",
+                "standard_name": "time"
+            }
+            coord_descriptors['time'] = VariableDescriptor('time',
+                                                           dtype='int64',
+                                                           dims=('time',),
+                                                           attrs=time_attrs)
+            if 'time_bnds' in coord_descriptors.keys():
+                coord_descriptors.pop('time_bnds')
+            if 'time_bounds' in coord_descriptors.keys():
+                coord_descriptors.pop('time_bounds')
+            time_bnds_attrs = {
+                "units": "seconds since 1970-01-01T00:00:00Z",
+                "calendar": "proleptic_gregorian",
+                "standard_name": "time_bnds",
+            }
+            coord_descriptors['time_bnds'] = \
+                VariableDescriptor('time_bnds',
+                                   dtype='int64',
+                                   dims=('time', bounds_dim_name),
+                                   attrs=time_bnds_attrs)
+
+        if 'variables' in ds_metadata:
+            ds_metadata.pop('variables')
+        ds_metadata.pop('dimensions')
+        ds_metadata.pop('variable_infos')
+        attrs = ds_metadata.get('attributes', {}).get('NC_GLOBAL', {})
+        ds_metadata.pop('attributes')
+        attrs.update(ds_metadata)
+        self._remove_irrelevant_metadata_attributes(attrs)
+        descriptor = DatasetDescriptor(data_id,
+                                       data_type=self._data_type,
+                                       crs=crs,
+                                       dims=dims,
+                                       coords=coord_descriptors,
+                                       data_vars=var_descriptors,
+                                       attrs=attrs,
+                                       bbox=bbox,
+                                       # spatial_res=spatial_resolution,
+                                       time_range=temporal_coverage,
+                                       time_period=temporal_resolution)
+        data_schema = self._get_open_data_params_schema(descriptor)
+        descriptor.open_params_schema = data_schema
+        return descriptor
+
+    def _get_open_data_params_schema(
+            self, vdcd: VectorDataCubeDescriptor = None
+    ) -> JsonObjectSchema:
+        # noinspection PyUnresolvedReferences
+        vectordatacube_params = dict(
+            normalize_data=JsonBooleanSchema(default=True),
+            variable_names=JsonArraySchema(items=JsonStringSchema(
+                enum=vdcd.data_vars.keys() if vdcd and vdcd.data_vars else None))
+        )
+        if vdcd:
+            min_date = vdcd.time_range[0] if vdcd.time_range else None
+            max_date = vdcd.time_range[1] if vdcd.time_range else None
+            if min_date or max_date:
+                vectordatacube_params['time_range'] = \
+                    JsonDateSchema.new_range(min_date, max_date)
+        else:
+            vectordatacube_params['time_range'] = JsonDateSchema.new_range(None, None)
+        if vdcd:
+            try:
+                if pyproj.CRS.from_string(vdcd.crs).is_geographic:
+                    min_lon = vdcd.bbox[0] if vdcd and vdcd.bbox else -180
+                    min_lat = vdcd.bbox[1] if vdcd and vdcd.bbox else -90
+                    max_lon = vdcd.bbox[2] if vdcd and vdcd.bbox else 180
+                    max_lat = vdcd.bbox[3] if vdcd and vdcd.bbox else 90
+                    bbox = JsonArraySchema(items=(
+                        JsonNumberSchema(minimum=min_lon, maximum=max_lon),
+                        JsonNumberSchema(minimum=min_lat, maximum=max_lat),
+                        JsonNumberSchema(minimum=min_lon, maximum=max_lon),
+                        JsonNumberSchema(minimum=min_lat, maximum=max_lat)))
+                    vectordatacube_params['bbox'] = bbox
+            except pyproj.exceptions.CRSError:
+                # do not set bbox then
+                pass
+        cci_schema = JsonObjectSchema(
+            properties=dict(**vectordatacube_params),
+            required=[
+            ],
+            additional_properties=False
+        )
+        return cci_schema
+
+    def open_data(self, data_id: str, **open_params) -> Any:
+        pass
+
+
 class CciCdcDataStore(DataStore):
 
     def __init__(self, normalize_data=True, **store_params):
@@ -554,9 +714,13 @@ class CciCdcDataStore(DataStore):
         dataframe_opener = CciCdcDataFrameOpener(
             **cdc_kwargs
         )
+        vectordatacube_opener = CciCdcVectorDataCubeOpener(
+            **cdc_kwargs
+        )
         self._openers = {
             DATASET_OPENER_ID: dataset_opener,
-            DATAFRAME_OPENER_ID: dataframe_opener
+            DATAFRAME_OPENER_ID: dataframe_opener,
+            VECTORDATACUBE_OPENER_ID: vectordatacube_opener
         }
         dataset_states_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
@@ -593,13 +757,16 @@ class CciCdcDataStore(DataStore):
 
     @classmethod
     def get_data_types(cls) -> Tuple[str, ...]:
-        return DATASET_TYPE.alias, GEO_DATA_FRAME_TYPE.alias
+        return (DATASET_TYPE.alias, GEO_DATA_FRAME_TYPE.alias,
+                VECTOR_DATA_CUBE_TYPE.alias)
 
     def get_data_types_for_data(self, data_id: str) -> Tuple[str, ...]:
         if self.has_data(data_id, data_type=DATASET_TYPE):
             return DATASET_TYPE.alias,
         if self.has_data(data_id, data_type=GEO_DATA_FRAME_TYPE):
             return GEO_DATA_FRAME_TYPE.alias,
+        if self.has_data(data_id, data_type=VECTOR_DATA_CUBE_TYPE):
+            return VECTOR_DATA_CUBE_TYPE.alias,
         raise DataStoreError(
             f'Data resource {data_id!r} does not exist in store'
         )
@@ -616,13 +783,15 @@ class CciCdcDataStore(DataStore):
                 for opener_type in opener_types:
                     if opener_type.is_super_type_of(data_type):
                         return [opener]
-                raise ValueError(f"Opener '{opener_id}' is not compataible with "
+                raise ValueError(f"Opener '{opener_id}' is not compatible with "
                                  f"data type '{data_type}'.")
         if data_type is not None:
             if DATASET_TYPE.is_super_type_of(data_type):
                 return [self._openers[DATASET_OPENER_ID]]
             if GEO_DATA_FRAME_TYPE.is_super_type_of(data_type):
                 return [self._openers[DATAFRAME_OPENER_ID]]
+            if VECTOR_DATA_CUBE_TYPE.is_super_type_of(data_type):
+                return [self._openers[VECTORDATACUBE_OPENER_ID]]
         return list(self._openers.values())
 
     def get_data_ids(self,
@@ -669,7 +838,8 @@ class CciCdcDataStore(DataStore):
             data_ids = CciCdc(data_type=data_type).dataset_names
         else:
             data_ids = CciCdc(data_type=DATASET_TYPE.alias).dataset_names + \
-                       CciCdc(data_type=GEO_DATA_FRAME_TYPE.alias).dataset_names
+                       CciCdc(data_type=GEO_DATA_FRAME_TYPE.alias).dataset_names + \
+                       CciCdc(data_type=VECTOR_DATA_CUBE_TYPE.alias).dataset_names
         ecvs = set([data_id.split('.')[1] for data_id in data_ids])
         frequencies = set(
             [data_id.split('.')[2].replace('-days', ' days').
@@ -771,18 +941,20 @@ class CciCdcDataStore(DataStore):
     def _is_valid_data_type(cls, data_type: str) -> bool:
         return data_type is None \
                or DATASET_TYPE.is_super_type_of(data_type) \
-               or GEO_DATA_FRAME_TYPE.is_super_type_of(data_type)
+               or GEO_DATA_FRAME_TYPE.is_super_type_of(data_type) \
+               or VECTOR_DATA_CUBE_TYPE.is_super_type_of(data_type)
 
     @classmethod
     def _assert_valid_data_type(cls, data_type):
         if not cls._is_valid_data_type(data_type):
             raise DataStoreError(
-                f'Data type must be {DATASET_TYPE!r},'
-                f' but got {data_type!r}')
+                f'Data type must be {DATASET_TYPE!r}, {GEO_DATA_FRAME_TYPE!r}, '
+                f'or {VECTOR_DATA_CUBE_TYPE!r}, but got {data_type!r}')
 
     def _assert_valid_opener_id(self, opener_id):
         if opener_id is not None and opener_id not in list(self._openers.keys()):
             raise DataStoreError(
-                f'Data opener identifier must be {DATASET_OPENER_ID!r} or '
-                f'{DATAFRAME_OPENER_ID!r}, but got {opener_id!r}'
+                f'Data opener identifier must be {DATASET_OPENER_ID!r}, '
+                f'{DATAFRAME_OPENER_ID!r}, or {VECTORDATACUBE_OPENER_ID!r},'
+                f'but got {opener_id!r}'
             )
