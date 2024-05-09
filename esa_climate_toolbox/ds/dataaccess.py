@@ -134,7 +134,7 @@ class CciCdcDataOpener(DataOpener):
             )
         return data_descriptors
 
-    def describe_data(self, data_id: str) -> GeoDataFrameDescriptor:
+    def describe_data(self, data_id: str) -> DataDescriptor:
         self._assert_valid_data_id(data_id)
         try:
             ds_metadata = self._cci_cdc.get_dataset_metadata(data_id)
@@ -548,6 +548,7 @@ class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
             VECTOR_DATA_CUBE_TYPE,
             normalize_data=normalize_data,
         )
+
     @classmethod
     def get_data_types(cls) -> Tuple[DataType, ...]:
         return VECTOR_DATA_CUBE_TYPE,
@@ -556,29 +557,11 @@ class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
             self, data_id: str, metadata: dict
     ) -> VectorDataCubeDescriptor:
         ds_metadata = metadata.copy()
-        # is_climatology = \
-        #     ds_metadata.get('time_frequency', '') == 'climatology' and \
-        #     'AEROSOL' in data_id
         dims = self._normalize_dims(ds_metadata.get('dimensions', {}))
-        bounds_dim_name = None
-        for dim_name, dim_size in dims.items():
-            if dim_size == 2:
-                bounds_dim_name = dim_name
-                break
-        if not bounds_dim_name:
-            bounds_dim_name = 'bnds'
-            dims['bnds'] = 2
         temporal_resolution = get_temporal_resolution_from_id(data_id)
         dataset_info = self._cci_cdc.get_dataset_info(data_id, ds_metadata)
-        # spatial_resolution = dataset_info['y_res']
-        # if spatial_resolution <= 0:
-        #     spatial_resolution = None
         bbox = dataset_info['bbox']
         crs = dataset_info['crs']
-        # only use date parts of times
-        # if is_climatology:
-        #     temporal_coverage = None
-        # else:
         temporal_coverage = (
             dataset_info['temporal_coverage_start'].split('T')[0]
             if dataset_info['temporal_coverage_start'] else None,
@@ -588,6 +571,13 @@ class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
         var_infos = self._normalize_var_infos(
             ds_metadata.get('variable_infos', {})
         )
+        var_names = dataset_info["var_names"]
+        lat_lons = [("lat", "lon"), ("latitude", "longitude")]
+        for lat_lon in lat_lons:
+            if lat_lon[0] in var_names and lat_lon[1] in var_names:
+                var_names.remove(lat_lon[0])
+                var_names.remove(lat_lon[1])
+            break
         coord_names = self._normalize_coord_names(dataset_info['coord_names'])
         time_dim_name = 'time'
         var_descriptors = self._get_variable_descriptors(
@@ -597,37 +587,6 @@ class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
                                                            var_infos,
                                                            time_dim_name,
                                                            normalize_dims=False)
-        if 'time' not in coord_descriptors.keys() and \
-                't' not in coord_descriptors.keys():
-            # if is_climatology:
-            #     coord_descriptors['month'] = VariableDescriptor(
-            #         'month', dtype='int8', dims=('month',)
-            #     )
-            # else:
-            time_attrs = {
-                "units": "seconds since 1970-01-01T00:00:00Z",
-                "calendar": "proleptic_gregorian",
-                "standard_name": "time"
-            }
-            coord_descriptors['time'] = VariableDescriptor('time',
-                                                           dtype='int64',
-                                                           dims=('time',),
-                                                           attrs=time_attrs)
-            if 'time_bnds' in coord_descriptors.keys():
-                coord_descriptors.pop('time_bnds')
-            if 'time_bounds' in coord_descriptors.keys():
-                coord_descriptors.pop('time_bounds')
-            time_bnds_attrs = {
-                "units": "seconds since 1970-01-01T00:00:00Z",
-                "calendar": "proleptic_gregorian",
-                "standard_name": "time_bnds",
-            }
-            coord_descriptors['time_bnds'] = \
-                VariableDescriptor('time_bnds',
-                                   dtype='int64',
-                                   dims=('time', bounds_dim_name),
-                                   attrs=time_bnds_attrs)
-
         if 'variables' in ds_metadata:
             ds_metadata.pop('variables')
         ds_metadata.pop('dimensions')
@@ -636,17 +595,16 @@ class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
         ds_metadata.pop('attributes')
         attrs.update(ds_metadata)
         self._remove_irrelevant_metadata_attributes(attrs)
-        descriptor = DatasetDescriptor(data_id,
-                                       data_type=self._data_type,
-                                       crs=crs,
-                                       dims=dims,
-                                       coords=coord_descriptors,
-                                       data_vars=var_descriptors,
-                                       attrs=attrs,
-                                       bbox=bbox,
-                                       # spatial_res=spatial_resolution,
-                                       time_range=temporal_coverage,
-                                       time_period=temporal_resolution)
+        descriptor = VectorDataCubeDescriptor(data_id,
+                                              data_type=self._data_type,
+                                              crs=crs,
+                                              dims=dims,
+                                              coords=coord_descriptors,
+                                              data_vars=var_descriptors,
+                                              attrs=attrs,
+                                              bbox=bbox,
+                                              time_range=temporal_coverage,
+                                              time_period=temporal_resolution)
         data_schema = self._get_open_data_params_schema(descriptor)
         descriptor.open_params_schema = data_schema
         return descriptor
@@ -693,7 +651,18 @@ class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
         return cci_schema
 
     def open_data(self, data_id: str, **open_params) -> Any:
-        pass
+        cci_schema = self.get_open_data_params_schema(data_id)
+        cci_schema.validate_instance(open_params)
+        cube_kwargs, open_params = cci_schema.process_kwargs_subset(
+            open_params, ('variable_names',
+                          'time_range',
+                          'bbox')
+        )
+        chunk_store = CciChunkStore(self._cci_cdc, data_id, cube_kwargs)
+        ds = xr.open_zarr(chunk_store, consolidated=False)
+        ds.zarr_store.set(chunk_store)
+        ds = self._normalize_dataset(ds)
+        return ds
 
 
 class CciCdcDataStore(DataStore):

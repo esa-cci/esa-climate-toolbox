@@ -18,6 +18,8 @@ from esa_climate_toolbox.ds.dataaccess import CciCdcDataFrameOpener
 from esa_climate_toolbox.ds.dataaccess import CciCdcDatasetOpener
 from esa_climate_toolbox.ds.dataaccess import get_temporal_resolution_from_id
 from esa_climate_toolbox.ds.dataaccess import CciCdcVectorDataCubeOpener
+from esa_climate_toolbox.ds.dataaccess import VectorDataCubeDescriptor
+from esa_climate_toolbox.ds.dataaccess import VECTOR_DATA_CUBE_TYPE
 
 AEROSOL_DAY_ID = 'esacci.AEROSOL.day.L3.AAI.multi-sensor.multi-platform.' \
                  'MSAAI.1-7.r1'
@@ -40,6 +42,8 @@ SEAICE_ID = 'esacci.SEAICE.day.L4.SICONC.multi-sensor.multi-platform.' \
             'AMSR_25kmEASE2.2-1.NH'
 SST_ID = 'esacci.SST.day.L4.SSTdepth.multi-sensor.multi-platform.OSTIA.1-1.r1'
 GHG_DS_ID = "esacci.GHG.satellite-orbit-frequency.L2.CH4.SCIAMACHY.Envisat.IMAP.v7-2.r1"
+VDC_ID = "esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.WAFRICA"
+
 
 class DataAccessTest(unittest.TestCase):
 
@@ -713,6 +717,53 @@ class CciCdcCciCdcVectorDataCubeOpenerTest(unittest.TestCase):
     def test_dataset_names(self):
         ds_names = self._opener.dataset_names
         self.assertTrue(len(ds_names) > 10)
+
+    def test_get_data_types(self):
+        data_types = self._opener.get_data_types()
+        self.assertEqual(1, len(data_types))
+        self.assertEqual(VECTOR_DATA_CUBE_TYPE, data_types[0])
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_has_data(self):
+        self.assertTrue(self._opener.has_data(VDC_ID))
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_describe_data(self):
+        descriptor = self._opener.describe_data(VDC_ID)
+        self.assertIsNotNone(descriptor)
+        self.assertIsInstance(descriptor, VectorDataCubeDescriptor)
+        self.assertEqual(VDC_ID, descriptor.data_id)
+        self.assertEqual('vectordatacube', str(descriptor.data_type))
+        self.assertEqual(['nbpoints', 'nbmonth'], list(descriptor.dims.keys()))
+        self.assertEqual(1867, descriptor.dims['nbpoints'])
+        self.assertEqual(216, descriptor.dims['nbmonth'])
+        self.assertEqual(4, len(descriptor.data_vars))
+        self.assertTrue('distance_to_coast' in descriptor.data_vars)
+        self.assertEqual(1, descriptor.data_vars['distance_to_coast'].ndim)
+        self.assertEqual(tuple(['nbpoints']),
+                         descriptor.data_vars['distance_to_coast'].dims)
+        self.assertEqual('float32', descriptor.data_vars['distance_to_coast'].dtype)
+        self.assertEqual('WGS84', descriptor.crs)
+        self.assertEqual(('2002-01-01', '2019-12-31'), descriptor.time_range)
+        self.assertEqual('1M', descriptor.time_period)
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_get_open_data_params_schema(self):
+        schema = self._opener.get_open_data_params_schema(VDC_ID).to_dict()
+        self.assertIsNotNone(schema)
+        self.assertTrue('variable_names' in schema['properties'])
+        self.assertTrue('time_range' in schema['properties'])
+        self.assertTrue('bbox' in schema['properties'])
+        self.assertFalse(schema['additionalProperties'])
+
+    def test_open_data(self):
+        # todo make this work
+        data = self._opener.open_data(VDC_ID)
+        self.assertIsNotNone(data)
+        self.assertIsNotNone(data.geometry.values())
 
 
 class CciCdcDataStoreTest(unittest.TestCase):

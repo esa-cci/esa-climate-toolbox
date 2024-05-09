@@ -42,7 +42,7 @@ DEFAULT_NUM_RETRIES = 200
 
 CCI_MAX_IMAGE_SIZE = 2500
 
-COMMON_COORD_VAR_NAMES = ['time', 'lat', 'lon', 'latitude', 'longitude',
+COMMON_COORD_VAR_NAMES = ['lat', 'lon', 'latitude', 'longitude',
                           'latitude_centers', 'x', 'y', 'xc', 'yc']
 
 TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S"

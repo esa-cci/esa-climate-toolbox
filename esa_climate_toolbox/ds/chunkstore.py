@@ -25,6 +25,7 @@ import itertools
 import json
 import logging
 import math
+import numcodecs
 import time
 import warnings
 from abc import abstractmethod, ABCMeta
@@ -235,8 +236,9 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 coord_array = np.array(coord_data)
                 self._add_static_array(coord_name, coord_array, coord_attrs)
             else:
-                shape = list(coords_data[coord_name].
-                             get('shape', coords_data[coord_name].get('size')))
+                shape = [coords_data[coord_name].get(
+                    'shape', coords_data[coord_name].get('size')
+                )]
                 chunk_size = coords_data[coord_name]['chunkSize']
                 if not isinstance(chunk_size, List):
                     chunk_size = [chunk_size]
@@ -344,9 +346,10 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                                   f"string. Will omit it from the dataset.")
                     remove.append(variable_name)
                     continue
-            chunk_sizes = self._adjust_chunk_sizes(chunk_sizes,
-                                                   sizes,
-                                                   time_dimension)
+            if self._optimise_chunking():
+                chunk_sizes = self._adjust_chunk_sizes(chunk_sizes,
+                                                       sizes,
+                                                       time_dimension)
             var_attrs['chunk_sizes'] = chunk_sizes
             if len(var_attrs.get('file_dimensions', [])) < len(dimensions):
                 var_attrs['file_chunk_sizes'] = chunk_sizes[1:].copy()
@@ -555,6 +558,10 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
         return _MIN_CHUNK_SIZE <= size <= _MAX_CHUNK_SIZE
 
     @abstractmethod
+    def _optimise_chunking(self) -> bool:
+        pass
+
+    @abstractmethod
     def get_time_ranges(
             self, cube_id: str, cube_params: Mapping[str, Any]
     ) -> List[Tuple]:
@@ -666,7 +673,7 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
     def _fetch_chunk(self, key: str, var_name: str,
                      chunk_index: Tuple[int, ...]) -> bytes:
         request_time_range = self.request_time_range(
-            chunk_index[self._time_indexes[var_name]])
+            chunk_index[self._time_indexes.get(var_name, 0)])
 
         t0 = time.perf_counter()
         try:
@@ -853,6 +860,9 @@ class CciChunkStore(RemoteChunkStore):
                          observer=observer,
                          trace_store_calls=trace_store_calls)
 
+    def _optimise_chunking(self) -> bool:
+        return self._cci_cdc.get_data_type() != "vectordatacube"
+
     def get_time_ranges(self, dataset_id: str,
                         cube_params: Mapping[str, Any]) -> List[Tuple]:
         return self._time_range_getter.get_time_ranges(dataset_id, cube_params)
@@ -895,6 +905,9 @@ class CciChunkStore(RemoteChunkStore):
         encoding_dict = {
             'fill_value': self.get_attrs(var_name).get('fill_value'),
             'dtype': self.get_attrs(var_name).get('data_type')}
+        if var_name == "geometry" and self._cci_cdc.get_data_type() == "vectordatacube":
+            json_codec = numcodecs.JSON()
+            encoding_dict["filters"] = [json_codec.get_config()]
         return encoding_dict
 
     def get_attrs(self, var_name: str) -> Dict[str, Any]:

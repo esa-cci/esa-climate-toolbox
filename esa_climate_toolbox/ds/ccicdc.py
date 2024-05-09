@@ -103,6 +103,7 @@ _DTYPES_TO_DTYPES_WITH_MORE_BYTES = {
     'float32': 'float32',
     'float64': 'float64'
 }
+_VECTOR_DATACUBE_CHUNKING = 50
 
 
 def _convert_time_from_drs_id(time_value: str) -> str:
@@ -456,6 +457,7 @@ class CciCdc:
         self._data_sources = {}
         self._features = {}
         self._result_dicts = {}
+        self._vector_offsets = {}
         eds_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 'data/excluded_data_sources')
         with open(eds_file, 'r') as eds:
@@ -470,6 +472,9 @@ class CciCdc:
     def _is_valid_dataset(self, data_id: str):
         return self._dataset_states.get(data_id, {}).get('data_type', 'dataset') \
                == self._data_type
+
+    def get_data_type(self) -> str:
+        return self._data_type
 
     def close(self):
         pass
@@ -703,8 +708,7 @@ class CciCdc:
             self._opensearch_url, data_fid, dataset_name, session, data_source
         )
 
-    @staticmethod
-    def _get_data_var_and_coord_names(data_source) \
+    def _get_data_var_and_coord_names(self, data_source) \
             -> Tuple[List[str], List[str]]:
         names_of_dims = list(data_source.get('dimensions', {}).keys())
         variable_infos = data_source['variable_infos']
@@ -715,14 +719,24 @@ class CciCdc:
                 coords.append(variable)
             elif variable.endswith('bounds') or variable.endswith('bnds'):
                 coords.append(variable)
-            elif variable in COMMON_COORD_VAR_NAMES:
+            elif variable == "time":
                 coords.append(variable)
+            elif variable == "geometry":
+                coords.append(variable)
+            elif variable in COMMON_COORD_VAR_NAMES:
+                if self._data_type != "vectordatacube":
+                    coords.append(variable)
+                else:
+                    pass
+                    #ignore
             elif variable_infos[variable].get('data_type', '') == 'bytes1024' \
                     and len(variable_infos[variable]['dimensions']) > 0:
                 # add as neither coordinate nor variable
                 continue
             else:
                 variables.append(variable)
+        if self._data_type == "vectordatacube":
+            coords.append("geometry")
         return variables, coords
 
     def search(self,
@@ -917,11 +931,18 @@ class CciCdc:
                         var_data[var_name]['data'] = data
                 else:
                     var_data[var_name]['data'] = []
+            elif var_name == "geometry" and self._data_type == "vectordatacube":
+                var_data[var_name] = dict(
+                    size=variable_dict[var_name],
+                    chunkSize=_VECTOR_DATACUBE_CHUNKING,
+                    data=[]
+                )
             else:
                 var_data[var_name] = dict(
                     size=variable_dict[var_name],
                     chunkSize=variable_dict[var_name],
-                    data=list(range(variable_dict[var_name])))
+                    data=list(range(variable_dict[var_name]))
+                )
         return var_data
 
     async def _get_feature_list(self, session, request):
@@ -1262,7 +1283,7 @@ class CciCdc:
                 json_dict = await resp.json(encoding='utf-8')
                 data_source['variables'] = json_dict.get(dataset_name, [])
 
-        feature, time_dimension_size = \
+        feature, num_nc_files = \
             await self._fetch_feature_and_num_nc_files_at(
                 session,
                 opensearch_url,
@@ -1270,6 +1291,8 @@ class CciCdc:
                      drsId=dataset_name),
                 1
             )
+        time_name = "time"
+        time_dimension_size = num_nc_files
         if feature is not None:
             variable_infos, attributes = \
                 await self._get_variable_infos_from_feature(feature, session)
@@ -1280,8 +1303,11 @@ class CciCdc:
                     if dimension not in dimensions:
                         dimensions[dimension] = \
                             variable_infos[variable_info]['shape'][index]
-            time_name = 'month' if 'AEROSOL.climatology' in dataset_name \
-                else 'time'
+            if 'AEROSOL.climatology' in dataset_name:
+                time_name = 'month'
+            elif "nbmonth" in dimensions:
+                time_name = "nbmonth"
+                time_dimension_size = 1
             dimensions[time_name] = time_dimension_size * dimensions.get(
                 time_name, 1
             )
@@ -1295,6 +1321,77 @@ class CciCdc:
         data_source['dimensions'] = dimensions
         data_source['variable_infos'] = variable_infos
         data_source['attributes'] = attributes
+        if self._data_type == "vectordatacube":
+            start_time = data_source.get("temporal_coverage_start")
+            end_time = data_source.get("temporal_coverage_end")
+            non_time_dimension = [dim for dim in dimensions if not dim == time_name][0]
+            num_geometries = await self._count_geometries(
+                session, dataset_id, dataset_name, start_time, end_time,
+                non_time_dimension
+            )
+            data_source["dimensions"][non_time_dimension] = num_geometries
+            for variable_name, var_dict in variable_infos.items():
+                if non_time_dimension in var_dict.get("dimensions"):
+                    index = var_dict.get("dimensions").index(non_time_dimension)
+                    if "shape" in var_dict:
+                        data_source["variable_infos"][variable_name]["shape"][index] \
+                            = num_geometries
+                        data_source["variable_infos"][variable_name]["size"] = \
+                            sum(data_source["variable_infos"][variable_name]["shape"])
+                    if len(var_dict.get("dimensions")) > 1:
+                        data_source["variable_infos"][variable_name]["chunk_sizes"][index] \
+                            = _VECTOR_DATACUBE_CHUNKING
+                        data_source["variable_infos"][variable_name]["file_chunk_sizes"][index] \
+                            = _VECTOR_DATACUBE_CHUNKING
+                    else:
+                        data_source["variable_infos"][variable_name]["chunk_sizes"] \
+                                = _VECTOR_DATACUBE_CHUNKING
+                        data_source["variable_infos"][variable_name]["file_chunk_sizes"] \
+                                = _VECTOR_DATACUBE_CHUNKING
+            lat_lons = [("lat", "lon"), ("latitude", "longitude")]
+            for lat_lon in lat_lons:
+                if lat_lon[0] in variable_infos.keys() \
+                        and lat_lon[1] in variable_infos.keys():
+                    var_info = variable_infos.pop(lat_lon[0])
+                    variable_infos["geometry"] = dict(
+                        standard_name="geometry",
+                        long_name="geometry",
+                        dimensions=var_info.get('dimensions'),
+                        file_dimensions=var_info.get('file_dimensions'),
+                        size=var_info.get('size'),
+                        shape=var_info.get('shape'),
+                        chunk_sizes=[_VECTOR_DATACUBE_CHUNKING],
+                        file_chunk_sizes=[_VECTOR_DATACUBE_CHUNKING],
+                        data_type="object"
+                    )
+                    variable_infos.pop(lat_lon[1])
+                break
+
+    async def _count_geometries(
+            self, session, dataset_id, dataset_name, start_time, end_time,
+            non_time_dimension
+    ):
+        request = dict(parentIdentifier=dataset_id,
+                       startDate=start_time,
+                       endDate=end_time,
+                       drsId=dataset_name,
+                       fileFormat='.nc')
+        feature_list = await self._get_feature_list(session, request)
+        search_string = f"{non_time_dimension} = "
+        offsets = []
+        offset = 0
+        for feature in feature_list:
+            opendap_url = feature[2]
+            offsets.append([offset, opendap_url])
+            res_dict = {}
+            await self._get_content_from_opendap_url(
+                opendap_url, 'dds', res_dict, session
+            )
+            index = res_dict.get("dds").index(search_string)
+            sub_dds = res_dict.get("dds")[index + len(search_string):]
+            offset += int(sub_dds[:sub_dds.index("]")])
+        self._vector_offsets[dataset_name] = offsets
+        return offset
 
     async def _fetch_feature_and_num_nc_files_at(
             self, session, base_url, query_args, index
