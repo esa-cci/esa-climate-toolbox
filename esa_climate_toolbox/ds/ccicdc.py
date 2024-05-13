@@ -28,6 +28,7 @@ import logging
 import lxml.etree as etree
 import math
 import nest_asyncio
+import numcodecs
 import numpy as np
 import os
 import random
@@ -39,6 +40,8 @@ import urllib.parse
 import warnings
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from shapely import Point
+from shapely.geometry import mapping
 from typing import List, Dict, Tuple, Optional, Union, Mapping
 from urllib.parse import quote
 
@@ -1130,6 +1133,91 @@ class CciCdc:
     async def _get_data_chunk(
             self, session, request: Dict, dim_indexes: Tuple, to_bytes: bool = True
     ) -> Optional[bytes]:
+        if self._data_type == "vectordatacube":
+            return await self._get_vectordatacube_chunk(
+                session, request, dim_indexes, to_bytes
+            )
+        return await self._get_dataset_chunk(session, request, dim_indexes, to_bytes)
+
+    async def get_geometry_data(
+            self, session, dataset, data_source, geom_var_name, ds_dim_indexes
+    ):
+        var_name = data_source[geom_var_name]
+        data_type = [d for d in data_source.get('variables', {})
+                     if d["var_id"] == var_name][0].get("data_type")
+        data = await self._get_data_from_opendap_dataset(
+            dataset, session, var_name, ds_dim_indexes
+        )
+        return np.array(data, copy=False, dtype=data_type)
+
+    async def _get_vectordatacube_chunk(
+            self, session, request: Dict, dim_indexes: Tuple, to_bytes: bool = True
+    ) -> Optional[bytes]:
+        var_name = request.get('varNames')[0]
+        drsId = request.get('drsId')
+        vector_offsets = self._vector_offsets[drsId]
+        await self._ensure_all_info_in_data_sources(session, [drsId])
+        data_source = self._data_sources[drsId]
+        dimensions = (data_source.get('variable_infos', {}).
+                      get(var_name, {}).get('file_dimensions'))
+        geometry_index = dimensions.index(data_source.get("geometry_dimension"), -1)
+        geom_start_index = dim_indexes[geometry_index].start
+        geom_stop_index = dim_indexes[geometry_index].stop
+        start = bisect.bisect_right(
+            [vo[0] for vo in vector_offsets], geom_start_index
+        ) - 1
+        end = bisect.bisect_right(
+            [vo[0] for vo in vector_offsets], geom_stop_index
+        ) - 1
+        res = None
+        for i in range(start, end + 1):
+            vo = vector_offsets[i]
+            geom_dim_start_index = max(0, geom_start_index - vo[0])
+            geom_dim_stop_index = min(geom_stop_index, vo[1]) - vo[0]
+            opendap_url = vo[2]
+            dataset = await self._get_opendap_dataset(session, opendap_url)
+            ds_dim_index_list = []
+            for i, di in enumerate(dim_indexes):
+                if i == geometry_index:
+                    ds_dim_index_list.append(
+                        slice(geom_dim_start_index, geom_dim_stop_index)
+                    )
+                else:
+                    ds_dim_index_list.append(di)
+            ds_dim_indexes = tuple(ds_dim_index_list)
+            if var_name == "geometry":
+                lat_data = await self.get_geometry_data(
+                    session, dataset, data_source, "lat_var", ds_dim_indexes
+                )
+                lon_data = await self.get_geometry_data(
+                    session, dataset, data_source, "lon_var", ds_dim_indexes
+                )
+                lat_lon_data = np.array((lon_data, lat_data)).T
+                geometry_data = [mapping(Point(ll)) for ll in lat_lon_data]
+                # geometry_data = dict(lat_lon_data)
+                np_array = np.array(geometry_data, copy=False, dtype=object)
+            else:
+                data_type = (data_source.get('variable_infos', {}).get(var_name, {}).
+                             get('data_type'))
+                data = await self._get_data_from_opendap_dataset(
+                    dataset, session, var_name, ds_dim_indexes
+                )
+                np_array = np.array(data, copy=False, dtype=data_type)
+            if res is None:
+                res = np_array
+            else:
+                res = np.concatenate(res, np_array)
+        if to_bytes:
+            if var_name == "geometry":
+                codec = numcodecs.JSON()
+                return codec.encode(res)
+            else:
+                return res.flatten().tobytes()
+        return res
+
+    async def _get_dataset_chunk(
+            self, session, request: Dict, dim_indexes: Tuple, to_bytes: bool = True
+    ) -> Optional[bytes]:
         var_name = request['varNames'][0]
         opendap_url = await self._get_opendap_url(session, request)
         if not opendap_url:
@@ -1330,6 +1418,7 @@ class CciCdc:
                 non_time_dimension
             )
             data_source["dimensions"][non_time_dimension] = num_geometries
+            data_source["geometry_dimension"] = non_time_dimension
             for variable_name, var_dict in variable_infos.items():
                 if non_time_dimension in var_dict.get("dimensions"):
                     index = var_dict.get("dimensions").index(non_time_dimension)
@@ -1350,6 +1439,8 @@ class CciCdc:
                                 = _VECTOR_DATACUBE_CHUNKING
             lat_lons = [("lat", "lon"), ("latitude", "longitude")]
             for lat_lon in lat_lons:
+                data_source["lat_var"] = lat_lon[0]
+                data_source["lon_var"] = lat_lon[1]
                 if lat_lon[0] in variable_infos.keys() \
                         and lat_lon[1] in variable_infos.keys():
                     var_info = variable_infos.pop(lat_lon[0])
@@ -1382,14 +1473,15 @@ class CciCdc:
         offset = 0
         for feature in feature_list:
             opendap_url = feature[2]
-            offsets.append([offset, opendap_url])
             res_dict = {}
             await self._get_content_from_opendap_url(
                 opendap_url, 'dds', res_dict, session
             )
             index = res_dict.get("dds").index(search_string)
             sub_dds = res_dict.get("dds")[index + len(search_string):]
-            offset += int(sub_dds[:sub_dds.index("]")])
+            next_offset = offset + int(sub_dds[:sub_dds.index("]")])
+            offsets.append([offset, next_offset, opendap_url])
+            offset = next_offset
         self._vector_offsets[dataset_name] = offsets
         return offset
 

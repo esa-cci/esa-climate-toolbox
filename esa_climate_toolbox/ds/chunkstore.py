@@ -943,7 +943,8 @@ class CciChunkStore(RemoteChunkStore):
         if not data:
             raise KeyError(f'{key}: cannot fetch chunk for variable '
                            f'{var_name!r} and time_range {time_range!r}.')
-        if self._time_chunking > 1:
+        if (self._time_chunking > 1 and
+                self._cci_cdc.get_data_type() != "vectordatacube"):
             expected_chunk_size, dtype_size = \
                 self._determine_expected_chunk_size(var_name)
             data_length = len(data)
