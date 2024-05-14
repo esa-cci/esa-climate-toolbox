@@ -23,9 +23,10 @@ from abc import abstractmethod
 import json
 import os
 from typing import Any, Iterator, List, Tuple, Optional, Dict, Union, Container
-
 import pyproj
+from shapely import Point
 import xarray as xr
+import xvec
 
 from xcube.core.normalize import normalize_dataset
 from xcube.core.store import GEO_DATA_FRAME_TYPE
@@ -618,30 +619,31 @@ class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
             variable_names=JsonArraySchema(items=JsonStringSchema(
                 enum=vdcd.data_vars.keys() if vdcd and vdcd.data_vars else None))
         )
-        if vdcd:
-            min_date = vdcd.time_range[0] if vdcd.time_range else None
-            max_date = vdcd.time_range[1] if vdcd.time_range else None
-            if min_date or max_date:
-                vectordatacube_params['time_range'] = \
-                    JsonDateSchema.new_range(min_date, max_date)
-        else:
-            vectordatacube_params['time_range'] = JsonDateSchema.new_range(None, None)
-        if vdcd:
-            try:
-                if pyproj.CRS.from_string(vdcd.crs).is_geographic:
-                    min_lon = vdcd.bbox[0] if vdcd and vdcd.bbox else -180
-                    min_lat = vdcd.bbox[1] if vdcd and vdcd.bbox else -90
-                    max_lon = vdcd.bbox[2] if vdcd and vdcd.bbox else 180
-                    max_lat = vdcd.bbox[3] if vdcd and vdcd.bbox else 90
-                    bbox = JsonArraySchema(items=(
-                        JsonNumberSchema(minimum=min_lon, maximum=max_lon),
-                        JsonNumberSchema(minimum=min_lat, maximum=max_lat),
-                        JsonNumberSchema(minimum=min_lon, maximum=max_lon),
-                        JsonNumberSchema(minimum=min_lat, maximum=max_lat)))
-                    vectordatacube_params['bbox'] = bbox
-            except pyproj.exceptions.CRSError:
+        # TODO add this when spatial and temporal subsetting are supported
+        # if vdcd:
+        #     min_date = vdcd.time_range[0] if vdcd.time_range else None
+        #     max_date = vdcd.time_range[1] if vdcd.time_range else None
+        #     if min_date or max_date:
+        #         vectordatacube_params['time_range'] = \
+        #             JsonDateSchema.new_range(min_date, max_date)
+        # else:
+        #     vectordatacube_params['time_range'] = JsonDateSchema.new_range(None, None)
+        # if vdcd:
+        #     try:
+        #         if pyproj.CRS.from_string(vdcd.crs).is_geographic:
+        #             min_lon = vdcd.bbox[0] if vdcd and vdcd.bbox else -180
+        #             min_lat = vdcd.bbox[1] if vdcd and vdcd.bbox else -90
+        #             max_lon = vdcd.bbox[2] if vdcd and vdcd.bbox else 180
+        #             max_lat = vdcd.bbox[3] if vdcd and vdcd.bbox else 90
+        #             bbox = JsonArraySchema(items=(
+        #                 JsonNumberSchema(minimum=min_lon, maximum=max_lon),
+        #                 JsonNumberSchema(minimum=min_lat, maximum=max_lat),
+        #                 JsonNumberSchema(minimum=min_lon, maximum=max_lon),
+        #                 JsonNumberSchema(minimum=min_lat, maximum=max_lat)))
+        #             vectordatacube_params['bbox'] = bbox
+        #     except pyproj.exceptions.CRSError:
                 # do not set bbox then
-                pass
+                # pass
         cci_schema = JsonObjectSchema(
             properties=dict(**vectordatacube_params),
             required=[
@@ -660,8 +662,15 @@ class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
         )
         chunk_store = CciChunkStore(self._cci_cdc, data_id, cube_kwargs)
         ds = xr.open_zarr(chunk_store, consolidated=False)
+
+        def _convert_to_point(chunk):
+            return [Point(point_dict.get("coordinates")) for point_dict in chunk]
+
+        da = xr.apply_ufunc(_convert_to_point, ds.geometry,
+                            dask='parallelized', output_dtypes=["object"])
+        ds = ds.assign_coords(geometry=da)
+        ds = ds.set_xindex("geometry", xvec.GeometryIndex)
         ds.zarr_store.set(chunk_store)
-        ds = self._normalize_dataset(ds)
         return ds
 
 

@@ -1174,6 +1174,8 @@ class CciCdc:
             vo = vector_offsets[i]
             geom_dim_start_index = max(0, geom_start_index - vo[0])
             geom_dim_stop_index = min(geom_stop_index, vo[1]) - vo[0]
+            if geom_dim_start_index == geom_dim_stop_index:
+                continue
             opendap_url = vo[2]
             dataset = await self._get_opendap_dataset(session, opendap_url)
             ds_dim_index_list = []
@@ -1194,7 +1196,6 @@ class CciCdc:
                 )
                 lat_lon_data = np.array((lon_data, lat_data)).T
                 geometry_data = [mapping(Point(ll)) for ll in lat_lon_data]
-                # geometry_data = dict(lat_lon_data)
                 np_array = np.array(geometry_data, copy=False, dtype=object)
             else:
                 data_type = (data_source.get('variable_infos', {}).get(var_name, {}).
@@ -1206,9 +1207,13 @@ class CciCdc:
             if res is None:
                 res = np_array
             else:
-                res = np.concatenate(res, np_array)
+                res = np.append(res, np_array)
         if to_bytes:
             if var_name == "geometry":
+                if len(res) < _VECTOR_DATACUBE_CHUNKING:
+                    to_fill = _VECTOR_DATACUBE_CHUNKING - len(res)
+                    nones = [None] * to_fill
+                    res = np.append(res, np.array(nones))
                 codec = numcodecs.JSON()
                 return codec.encode(res)
             else:

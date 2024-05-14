@@ -289,6 +289,11 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 (time_coverage_end - time_coverage_start).isoformat()
 
         self._time_indexes = {}
+        for coord_name in sorted_coords_names:
+            self._time_indexes[coord_name] = -1
+            if coord_name == 'time' or coord_name == 'time_bnds' or \
+                    coord_name == 'month':
+                self._time_indexes[coord_name] = 0
         remove = []
         logging.debug('Adding variables to dataset ...')
         for variable_name in self._variable_names:
@@ -308,7 +313,8 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
             chunk_sizes = var_attrs.get('chunk_sizes', [-1] * len(dimensions))
             if isinstance(chunk_sizes, int):
                 chunk_sizes = [chunk_sizes]
-            if len(dimensions) > 0 and time_dim_name not in dimensions:
+            if len(dimensions) > 0 and time_dim_name not in dimensions \
+                    and self._optimise_chunking():
                 dimensions.insert(0, time_dim_name)
                 chunk_sizes.insert(0, 1)
             var_attrs.update(_ARRAY_DIMENSIONS=dimensions)
@@ -659,7 +665,10 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
         self._vfs[name] = _str_to_bytes('')
         self._vfs[name + '/.zarray'] = _dict_to_bytes(array_metadata)
         self._vfs[name + '/.zattrs'] = _dict_to_bytes(attrs)
-        nums = np.array(shape) // np.array(chunks)
+        nums = []
+        for i in range(len(shape)):
+            nums.append(math.ceil(shape[i] / chunks[i]))
+        nums = np.array(nums)
         ranges = tuple(map(range, map(int, nums)))
         self._var_name_to_ranges[name] = ranges
         if ranges not in self._ranges_to_indexes:
@@ -672,9 +681,11 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
 
     def _fetch_chunk(self, key: str, var_name: str,
                      chunk_index: Tuple[int, ...]) -> bytes:
-        request_time_range = self.request_time_range(
-            chunk_index[self._time_indexes.get(var_name, 0)])
-
+        time_index = self._time_indexes.get(var_name, 0)
+        if time_index >= 0:
+            request_time_range = self.request_time_range(chunk_index[time_index])
+        else:
+            request_time_range = self._time_ranges[0][0], self._time_ranges[-1][1]
         t0 = time.perf_counter()
         try:
             exception = None
@@ -871,7 +882,7 @@ class CciChunkStore(RemoteChunkStore):
         return self._time_range_getter.get_default_time_range(ds_id)
 
     def get_all_variable_names(self) -> List[str]:
-        return [variable['var_id'] for variable in self._metadata['variables']]
+        return [variable for variable in self._metadata['variable_infos'].keys()]
 
     def get_dimensions(self) -> Dict[str, int]:
         return copy.copy(self._metadata['dimensions'])

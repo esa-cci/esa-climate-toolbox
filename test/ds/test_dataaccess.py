@@ -709,7 +709,7 @@ class CciCdcDataFrameOpenerTest(unittest.TestCase):
         )
 
 
-class CciCdcCciCdcVectorDataCubeOpenerTest(unittest.TestCase):
+class CciCdcVectorDataCubeOpenerTest(unittest.TestCase):
 
     def setUp(self) -> None:
         self._opener = CciCdcVectorDataCubeOpener()
@@ -755,15 +755,21 @@ class CciCdcCciCdcVectorDataCubeOpenerTest(unittest.TestCase):
         schema = self._opener.get_open_data_params_schema(VDC_ID).to_dict()
         self.assertIsNotNone(schema)
         self.assertTrue('variable_names' in schema['properties'])
-        self.assertTrue('time_range' in schema['properties'])
-        self.assertTrue('bbox' in schema['properties'])
         self.assertFalse(schema['additionalProperties'])
 
     def test_open_data(self):
-        # todo make this work
-        data = self._opener.open_data(VDC_ID)
+        data = self._opener.open_data(VDC_ID,
+                                      variable_names=["distance_to_coast", "sla"])
         self.assertIsNotNone(data)
-        self.assertIsNotNone(data.geometry.values())
+        self.assertEqual({"distance_to_coast", "sla"}, set(data.data_vars))
+        self.assertEqual({"geometry", "time", "time_bnds"}, set(data.coords))
+        self.assertEqual({"nbpoints"}, set(data.distance_to_coast.dims))
+        self.assertEqual({50}, set(data.distance_to_coast.chunk_sizes))
+        self.assertEqual({1867}, set(data.distance_to_coast.shape))
+        self.assertEqual({"nbpoints", "nbmonth"}, set(data.sla.dims))
+        self.assertEqual({50, 216}, set(data.sla.chunk_sizes))
+        self.assertEqual({1867, 216}, set(data.sla.shape))
+        self.assertIsNotNone(data.zarr_store.get())
 
 
 class CciCdcDataStoreTest(unittest.TestCase):
