@@ -757,6 +757,8 @@ class CciCdcVectorDataCubeOpenerTest(unittest.TestCase):
         self.assertTrue('variable_names' in schema['properties'])
         self.assertFalse(schema['additionalProperties'])
 
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
     def test_open_data(self):
         data = self._opener.open_data(VDC_ID,
                                       variable_names=["distance_to_coast", "sla"])
