@@ -27,7 +27,6 @@ from typing import Optional
 from typing import Tuple
 import dask.array as da
 import numpy as np
-# import shapely
 import xarray
 import warnings
 
@@ -37,15 +36,18 @@ from xcube.core.store import DataTypeLike
 from xcube.core.store import VariableDescriptor
 from xcube.util.assertions import assert_true
 from xcube.util.jsonschema import JsonIntegerSchema
-from xcube.util.jsonschema import JsonNumberSchema
 from xcube.util.jsonschema import JsonObjectSchema
 
-from .ccicdc import CciCdc
+
+class VectorDataCube(xarray.Dataset):
+    """A wrapper class around an xarray Dataset to keep it separate."""
 
 VECTOR_DATA_CUBE_TYPE = DataType(
-    xarray.Dataset,
+    VectorDataCube,
     ['vectordatacube', 'xarray.Dataset']
 )
+
+DataType.register_data_type(VECTOR_DATA_CUBE_TYPE)
 
 
 def _attrs_to_json(attrs: Mapping[Hashable, Any]) \
@@ -145,27 +147,3 @@ class VectorDataCubeDescriptor(DataDescriptor):
         schema.additional_properties = False
         schema.factory = cls
         return schema
-
-
-class VectorDataCubeAccessor:
-
-    def __init__(self, cci_cdc: CciCdc, vdc_id: str, gdf_params: Mapping[str, Any]):
-        self._cci_cdc = cci_cdc
-        self._vdc_id = vdc_id
-        self._metadata = cci_cdc.get_dataset_metadata(vdc_id)
-        self._var_names = gdf_params.get("variable_names", {}).copy()
-        if len(self._var_names) == 0:
-            self._var_names = list(self._metadata.get("variable_infos").keys())
-        self._spatial_subset_area = None
-        # if "bbox" in gdf_params:
-        #     min_lon = gdf_params["bbox"][0]
-        #     min_lat = gdf_params["bbox"][1]
-        #     max_lon = gdf_params["bbox"][2]
-        #     max_lat = gdf_params["bbox"][3]
-        #     coords = ((min_lon, min_lat), (min_lon, max_lat), (max_lon, max_lat),
-        #               (max_lon, min_lat), (min_lon, min_lat))
-        #     self._spatial_subset_area = shapely.Polygon(coords)
-        # we use a time chunking of 1 as we do not know the actual content of a nc file
-        # self._time_chunking = 1
-        # tr = TimeRangeGetter(self._cci_cdc, self._metadata)
-        # self._time_ranges = tr.get_time_ranges(self._df_id, gdf_params)

@@ -1461,7 +1461,7 @@ class CciCdc:
                         data_type="object"
                     )
                     variable_infos.pop(lat_lon[1])
-                break
+                    break
 
     async def _count_geometries(
             self, session, dataset_id, dataset_name, start_time, end_time,

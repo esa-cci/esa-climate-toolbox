@@ -764,12 +764,12 @@ class CciCdcDataStore(DataStore):
                 raise ValueError(f"Opener '{opener_id}' is not compatible with "
                                  f"data type '{data_type}'.")
         if data_type is not None:
+            if data_type == "vectordatacube":
+                return [self._openers[VECTORDATACUBE_OPENER_ID]]
             if DATASET_TYPE.is_super_type_of(data_type):
                 return [self._openers[DATASET_OPENER_ID]]
             if GEO_DATA_FRAME_TYPE.is_super_type_of(data_type):
                 return [self._openers[DATAFRAME_OPENER_ID]]
-            if VECTOR_DATA_CUBE_TYPE.is_super_type_of(data_type):
-                return [self._openers[VECTORDATACUBE_OPENER_ID]]
         return list(self._openers.values())
 
     def get_data_ids(self,
@@ -918,9 +918,9 @@ class CciCdcDataStore(DataStore):
     @classmethod
     def _is_valid_data_type(cls, data_type: str) -> bool:
         return data_type is None \
+               or data_type == "vectordatacube" \
                or DATASET_TYPE.is_super_type_of(data_type) \
-               or GEO_DATA_FRAME_TYPE.is_super_type_of(data_type) \
-               or VECTOR_DATA_CUBE_TYPE.is_super_type_of(data_type)
+               or GEO_DATA_FRAME_TYPE.is_super_type_of(data_type)
 
     @classmethod
     def _assert_valid_data_type(cls, data_type):

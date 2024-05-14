@@ -730,7 +730,7 @@ class CciCdcVectorDataCubeOpenerTest(unittest.TestCase):
 
     @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
             'ECT_DISABLE_WEB_TESTS = 1')
-    def test_describe_data(self):
+    def test_describe_data_sealevel(self):
         descriptor = self._opener.describe_data(VDC_ID)
         self.assertIsNotNone(descriptor)
         self.assertIsInstance(descriptor, VectorDataCubeDescriptor)
@@ -826,11 +826,18 @@ class CciCdcDataStoreTest(unittest.TestCase):
 
     @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
             'ECT_DISABLE_WEB_TESTS = 1')
-    def test_search(self):
+    def test_search_geodataframe(self):
         geodataframe_search_result = \
             list(self.store.search_data('geodataframe'))
         self.assertIsNotNone(geodataframe_search_result)
         self.assertTrue(len(geodataframe_search_result) > 20)
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_search_vectordatacube(self):
+        vectordatacube_search_result = list(self.store.search_data('vectordatacube'))
+        self.assertIsNotNone(vectordatacube_search_result)
+        self.assertTrue(len(vectordatacube_search_result) > 10)
 
 
 class CciDataNormalizationTest(unittest.TestCase):
