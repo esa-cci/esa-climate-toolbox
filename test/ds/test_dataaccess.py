@@ -359,7 +359,6 @@ class CciCdcDatasetOpenerTest(unittest.TestCase):
     def test_open_2d_grid_coords_data(self):
         dataset = self.opener.open_data(
             COORDS_2D_ID,
-            # variable_names=['CS2SEC']
         )
         self.assertIsNotNone(dataset)
         self.assertEqual(
