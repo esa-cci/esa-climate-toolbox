@@ -39,6 +39,9 @@ SEAICE_ID = 'esacci.SEAICE.day.L4.SICONC.multi-sensor.multi-platform.' \
             'AMSR_25kmEASE2.2-1.NH'
 SST_ID = 'esacci.SST.day.L4.SSTdepth.multi-sensor.multi-platform.OSTIA.1-1.r1'
 GHG_DS_ID = "esacci.GHG.satellite-orbit-frequency.L2.CH4.SCIAMACHY.Envisat.IMAP.v7-2.r1"
+COORDS_2D_ID = "esacci.ICESHEETS.unspecified.L4.SEC.multi-sensor.multi-platform." \
+               "UNSPECIFIED.0-1.greenland_sec_saral_altika"
+
 
 class DataAccessTest(unittest.TestCase):
 
@@ -214,6 +217,29 @@ class CciCdcDatasetOpenerTest(unittest.TestCase):
                          descriptor.time_range)
         self.assertEqual('1D', descriptor.time_period)
 
+    # @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+    #         'ECT_DISABLE_WEB_TESTS = 1')
+    def test_describe_2d_grid_coords_data(self):
+        descriptor = self.opener.describe_data(COORDS_2D_ID)
+        self.assertIsNotNone(descriptor)
+        self.assertEqual('dataset', str(descriptor.data_type))
+        self.assertEqual(['Time', 'x', 'y', 'bnds'], list(descriptor.dims.keys()))
+        self.assertEqual(634, descriptor.dims['x'])
+        self.assertEqual(635, descriptor.dims['y'])
+        self.assertEqual(1, descriptor.dims['Time'])
+        self.assertEqual(2, descriptor.dims['bnds'])
+        self.assertEqual(7, len(descriptor.data_vars))
+        self.assertTrue('CS2SEC' in descriptor.data_vars)
+        self.assertEqual(3, descriptor.data_vars['CS2SEC'].ndim)
+        self.assertEqual(('y', 'x', 'Time'),
+                         descriptor.data_vars['CS2SEC'].dims)
+        self.assertEqual('float32',
+                         descriptor.data_vars['CS2SEC'].dtype)
+        self.assertEqual('Polar Stereographic (variant B)', descriptor.crs)
+        self.assertIsNone(descriptor.spatial_res)
+        self.assertEqual(('2013-03-31', '2017-03-31'), descriptor.time_range)
+        self.assertIsNone(descriptor.time_period)
+
     def test_get_open_data_params_schema_no_data(self):
         schema = self.opener.get_open_data_params_schema().to_dict()
         self.assertIsNotNone(schema)
@@ -327,6 +353,22 @@ class CciCdcDatasetOpenerTest(unittest.TestCase):
         self.assertEqual({'time', 'air_pressure', 'latitude_centers'},
                          dataset.ozone_mixing_ratio.dims)
         self.assertEqual({1, 32, 18}, dataset.ozone_mixing_ratio.chunk_sizes)
+
+    # @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+    #         'ECT_DISABLE_WEB_TESTS = 1')
+    def test_open_2d_grid_coords_data(self):
+        dataset = self.opener.open_data(
+            COORDS_2D_ID,
+            # variable_names=['CS2SEC']
+        )
+        self.assertIsNotNone(dataset)
+        self.assertEqual(
+            {'AltiKaSEC', 'AltiKaSEC_error', 'CS2SEC', 'CS2SEC_error',
+             'grid_projection', 'lat', 'lon'},
+            set(dataset.data_vars)
+        )
+        self.assertEqual(('y', 'x', 'Time'), dataset.AltiKaSEC.dims)
+        self.assertEqual([635, 634, 1], dataset.AltiKaSEC.chunk_sizes)
 
     @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
             'ECT_DISABLE_WEB_TESTS = 1')

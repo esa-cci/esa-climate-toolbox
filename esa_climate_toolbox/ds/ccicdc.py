@@ -710,19 +710,20 @@ class CciCdc:
         variable_infos = data_source['variable_infos']
         variables = []
         coords = []
-        for variable in variable_infos:
-            if variable in names_of_dims:
-                coords.append(variable)
-            elif variable.endswith('bounds') or variable.endswith('bnds'):
-                coords.append(variable)
-            elif variable in COMMON_COORD_VAR_NAMES:
-                coords.append(variable)
-            elif variable_infos[variable].get('data_type', '') == 'bytes1024' \
-                    and len(variable_infos[variable]['dimensions']) > 0:
+        for variable_name, variable_info in variable_infos.items():
+            if variable_name in names_of_dims:
+                coords.append(variable_name)
+            elif variable_name.endswith('bounds') or variable_name.endswith('bnds'):
+                coords.append(variable_name)
+            elif variable_name in COMMON_COORD_VAR_NAMES \
+                    and len(variable_info.get("dimensions")) == 1:
+                coords.append(variable_name)
+            elif variable_info.get('data_type', '') == 'bytes1024' \
+                    and len(variable_info['dimensions']) > 0:
                 # add as neither coordinate nor variable
                 continue
             else:
-                variables.append(variable)
+                variables.append(variable_name)
         return variables, coords
 
     def search(self,
@@ -1280,14 +1281,17 @@ class CciCdc:
                     if dimension not in dimensions:
                         dimensions[dimension] = \
                             variable_infos[variable_info]['shape'][index]
-            time_name = 'month' if 'AEROSOL.climatology' in dataset_name \
-                else 'time'
+            time_name = "time"
+            if 'AEROSOL.climatology' in dataset_name:
+                time_name = 'month'
+            if "Time" in dimensions:
+                time_name = "Time"
             dimensions[time_name] = time_dimension_size * dimensions.get(
                 time_name, 1
             )
             for variable_info in variable_infos.values():
-                if 'time' in variable_info['dimensions']:
-                    time_index = variable_info['dimensions'].index('time')
+                if time_name in variable_info['dimensions']:
+                    time_index = variable_info['dimensions'].index(time_name)
                     if 'shape' in variable_info:
                         variable_info['shape'][time_index] = \
                             dimensions[time_name]

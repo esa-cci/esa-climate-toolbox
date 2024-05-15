@@ -295,7 +295,12 @@ class CciCdcDatasetOpener(CciCdcDataOpener):
             ds_metadata.get('variable_infos', {})
         )
         coord_names = self._normalize_coord_names(dataset_info['coord_names'])
-        time_dim_name = 'month' if is_climatology else 'time'
+
+        time_dim_name = "time"
+        if is_climatology:
+            time_dim_name = 'month'
+        if "Time" in dims.keys():
+            time_dim_name = "Time"
         var_descriptors = self._get_variable_descriptors(
             dataset_info['var_names'], var_infos, time_dim_name
         )
@@ -303,12 +308,11 @@ class CciCdcDatasetOpener(CciCdcDataOpener):
                                                            var_infos,
                                                            time_dim_name,
                                                            normalize_dims=False)
-        if 'time' not in coord_descriptors.keys() and \
-                't' not in coord_descriptors.keys() and \
-                'month' not in coord_descriptors.keys():
+        if time_dim_name not in coord_descriptors.keys() and \
+                't' not in coord_descriptors.keys():
             if is_climatology:
-                coord_descriptors['month'] = VariableDescriptor(
-                    'month', dtype='int8', dims=('month',)
+                coord_descriptors[time_dim_name] = VariableDescriptor(
+                    time_dim_name, dtype='int8', dims=('time_dim_name',)
                 )
             else:
                 time_attrs = {
@@ -316,10 +320,10 @@ class CciCdcDatasetOpener(CciCdcDataOpener):
                     "calendar": "proleptic_gregorian",
                     "standard_name": "time"
                 }
-                coord_descriptors['time'] = VariableDescriptor('time',
-                                                               dtype='int64',
-                                                               dims=('time',),
-                                                               attrs=time_attrs)
+                coord_descriptors[time_dim_name] = VariableDescriptor(
+                    time_dim_name, dtype='int64', dims=(time_dim_name,),
+                    attrs=time_attrs
+                )
                 if 'time_bnds' in coord_descriptors.keys():
                     coord_descriptors.pop('time_bnds')
                 if 'time_bounds' in coord_descriptors.keys():
@@ -332,7 +336,7 @@ class CciCdcDatasetOpener(CciCdcDataOpener):
                 coord_descriptors['time_bnds'] = \
                     VariableDescriptor('time_bnds',
                                        dtype='int64',
-                                       dims=('time', bounds_dim_name),
+                                       dims=(time_dim_name, bounds_dim_name),
                                        attrs=time_bnds_attrs)
 
         if 'variables' in ds_metadata:
