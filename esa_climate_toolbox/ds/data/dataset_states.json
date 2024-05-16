@@ -243,47 +243,47 @@
         "title": "ESA Aerosol Climate Change Initiative (Aerosol CCI): Level 3 aerosol products from MERIS (ALAMO algorithm), Version 2.2"
     },
     "esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.AATSR.Envisat.AATSR-ENVISAT-ENS.v2-6.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from AATSR (ensemble product), Version 2.6"
     },
     "esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.AATSR.Envisat.ADV.2-31.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from AATSR (ADV Algorithm), Version 2.31"
     },
     "esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.AATSR.Envisat.ORAC.04-01.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from AATSR (ORAC Algorithm), Version 4.01"
     },
     "esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.AATSR.Envisat.SU.4-3.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from AATSR (SU Algorithm), Version 4.3"
     },
     "esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.ATSR-2.ERS-2.ADV.2-31.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from ATSR-2 (ADV algorithm), Version 2.31"
     },
     "esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.ATSR-2.ERS-2.ORAC.04-01.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from ATSR-2 (ORAC algorithm), Version 4.01"
     },
     "esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.ATSR-2.ERS-2.SU.4-3.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from ATSR-2 (SU algorithm), Version 4.3"
     },
     "esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.multi-sensor.multi-platform.ATSR2-ENVISAT-ENS.v2-6.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from ATSR-2 (ensemble product), Version 2.6"
     },
     "esacci.AEROSOL.satellite-orbit-frequency.L2P.AOD.MERIS.Envisat.MERIS_ENVISAT.2-2.r1": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol CCI): Level 2 aerosol products from MERIS (ALAMO algorithm), Version 2.2"
     },

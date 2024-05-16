@@ -137,7 +137,10 @@ class DataFrameAccessor:
             gdf['time'] = gdf.apply(
                 create_timestamp, args=(time_unit, time_offset), axis=1
             )
-        gdf['time'] = gdf['time'].astype(str)
+        if 'time' in gdf:
+            gdf['time'] = gdf['time'].astype(str)
+        else:
+            gdf['time'] = start_time
         for feature in gdf.iterfeatures():
             yield feature
 
