@@ -574,12 +574,12 @@
         "title": "ESA Greenland Ice Sheet Climate Change Initiative (Greenland_Ice_Sheet_cci): Greenland Surface Elevation Change grid from SARAL-AltiKa for 2013-2017, v0.1"
     },
     "esacci.ICESHEETS.unspecified.Unspecified.CFL.multi-sensor.multi-platform.UNSPECIFIED.v3-0.greenland": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Greenland Ice Sheet Climate Change Initiative (Greenland_Ice_Sheet_cci): Greenland Calving Front Locations, v3.0"
     },
     "esacci.ICESHEETS.unspecified.Unspecified.GLL.multi-sensor.multi-platform.UNSPECIFIED.v1-3.greenland": {
-        "data_type": "dataset",
+        "data_type": "geodataframe",
         "verification_flags": [],
         "title": "ESA Greenland Ice Sheet Climate Change Initiative (Greenland_Ice_Sheet_cci): Grounding Line Locations from SAR Interferometry,  v1.3"
     },

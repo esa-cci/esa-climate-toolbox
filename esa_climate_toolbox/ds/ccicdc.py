@@ -23,6 +23,7 @@ import aiohttp
 import asyncio
 import bisect
 import copy
+import geopandas as gpd
 import json
 import logging
 import lxml.etree as etree
@@ -924,7 +925,11 @@ class CciCdc:
                     data=list(range(variable_dict[var_name])))
         return var_data
 
-    async def _get_feature_list(self, session, request):
+    async def _get_feature_list(self, session, request, file_format):
+        request["fileFormat"] = file_format
+        extender = self._extract_times_and_opendap_url
+        if file_format == ".shp":
+            extender = self._extract_times_and_download_url
         ds_id = request['drsId']
         start_date_str = request['startDate']
         try:
@@ -941,7 +946,7 @@ class CciCdc:
             self._features[ds_id] = []
             await self._fetch_opensearch_feature_list(
                 session, self._opensearch_url, feature_list,
-                self._extract_times_and_opendap_url, request
+                extender, request
             )
             if len(feature_list) == 0:
                 # try without dates. For some data sets, this works better
@@ -951,7 +956,7 @@ class CciCdc:
                     request.pop('endDate')
                 await self._fetch_opensearch_feature_list(
                     session, self._opensearch_url, feature_list,
-                    self._extract_times_and_opendap_url, request
+                    extender, request
                 )
             feature_list.sort(key=lambda x: x[0])
             self._features[ds_id] = feature_list
@@ -962,7 +967,7 @@ class CciCdc:
                 )
                 await self._fetch_opensearch_feature_list(
                     session, self._opensearch_url, feature_list,
-                    self._extract_times_and_opendap_url, request
+                    extender, request
                 )
                 if len(feature_list) > 0:
                     feature_list.sort(key=lambda x: x[0])
@@ -979,7 +984,7 @@ class CciCdc:
                 request['endDate'] = end_date_str
                 await self._fetch_opensearch_feature_list(
                     session, self._opensearch_url, feature_list,
-                    self._extract_times_and_opendap_url, request
+                    extender, request
                 )
                 if len(feature_list) > 0:
                     feature_list.sort(key=lambda x: x[0])
@@ -1002,16 +1007,28 @@ class CciCdc:
     def _extract_times_and_opendap_url(
             features: List[Tuple], feature_list: List[Dict]
     ):
+        CciCdc._extract_times_and_url(features, feature_list, "Opendap")
+
+    @staticmethod
+    def _extract_times_and_download_url(
+            features: List[Tuple], feature_list: List[Dict]
+    ):
+        CciCdc._extract_times_and_url(features, feature_list, "Download")
+
+    @staticmethod
+    def _extract_times_and_url(
+            features: List[Tuple], feature_list: List[Dict], url_type: str
+    ):
         for feature in feature_list:
             start_time = None
             end_time = None
             properties = feature.get('properties', {})
-            opendap_url = None
+            url = None
             links = properties.get('links', {}).get('related', {})
             for link in links:
-                if link.get('title', '') == 'Opendap':
-                    opendap_url = link.get('href', None)
-            if not opendap_url:
+                if link.get('title', '') == url_type:
+                    url = link.get('href', None)
+            if not url:
                 continue
             date_property = properties.get('date', None)
             if date_property:
@@ -1056,7 +1073,7 @@ class CciCdc:
                 except (TypeError, IndexError, ValueError, KeyError):
                     # just use the previous values
                     pass
-                features.append((start_time, end_time, opendap_url))
+                features.append((start_time, end_time, url))
 
     def get_time_ranges_from_data(self, dataset_name: str,
                                   start_time: str = _EARLY_START_TIME,
@@ -1077,7 +1094,15 @@ class CciCdc:
                        drsId=dataset_name,
                        fileFormat='.nc')
 
-        feature_list = await self._get_feature_list(session, request)
+        feature_list = await self._get_feature_list(session, request, '.nc')
+        if len(feature_list) == 0:
+            request = dict(parentIdentifier=dataset_id,
+                           startDate=start_time,
+                           endDate=end_time,
+                           drsId=dataset_name,
+                           fileFormat='.shp')
+
+            feature_list = await self._get_feature_list(session, request, '.shp')
         request_time_ranges = [feature[0:2] for feature in feature_list]
         return request_time_ranges
 
@@ -1090,10 +1115,16 @@ class CciCdc:
             'uuid', self._data_sources[dataset_name]['fid']
         )
 
+    async def _get_shapefile_url(self, session, request: Dict):
+        request['fileFormat'] = '.shp'
+        feature_list = await self._get_feature_list(session, request, '.shp')
+        if len(feature_list) == 0:
+            return
+        return feature_list[0][2]
+
     async def _get_opendap_url(self, session, request: Dict):
         request['fileFormat'] = '.nc'
-        # async with _FEATURE_LIST_LOCK:
-        feature_list = await self._get_feature_list(session, request)
+        feature_list = await self._get_feature_list(session, request, '.nc')
         if len(feature_list) == 0:
             return
         return feature_list[0][2]
@@ -1134,6 +1165,25 @@ class CciCdc:
         if to_bytes:
             return data.flatten().tobytes()
         return data
+
+    def get_geodataframe_from_shapefile(
+            self, request: Dict, dim_indexes: Tuple, to_bytes: bool = True
+    ) -> Optional[gpd.geodataframe]:
+        gdf = self._run_with_session(
+            self._get_geodataframe_from_shapefile, request, dim_indexes, to_bytes
+        )
+        return gdf
+
+    async def _get_geodataframe_from_shapefile(
+            self, session, request: Dict
+    ) -> Optional[gpd.geodataframe]:
+        var_names = request['varNames']
+        shapefile_url = await self._get_shapefile_url(session, request)
+        if not shapefile_url:
+            return None
+        gdf = gpd.read_file(shapefile_url)
+        gdf = gdf[var_names]
+        return gdf
 
     async def _fetch_data_source_list_json(self, session, base_url, query_args,
                                            max_wanted_results=100000) -> Dict:
@@ -1273,6 +1323,7 @@ class CciCdc:
         if feature is not None:
             variable_infos, attributes = \
                 await self._get_variable_infos_from_feature(feature, session)
+            attributes["shapefile"] = False
             for variable_info in variable_infos:
                 for index, dimension in enumerate(
                         variable_infos[variable_info]['dimensions']
@@ -1292,6 +1343,20 @@ class CciCdc:
                         variable_info['shape'][time_index] = \
                             dimensions[time_name]
                         variable_info['size'] = np.prod(variable_info['shape'])
+        else:
+            feature, num_shapefiles = \
+                await self._fetch_feature_from_shapefile(
+                    session,
+                    opensearch_url,
+                    dict(parentIdentifier=dataset_id,
+                         drsId=dataset_name),
+                    1
+                )
+            if feature is not None:
+                variable_infos, attributes = \
+                    await self._get_variable_infos_from_shapefile_feature(feature)
+                attributes["shapefile"] = True
+                dimensions = {}
         data_source['dimensions'] = dimensions
         data_source['variable_infos'] = variable_infos
         data_source['attributes'] = attributes
@@ -1304,6 +1369,27 @@ class CciCdc:
                                  maximumRecords=5,
                                  httpAccept='application/geo+json',
                                  fileFormat='.nc')
+        url = base_url + '?' + urllib.parse.urlencode(paging_query_args)
+        resp = await self.get_response(session, url)
+        if resp:
+            json_text = await resp.read()
+            json_dict = json.loads(json_text.decode('utf-8'))
+            feature_list = json_dict.get("features", [])
+            # we try not to take the first feature,
+            # as the last and the first one may have different time chunkings
+            if len(feature_list) > 0:
+                index = math.floor(len(feature_list) / 2)
+                return feature_list[index], json_dict.get("totalResults", 0)
+        return None, 0
+
+    async def _fetch_feature_from_shapefile(
+            self, session, base_url, query_args, index
+    ) -> Tuple[Optional[Dict], int]:
+        paging_query_args = dict(query_args or {})
+        paging_query_args.update(startPage=index,
+                                 maximumRecords=5,
+                                 httpAccept='application/geo+json',
+                                 fileFormat='.shp')
         url = base_url + '?' + urllib.parse.urlencode(paging_query_args)
         resp = await self.get_response(session, url)
         if resp:
@@ -1399,6 +1485,22 @@ class CciCdc:
             return {}
         xml_text = await resp.read()
         return _extract_metadata_from_odd(etree.XML(xml_text))
+
+    async def _get_variable_infos_from_shapefile_feature(
+            self, feature: dict
+    ) -> (dict, dict):
+        feature_info = _extract_feature_info(feature)
+        shapefile_url = f"{feature_info[4].get('Download')}"
+        if shapefile_url == 'None':
+            _LOG.warning(f'Shapefile is not accessible')
+            return {}, {}
+        geodataframe = gpd.read_file(shapefile_url)
+        variable_infos = {}
+        for column in geodataframe.columns:
+            variable_infos[column] = {}
+            variable_infos[column]["name"] = geodataframe[column].name
+            variable_infos[column]["dtype"] = geodataframe[column].dtype
+        return variable_infos, geodataframe.attrs
 
     async def _get_variable_infos_from_feature(self,
                                                feature: dict,

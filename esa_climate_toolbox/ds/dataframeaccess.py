@@ -81,46 +81,57 @@ class DataFrameAccessor:
         var_infos = self._metadata.get("variable_infos")
         all_var_names = list(var_infos.keys())
         var_names = self._var_names
-        spatial_coord_names = ["lat", "lon", "latitude", "longitude"]
+        spatial_coord_names = ["lat", "lon", "latitude", "longitude", "geometry"]
         for spatial_coord_name in spatial_coord_names:
             if spatial_coord_name in all_var_names and \
                     spatial_coord_name not in var_names:
                 var_names.append(spatial_coord_name)
-        gdf_data = {}
         if "time" in all_var_names:
             var_names.append("time")
-        for var_name in var_names:
-            if len(var_infos.get(var_name).get("dimensions", 1)) > 1:
-                continue
+        if self._metadata.get("attributes", {}).get("shapefile", False):
             request = dict(parentIdentifier=identifier,
-                           varNames=[var_name],
+                           varNames=var_names,
                            startDate=start_time,
                            endDate=end_time,
                            drsId=self._df_id,
-                           fileFormat='.nc'
-                           )
-            gdf_data[var_name] = list(self._cci_cdc.get_data_chunk(
+                           fileFormat='.shp')
+            gdf = self._cci_cdc.get_geodataframe_from_shapefile(
                 request, dim_indexes=(), to_bytes=False
-            ))
-        shift = False
-        for lon_var in ["longitude", "lon"]:
-            if lon_var in var_names:
-                if max(gdf_data[lon_var]) > 180.0:
-                    shift = True
-        if 'longitude' in var_names and 'latitude' in var_names:
-            gdf = gpd.GeoDataFrame(
-                gdf_data,
-                geometry=gpd.points_from_xy(gdf_data['longitude'], gdf_data['latitude'])
             )
-            gdf = gdf.drop(['longitude', 'latitude'], axis=1)
         else:
-            gdf = gpd.GeoDataFrame(
-                gdf_data,
-                geometry=gpd.points_from_xy(gdf_data['lon'], gdf_data['lat'])
-            )
-            gdf = gdf.drop(['lon', 'lat'], axis=1)
-        if shift:
-            gdf["geometry"] = gdf["geometry"].translate(xoff=-180.0)
+            gdf_data = {}
+            for var_name in var_names:
+                if len(var_infos.get(var_name).get("dimensions", [])) > 1:
+                    continue
+                request = dict(parentIdentifier=identifier,
+                               varNames=[var_name],
+                               startDate=start_time,
+                               endDate=end_time,
+                               drsId=self._df_id,
+                               fileFormat='.nc')
+                gdf_data[var_name] = list(self._cci_cdc.get_data_chunk(
+                    request, dim_indexes=(), to_bytes=False
+                ))
+            shift = False
+            for lon_var in ["longitude", "lon"]:
+                if lon_var in var_names:
+                    if max(gdf_data[lon_var]) > 180.0:
+                        shift = True
+            if 'longitude' in var_names and 'latitude' in var_names:
+                gdf = gpd.GeoDataFrame(
+                    gdf_data, geometry=gpd.points_from_xy(
+                        gdf_data['longitude'], gdf_data['latitude']
+                    )
+                )
+                gdf = gdf.drop(['longitude', 'latitude'], axis=1)
+            else:
+                gdf = gpd.GeoDataFrame(
+                    gdf_data,
+                    geometry=gpd.points_from_xy(gdf_data['lon'], gdf_data['lat'])
+                )
+                gdf = gdf.drop(['lon', 'lat'], axis=1)
+            if shift:
+                gdf["geometry"] = gdf["geometry"].translate(xoff=-180.0)
         if self._spatial_subset_area:
             gdf["geometry"] = gdf.intersection(self._spatial_subset_area)
             gdf = gdf[~gdf["geometry"].is_empty]
@@ -140,7 +151,7 @@ class DataFrameAccessor:
         if 'time' in gdf:
             gdf['time'] = gdf['time'].astype(str)
         else:
-            gdf['time'] = start_time
+            gdf = gdf.assign(time=start_time)
         for feature in gdf.iterfeatures():
             yield feature
 
