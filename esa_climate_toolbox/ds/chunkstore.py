@@ -233,8 +233,14 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                                                       coord_attrs)
                 coord_data = coords_data[coord_name]['data']
             if len(coord_data) > 0:
-                coord_array = np.array(coord_data)
-                self._add_static_array(coord_name, coord_array, coord_attrs)
+                coord_array = np.array(coord_data, dtype=coord_attrs.get("data_type"))
+                encoding = self.get_encoding(coord_name)
+                if encoding.get("filters", [{}])[0].get("id", "") == "json2":
+                    self._add_static_json_array(
+                        coord_name, coord_array, coord_attrs, encoding
+                    )
+                else:
+                    self._add_static_array(coord_name, coord_array, coord_attrs)
             else:
                 shape = [coords_data[coord_name].get(
                     'shape', coords_data[coord_name].get('size')
@@ -627,7 +633,35 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
         end_time = self._time_ranges[end_index][1]
         return start_time, end_time
 
-    def _add_static_array(self, name: str, array: np.ndarray, attrs: Dict):
+    def _add_static_json_array(
+            self, name: str, array: np.ndarray, attrs: Dict, encoding: Dict = None
+    ):
+        encoding = encoding or {}
+        shape = list(map(int, array.shape))
+        order = "C"
+        filters = encoding.get("filters")
+        array_metadata = {
+            "zarr_format": 2,
+            "chunks": shape,
+            "shape": shape,
+            "dtype": encoding.get("dtype", str(array.dtype.str)),
+            "fill_value": encoding.get("fill_value"),
+            "compressor": None,
+            "filters": filters,
+            "order": order,
+        }
+        chunk_key = '.'.join(['0'] * array.ndim)
+        self._vfs[name] = _str_to_bytes('')
+        self._vfs[name + '/.zarray'] = _dict_to_bytes(array_metadata)
+        self._vfs[name + '/.zattrs'] = _dict_to_bytes(attrs)
+        if filters[0].get("id", "") == "json2":
+            codec = numcodecs.JSON()
+            array = codec.encode(array)
+        self._vfs[name + '/' + chunk_key] = array
+
+    def _add_static_array(
+            self, name: str, array: np.ndarray, attrs: Dict
+    ):
         shape = list(map(int, array.shape))
         dtype = str(array.dtype.str)
         order = "C"

@@ -68,6 +68,7 @@ class TimeRangeGetter:
                 params.get('time_range',
                            self.get_default_time_range(dataset_id)))
         time_period = dataset_id.split('.')[2]
+        data_identifier = dataset_id.split('.')[9]
         if time_period == 'day':
             start_time = datetime(year=start_time.year, month=start_time.month,
                                   day=start_time.day)
@@ -81,7 +82,8 @@ class TimeRangeGetter:
             end_time = datetime(year=end_time.year, month=end_time.month, day=1)
             delta = relativedelta(months=1)
             end_time += delta
-        elif time_period == 'year' or time_period == 'yr':
+        elif (time_period == 'year' or time_period == 'yr') \
+                and data_identifier != "greenland_gmb_time_series":
             start_time = datetime(year=start_time.year, month=1, day=1)
             end_time = datetime(year=end_time.year, month=12, day=31)
             delta = relativedelta(years=1)
@@ -92,7 +94,8 @@ class TimeRangeGetter:
             end_time_str = datetime.strftime(end_time, TIMESTAMP_FORMAT)
             iso_end_time = extract_time_as_string(end_time_str)
             request_time_ranges = self._cci_cdc.get_time_ranges_from_data(
-                dataset_id, iso_start_time, iso_end_time)
+                dataset_id, iso_start_time, iso_end_time
+            )
             return request_time_ranges
         request_time_ranges = []
         this = start_time

@@ -24,6 +24,7 @@ import json
 import os
 from typing import Any, Iterator, List, Tuple, Optional, Dict, Union, Container
 import pyproj
+from shapely import from_wkt
 from shapely import Point
 import xarray as xr
 import xvec
@@ -664,12 +665,16 @@ class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
         ds = xr.open_zarr(chunk_store, consolidated=False)
 
         def _convert_to_point(chunk):
-            return [Point(point_dict.get("coordinates")) for point_dict in chunk]
+            if type(chunk[0]) == str:
+                return [from_wkt(g) for g in chunk]
+            else:
+                return [Point(point_dict.get("coordinates")) for point_dict in chunk]
 
         da = xr.apply_ufunc(_convert_to_point, ds.geometry,
                             dask='parallelized', output_dtypes=["object"])
         ds = ds.assign_coords(geometry=da)
-        ds = ds.set_xindex("geometry", xvec.GeometryIndex)
+        if "geometry" not in ds.xindexes:
+            ds = ds.set_xindex("geometry", xvec.GeometryIndex)
         ds.zarr_store.set(chunk_store)
         return ds
 

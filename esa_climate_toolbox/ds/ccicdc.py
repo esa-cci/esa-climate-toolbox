@@ -23,6 +23,7 @@ import aiohttp
 import asyncio
 import bisect
 import copy
+import geopandas as gpd
 import json
 import logging
 import lxml.etree as etree
@@ -903,6 +904,22 @@ class CciCdc:
                             variable_dict: Dict[str, int],
                             start_time: str,
                             end_time: str):
+        var_data = {}
+        if dataset_name.split(".")[9] == "greenland_gmb_time_series" \
+                and "geometry" in variable_dict:
+            dir_path = os.path.dirname(os.path.abspath(__file__))
+            basins = gpd.read_file(
+                os.path.join(dir_path, "data", "basins.geojson")
+            )
+            basins = basins.sort_values(by="basin_id")
+            geometry = list(basins.geometry)
+            g = [g.wkt for g in geometry]
+            var_data["geometry"] = dict(
+                size=len(g),
+                chunkSize=[len(g)],
+                data=g
+            )
+            return var_data
         dataset_id = await self._get_dataset_id(session, dataset_name)
         request = dict(parentIdentifier=dataset_id,
                        startDate=start_time,
@@ -910,7 +927,6 @@ class CciCdc:
                        drsId=dataset_name
                        )
         opendap_url = await self._get_opendap_url(session, request)
-        var_data = {}
         if not opendap_url:
             return var_data
         dataset = await self._get_opendap_dataset(session, opendap_url)
@@ -948,7 +964,11 @@ class CciCdc:
                 )
         return var_data
 
-    async def _get_feature_list(self, session, request):
+    async def _get_feature_list(self, session, request, file_format):
+        request["fileFormat"] = file_format
+        extender = self._extract_times_and_opendap_url
+        if file_format == ".shp" or file_format == ".dat":
+            extender = self._extract_times_and_download_url
         ds_id = request['drsId']
         start_date_str = request['startDate']
         try:
@@ -965,7 +985,7 @@ class CciCdc:
             self._features[ds_id] = []
             await self._fetch_opensearch_feature_list(
                 session, self._opensearch_url, feature_list,
-                self._extract_times_and_opendap_url, request
+                extender, request
             )
             if len(feature_list) == 0:
                 # try without dates. For some data sets, this works better
@@ -975,18 +995,22 @@ class CciCdc:
                     request.pop('endDate')
                 await self._fetch_opensearch_feature_list(
                     session, self._opensearch_url, feature_list,
-                    self._extract_times_and_opendap_url, request
+                    extender, request
                 )
-            feature_list.sort(key=lambda x: x[0])
+            try:
+                feature_list.sort(key=lambda x: x[0])
+            except TypeError:
+                feature_list.sort(key=lambda x: x[2])
             self._features[ds_id] = feature_list
         else:
-            if start_date < self._features[ds_id][0][0]:
+            if self._features[ds_id][0][0] is not None and \
+                    start_date < self._features[ds_id][0][0]:
                 request['endDate'] = datetime.strftime(
                     self._features[ds_id][0][0], TIMESTAMP_FORMAT
                 )
                 await self._fetch_opensearch_feature_list(
                     session, self._opensearch_url, feature_list,
-                    self._extract_times_and_opendap_url, request
+                    extender, request
                 )
                 if len(feature_list) > 0:
                     feature_list.sort(key=lambda x: x[0])
@@ -996,14 +1020,15 @@ class CciCdc:
                         end_offset -= 1
                     self._features[ds_id] = \
                         feature_list[:end_offset] + self._features[ds_id]
-            if end_date > self._features[ds_id][-1][1]:
+            if self._features[ds_id][-1][1] is not None and \
+                    end_date > self._features[ds_id][-1][1]:
                 request['startDate'] = datetime.strftime(
                     self._features[ds_id][-1][1], TIMESTAMP_FORMAT
                 )
                 request['endDate'] = end_date_str
                 await self._fetch_opensearch_feature_list(
                     session, self._opensearch_url, feature_list,
-                    self._extract_times_and_opendap_url, request
+                    extender, request
                 )
                 if len(feature_list) > 0:
                     feature_list.sort(key=lambda x: x[0])
@@ -1014,28 +1039,44 @@ class CciCdc:
                     if feature_list[end_offset] not in self._features[ds_id]:
                         self._features[ds_id] = self._features[ds_id] \
                                                 + feature_list[end_offset:]
-        start = bisect.bisect_left(
-            [feature[1] for feature in self._features[ds_id]], start_date
-        )
-        end = bisect.bisect_right(
-            [feature[0] for feature in self._features[ds_id]], end_date
-        )
-        return self._features[ds_id][start:end]
+        if len(self._features[ds_id]) > 0 and \
+                self._features[ds_id][0][0] is not None and \
+                self._features[ds_id][-1][1] is not None:
+            start = bisect.bisect_left(
+                [feature[1] for feature in self._features[ds_id]], start_date
+            )
+            end = bisect.bisect_right(
+                [feature[0] for feature in self._features[ds_id]], end_date
+            )
+            return self._features[ds_id][start:end]
+        return self._features[ds_id]
 
     @staticmethod
     def _extract_times_and_opendap_url(
             features: List[Tuple], feature_list: List[Dict]
     ):
+        CciCdc._extract_times_and_url(features, feature_list, "Opendap")
+
+    @staticmethod
+    def _extract_times_and_download_url(
+            features: List[Tuple], feature_list: List[Dict]
+    ):
+        CciCdc._extract_times_and_url(features, feature_list, "Download")
+
+    @staticmethod
+    def _extract_times_and_url(
+            features: List[Tuple], feature_list: List[Dict], url_type: str
+    ):
         for feature in feature_list:
             start_time = None
             end_time = None
             properties = feature.get('properties', {})
-            opendap_url = None
+            url = None
             links = properties.get('links', {}).get('related', {})
             for link in links:
-                if link.get('title', '') == 'Opendap':
-                    opendap_url = link.get('href', None)
-            if not opendap_url:
+                if link.get('title', '') == url_type:
+                    url = link.get('href', None)
+            if not url:
                 continue
             date_property = properties.get('date', None)
             if date_property:
@@ -1080,7 +1121,7 @@ class CciCdc:
                 except (TypeError, IndexError, ValueError, KeyError):
                     # just use the previous values
                     pass
-                features.append((start_time, end_time, opendap_url))
+            features.append((start_time, end_time, url))
 
     def get_time_ranges_from_data(self, dataset_name: str,
                                   start_time: str = _EARLY_START_TIME,
@@ -1101,7 +1142,27 @@ class CciCdc:
                        drsId=dataset_name,
                        fileFormat='.nc')
 
-        feature_list = await self._get_feature_list(session, request)
+        feature_list = await self._get_feature_list(session, request, '.nc')
+        if len(feature_list) == 0:
+            feature, num_dat_files = await self._fetch_feature_and_num_dat_files_at(
+                session,
+                self._opensearch_url,
+                dict(parentIdentifier=dataset_id,
+                     drsId=dataset_name),
+                     1
+            )
+            if num_dat_files > 0:
+                # collect the feature list here
+                request = dict(parentIdentifier=dataset_id,
+                               startDate=start_time,
+                               endDate=end_time,
+                               drsId=dataset_name,
+                               fileFormat='.dat')
+                await self._get_feature_list(session, request, '.dat')
+                file_link = feature.get("properties", {}).get("links", {}).\
+                    get("related", [{}])[0].get("href")
+                df = await self._get_dataframe_from_dat_url(file_link, session)
+                feature_list = [[dt, dt] for dt in df.time]
         request_time_ranges = [feature[0:2] for feature in feature_list]
         return request_time_ranges
 
@@ -1117,7 +1178,7 @@ class CciCdc:
     async def _get_opendap_url(self, session, request: Dict):
         request['fileFormat'] = '.nc'
         # async with _FEATURE_LIST_LOCK:
-        feature_list = await self._get_feature_list(session, request)
+        feature_list = await self._get_feature_list(session, request, '.nc')
         if len(feature_list) == 0:
             return
         return feature_list[0][2]
@@ -1160,9 +1221,16 @@ class CciCdc:
         data_source = self._data_sources[drsId]
         dimensions = (data_source.get('variable_infos', {}).
                       get(var_name, {}).get('file_dimensions'))
-        geometry_index = dimensions.index(data_source.get("geometry_dimension"), -1)
+        geometry_index = dimensions.index(data_source.get("geometry_dimension"))
         geom_start_index = dim_indexes[geometry_index].start
         geom_stop_index = dim_indexes[geometry_index].stop
+        if len(vector_offsets) == 0:
+            download_url = self._features[drsId][geom_start_index][2]
+            data = await self._get_dataframe_from_dat_url(download_url, session)
+            data_type = (data_source.get('variable_infos', {}).get(var_name, {}).
+                         get('data_type'))
+            res = np.array(data[var_name], dtype=data_type)
+            return res.flatten().tobytes()
         start = bisect.bisect_right(
             [vo[0] for vo in vector_offsets], geom_start_index
         ) - 1
@@ -1411,57 +1479,77 @@ class CciCdc:
                         variable_info['shape'][time_index] = \
                             dimensions[time_name]
                         variable_info['size'] = np.prod(variable_info['shape'])
+        else:
+            feature, num_dat_files = \
+                await self._fetch_feature_and_num_dat_files_at(
+                    session,
+                    opensearch_url,
+                    dict(parentIdentifier=dataset_id,
+                         drsId=dataset_name),
+                    1
+                )
+            if feature is not None:
+                variable_infos, attributes = \
+                    await self._get_variable_infos_from_dat_feature(feature, session)
+                dimensions = {"geometry": 8, "time": variable_infos.get("time").
+                    get("shape")}
         data_source['dimensions'] = dimensions
         data_source['variable_infos'] = variable_infos
         data_source['attributes'] = attributes
         if self._data_type == "vectordatacube":
             start_time = data_source.get("temporal_coverage_start")
             end_time = data_source.get("temporal_coverage_end")
-            non_time_dimension = [dim for dim in dimensions if not dim == time_name][0]
+            non_time_dimensions = [dim for dim in dimensions if not dim == time_name]
+            non_time_dimension = \
+                non_time_dimensions[0] if len(non_time_dimensions) > 0 else None
+            data_source["geometry_dimension"] = non_time_dimension
             num_geometries = await self._count_geometries(
                 session, dataset_id, dataset_name, start_time, end_time,
                 non_time_dimension
             )
-            data_source["dimensions"][non_time_dimension] = num_geometries
-            data_source["geometry_dimension"] = non_time_dimension
-            for variable_name, var_dict in variable_infos.items():
-                if non_time_dimension in var_dict.get("dimensions"):
-                    index = var_dict.get("dimensions").index(non_time_dimension)
-                    if "shape" in var_dict:
-                        data_source["variable_infos"][variable_name]["shape"][index] \
-                            = num_geometries
-                        data_source["variable_infos"][variable_name]["size"] = \
-                            sum(data_source["variable_infos"][variable_name]["shape"])
-                    if len(var_dict.get("dimensions")) > 1:
-                        data_source["variable_infos"][variable_name]["chunk_sizes"][index] \
-                            = _VECTOR_DATACUBE_CHUNKING
-                        data_source["variable_infos"][variable_name]["file_chunk_sizes"][index] \
-                            = _VECTOR_DATACUBE_CHUNKING
-                    else:
-                        data_source["variable_infos"][variable_name]["chunk_sizes"] \
+            if num_geometries > 0:
+                data_source["dimensions"][non_time_dimension] = num_geometries
+                for variable_name, var_dict in variable_infos.items():
+                    if non_time_dimension in var_dict.get("dimensions"):
+                        index = var_dict.get("dimensions").index(non_time_dimension)
+                        if "shape" in var_dict:
+                            data_source["variable_infos"][variable_name]["shape"][index] \
+                                = num_geometries
+                            data_source["variable_infos"][variable_name]["size"] = \
+                                sum(data_source["variable_infos"][variable_name]["shape"])
+                        if len(var_dict.get("dimensions")) > 1:
+                            data_source["variable_infos"][variable_name]["chunk_sizes"][index] \
                                 = _VECTOR_DATACUBE_CHUNKING
-                        data_source["variable_infos"][variable_name]["file_chunk_sizes"] \
+                            data_source["variable_infos"][variable_name]["file_chunk_sizes"][index] \
                                 = _VECTOR_DATACUBE_CHUNKING
-            lat_lons = [("lat", "lon"), ("latitude", "longitude")]
-            for lat_lon in lat_lons:
-                data_source["lat_var"] = lat_lon[0]
-                data_source["lon_var"] = lat_lon[1]
-                if lat_lon[0] in variable_infos.keys() \
-                        and lat_lon[1] in variable_infos.keys():
-                    var_info = variable_infos.pop(lat_lon[0])
-                    variable_infos["geometry"] = dict(
-                        standard_name="geometry",
-                        long_name="geometry",
-                        dimensions=var_info.get('dimensions'),
-                        file_dimensions=var_info.get('file_dimensions'),
-                        size=var_info.get('size'),
-                        shape=var_info.get('shape'),
-                        chunk_sizes=[_VECTOR_DATACUBE_CHUNKING],
-                        file_chunk_sizes=[_VECTOR_DATACUBE_CHUNKING],
-                        data_type="object"
-                    )
-                    variable_infos.pop(lat_lon[1])
-                    break
+                        else:
+                            data_source["variable_infos"][variable_name]["chunk_sizes"] \
+                                    = _VECTOR_DATACUBE_CHUNKING
+                            data_source["variable_infos"][variable_name]["file_chunk_sizes"] \
+                                    = _VECTOR_DATACUBE_CHUNKING
+                lat_lons = [("lat", "lon"), ("latitude", "longitude")]
+                for lat_lon in lat_lons:
+                    data_source["lat_var"] = lat_lon[0]
+                    data_source["lon_var"] = lat_lon[1]
+                    if lat_lon[0] in variable_infos.keys() \
+                            and lat_lon[1] in variable_infos.keys():
+                        var_info = variable_infos.pop(lat_lon[0])
+                        variable_infos["geometry"] = dict(
+                            standard_name="geometry",
+                            long_name="geometry",
+                            dimensions=var_info.get('dimensions'),
+                            file_dimensions=var_info.get('file_dimensions'),
+                            size=var_info.get('size'),
+                            shape=var_info.get('shape'),
+                            chunk_sizes=[_VECTOR_DATACUBE_CHUNKING],
+                            file_chunk_sizes=[_VECTOR_DATACUBE_CHUNKING],
+                            data_type="object"
+                        )
+                        variable_infos.pop(lat_lon[1])
+                        break
+        data_source['dimensions'] = dimensions
+        data_source['variable_infos'] = variable_infos
+        data_source['attributes'] = attributes
 
     async def _count_geometries(
             self, session, dataset_id, dataset_name, start_time, end_time,
@@ -1472,7 +1560,7 @@ class CciCdc:
                        endDate=end_time,
                        drsId=dataset_name,
                        fileFormat='.nc')
-        feature_list = await self._get_feature_list(session, request)
+        feature_list = await self._get_feature_list(session, request, '.nc')
         search_string = f"{non_time_dimension} = "
         offsets = []
         offset = 0
@@ -1493,11 +1581,25 @@ class CciCdc:
     async def _fetch_feature_and_num_nc_files_at(
             self, session, base_url, query_args, index
     ) -> Tuple[Optional[Dict], int]:
+        return await self._fetch_feature_and_num_files_at(
+            session, base_url, query_args, index, '.nc'
+        )
+
+    async def _fetch_feature_and_num_dat_files_at(
+            self, session, base_url, query_args, index
+    ) -> Tuple[Optional[Dict], int]:
+        return await self._fetch_feature_and_num_files_at(
+            session, base_url, query_args, index, '.dat'
+        )
+
+    async def _fetch_feature_and_num_files_at(
+            self, session, base_url, query_args, index, file_format
+    ) -> Tuple[Optional[Dict], int]:
         paging_query_args = dict(query_args or {})
         paging_query_args.update(startPage=index,
                                  maximumRecords=5,
                                  httpAccept='application/geo+json',
-                                 fileFormat='.nc')
+                                 fileFormat=file_format)
         url = base_url + '?' + urllib.parse.urlencode(paging_query_args)
         resp = await self.get_response(session, url)
         if resp:
@@ -1593,6 +1695,54 @@ class CciCdc:
             return {}
         xml_text = await resp.read()
         return _extract_metadata_from_odd(etree.XML(xml_text))
+
+    async def _get_variable_infos_from_dat_feature(self,
+                                               feature: dict,
+                                               session) -> (dict, dict):
+        feature_info = _extract_feature_info(feature)
+        download_url = f"{feature_info[4].get('Download')}"
+        if download_url == 'None':
+            _LOG.warning(f'Dataset is not accessible as Download')
+            return {}, {}
+        data = await self._get_dataframe_from_dat_url(download_url, session)
+        variable_infos = {
+            "time": {
+                "shape": len(data),
+                "chunk_sizes": len(data),
+                "file_chunk_sizes": len(data),
+                "dimensions": ["time"],
+                "file_dimensions": ["time"],
+                "data_type": "str",
+                "units": "decimal year"
+            },
+            "mass_change": {
+                "shape": [8, len(data)],
+                "chunk_sizes": [1, len(data)],
+                "file_chunk_sizes": [1, len(data)],
+                "dimensions": ["geometry", "time"],
+                "file_dimensions": ["geometry", "time"],
+                "units": "gigatons",
+                "data_type": "float32"
+            },
+            "mass_change_error": {
+                "shape": [8, len(data)],
+                "chunk_sizes": [1, len(data)],
+                "file_chunk_sizes": [1, len(data)],
+                "dimensions": ["geometry", "time"],
+                "file_dimensions": ["geometry", "time"],
+                "units": "gigatons",
+                "data_type": "float32"
+            },
+            "geometry": {
+                "shape": [8],
+                "chunk_sizes": [8],
+                "file_chunk_sizes": [8],
+                "dimensions": ["geometry"],
+                "file_dimensions": ["geometry"],
+                "data_type": "object"
+            }
+        }
+        return variable_infos, {}
 
     async def _get_variable_infos_from_feature(self,
                                                feature: dict,
@@ -1729,6 +1879,36 @@ class CciCdc:
             var.set_output_grid(True)
 
         return dataset
+
+    async def _get_dataframe_from_dat_url(
+            self, url: str, session
+    ):
+        resp = await self.get_response(session, url)
+        if resp:
+            res = await resp.read()
+            res = str(res, 'utf-8')
+            res = res.split("\n")
+            times = []
+            mcs = []
+            mces = []
+            for line in res:
+                ls = line.split(" ")
+                if len(ls) == 3 and "." in ls[0]:
+                    times.append(ls[0])
+                    mcs.append(ls[1])
+                    mces.append(ls[2])
+            df = pd.DataFrame(
+                {"time": times, "mass_change": mcs, "mass_change_error": mces}
+            )
+
+            def convert_time(df):
+                year = df['time'][:4]
+                doy = df['time'][5:]
+                return pd.to_datetime(f"{year}{doy}", format="%Y%j")
+
+            df['time'] = df.apply(convert_time, axis=1)
+
+            return df
 
     async def _get_content_from_opendap_url(
             self, url: str, part: str, res_dict: dict, session
