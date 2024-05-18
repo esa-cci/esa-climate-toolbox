@@ -383,7 +383,32 @@
         ],
         "title": "ESA Cloud Climate Change Initiative (Cloud_cci): MERIS+AATSR monthly gridded cloud properties,  Version 2.0"
     },
-    "esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel": {
+    "esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_1": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): MODIS Fire_cci Burned Area Pixel product, version 5.1"
+    },
+        "esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_2": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): MODIS Fire_cci Burned Area Pixel product, version 5.1"
+    },
+        "esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_3": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): MODIS Fire_cci Burned Area Pixel product, version 5.1"
+    },
+        "esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_4": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): MODIS Fire_cci Burned Area Pixel product, version 5.1"
+    },
+        "esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_5": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): MODIS Fire_cci Burned Area Pixel product, version 5.1"
+    },
+        "esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_6": {
         "data_type": "dataset",
         "verification_flags": [],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): MODIS Fire_cci Burned Area Pixel product, version 5.1"
@@ -398,7 +423,32 @@
         "verification_flags": [],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
     },
-    "esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-0.pixel": {
+    "esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_1": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Sentinel-3 SYN Burned Area Pixel product, version 1.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_2": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Sentinel-3 SYN Burned Area Pixel product, version 1.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_3": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Sentinel-3 SYN Burned Area Pixel product, version 1.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_4": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Sentinel-3 SYN Burned Area Pixel product, version 1.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_5": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Sentinel-3 SYN Burned Area Pixel product, version 1.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_6": {
         "data_type": "dataset",
         "verification_flags": [],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Sentinel-3 SYN Burned Area Pixel product, version 1.0"

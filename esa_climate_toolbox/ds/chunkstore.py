@@ -178,7 +178,8 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
             coord_attrs['_ARRAY_DIMENSIONS'] = coord_attrs['dimensions']
             coord_data = coords_data[coord_name]['data']
             if bbox is not None and \
-                    (coord_name == 'lat' or coord_name == 'latitude'):
+                    (coord_name == 'lat' or coord_name == 'latitude'
+                     or coord_name == 'y'):
                 if coord_data[0] < coord_data[-1]:
                     lat_min_offset = bisect.bisect_left(coord_data, bbox[1])
                     lat_max_offset = bisect.bisect_right(coord_data, bbox[3])
@@ -198,7 +199,8 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                                                       coord_attrs)
                 coord_data = coords_data[coord_name]['data']
             elif bbox is not None and \
-                    (coord_name == 'lon' or coord_name == 'longitude'):
+                    (coord_name == 'lon' or coord_name == 'longitude'
+                     or coord_name == 'x'):
                 lon_min_offset = bisect.bisect_left(coord_data, bbox[0])
                 lon_max_offset = bisect.bisect_right(coord_data, bbox[2])
                 coords_data = self._adjust_coord_data(coord_name,
@@ -861,7 +863,10 @@ class CciChunkStore(RemoteChunkStore):
         return self._time_range_getter.get_default_time_range(ds_id)
 
     def get_all_variable_names(self) -> List[str]:
-        return [variable['var_id'] for variable in self._metadata['variables']]
+        var_names = [variable['var_id'] for variable in self._metadata['variables']]
+        if len(var_names) == 0:
+            var_names = [k for k, v in self._metadata.get("variable_infos", {}).items()]
+        return var_names
 
     def get_dimensions(self) -> Dict[str, int]:
         return copy.copy(self._metadata['dimensions'])
