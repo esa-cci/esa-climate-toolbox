@@ -607,12 +607,12 @@ class CciCdc:
             for excluded_data_source in self._excluded_data_sources:
                 if excluded_data_source in self._drs_ids:
                     self._drs_ids.remove(excluded_data_source)
+            to_be_removed = []
             for drs_id in self._drs_ids:
                 replacements = self._get_replacements(drs_id)
                 if len(replacements) > 0:
-                    self._drs_ids.remove(drs_id)
+                    to_be_removed.append(drs_id)
                     self._drs_ids += replacements
-            to_be_removed = []
             for drs_id in self._drs_ids:
                 if drs_id in self._excluded_data_sources or \
                         not self._is_valid_dataset(drs_id):
@@ -953,6 +953,21 @@ class CciCdc:
                                                   shape=array[var_name].shape,
                                                   chunkSize=array[var_name].shape,
                                                   data=list(data))
+            else:
+                request = dict(parentIdentifier=dataset_id,
+                               startDate=start_time,
+                               endDate=end_time,
+                               drsId=dataset_name
+                               )
+                tif_url = await self._get_tif_url(session, request)
+                if tif_url is not None:
+                    array = rioxarray.open_rasterio(tif_url, chunks=dict(x=512, y=512))
+                    for var_name in variable_dict:
+                        data = array[var_name].values
+                        var_data[var_name] = dict(size=array[var_name].size,
+                                                  shape=array[var_name].shape,
+                                                  chunkSize=array[var_name].shape,
+                                                  data=list(data))
             return var_data
         dataset = await self._get_opendap_dataset(session, opendap_url)
         if not dataset:
@@ -1172,6 +1187,12 @@ class CciCdc:
             'uuid', self._data_sources[dataset_name]['fid']
         )
 
+    async def _get_tif_url(self, session, request: Dict):
+        feature_list = await self._get_feature_list(session, request, '.tif')
+        if len(feature_list) == 0:
+            return
+        return feature_list[0][2]
+
     async def _get_tar_url(self, session, request: Dict):
         feature_list = await self._get_feature_list(session, request, '.gz')
         if len(feature_list) == 0:
@@ -1205,7 +1226,7 @@ class CciCdc:
         data_type = self._data_sources[drs_id].\
             get('variable_infos', {}).get(var_name, {}).get('data_type')
         if not opendap_url:
-            request = orig_request
+            request = copy.deepcopy(orig_request)
             tar_url = await self._get_tar_url(session, request)
             if tar_url is not None:
                 dims = self._data_sources[drs_id].get("variable_infos", {}).\
@@ -1228,6 +1249,28 @@ class CciCdc:
                         array = rioxarray.open_rasterio(file_path, chunks=chunks)
                         self._tif_to_array[file_path] = array
                     array = self._tif_to_array[file_path]
+                    data = array.isel(sel_chunks)
+                    data = np.array(data, copy=False, dtype=data_type)
+                    if to_bytes:
+                        return data.flatten().tobytes()
+                    return data
+            else:
+                request = copy.deepcopy(orig_request)
+                tif_url = await self._get_tif_url(session, request)
+                if tif_url is not None:
+                    dims = self._data_sources[drs_id].get("variable_infos", {}). \
+                        get(var_name, {}).get("dimensions")
+                    chunks = {}
+                    sel_chunks = {}
+                    offset = len(dim_indexes) - len(dims)
+                    for i in range(len(dims)):
+                        di = dim_indexes[offset + i]
+                        chunks[dims[i]] = di.stop - di.start
+                        sel_chunks[dims[i]] = di
+                    if tif_url not in self._tif_to_array:
+                        array = rioxarray.open_rasterio(tif_url, chunks=chunks)
+                        self._tif_to_array[tif_url] = array
+                    array = self._tif_to_array[tif_url]
                     data = array.isel(sel_chunks)
                     data = np.array(data, copy=False, dtype=data_type)
                     if to_bytes:
@@ -1404,6 +1447,15 @@ class CciCdc:
                          drsId=dataset_name),
                     1
                 )
+        if feature is None:
+            feature, time_dimension_size = \
+                await self._fetch_feature_and_num_tif_files_at(
+                    session,
+                    opensearch_url,
+                    dict(parentIdentifier=dataset_id,
+                         drsId=dataset_name),
+                    1
+                )
         if feature is not None:
             variable_infos, attributes = \
                 await self._get_variable_infos_from_feature(feature, session)
@@ -1444,6 +1496,13 @@ class CciCdc:
             session, base_url, query_args, index, '.gz'
         )
 
+    async def _fetch_feature_and_num_tif_files_at(
+            self, session, base_url, query_args, index
+    ) -> Tuple[Optional[Dict], int]:
+        return await self._fetch_feature_and_num_files_at(
+            session, base_url, query_args, index, '.tif'
+        )
+
     async def _fetch_feature_and_num_files_at(
             self, session, base_url, query_args, index, file_format
     ) -> Tuple[Optional[Dict], int]:
@@ -1454,26 +1513,27 @@ class CciCdc:
                                  fileFormat=file_format)
         drs_id = paging_query_args.get("drsId", "")
         sdrsid = drs_id.split("~")
-        area = ""
-        divisor = 1
+        name_filter = ""
         if len(sdrsid) == 2:
             paging_query_args["drsId"] = sdrsid[0]
-            area = sdrsid[1]
-            paging_query_args["maximumRecords"] = 30
-            divisor = 6
+            name_filter = sdrsid[1]
+            paging_query_args["maximumRecords"] = 348
         url = base_url + '?' + urllib.parse.urlencode(paging_query_args)
         resp = await self.get_response(session, url)
         if resp:
             json_text = await resp.read()
             json_dict = json.loads(json_text.decode('utf-8'))
             feature_list = json_dict.get("features", [])
-            feature_list = [f for f in feature_list if area in
-                            f.get("properties", {}).get("links",{}).
-                                get("related", [{}])[0].get("href", "")
-                            ]
-            # we try not to take the first feature,
-            # as the last and the first one may have different time chunkings
             if len(feature_list) > 0:
+                len_before = len(feature_list)
+                feature_list = [f for f in feature_list if name_filter in
+                                f.get("properties", {}).get("links",{}).
+                                get("related", [{}])[0].get("href", "")
+                                ]
+                len_after = len(feature_list)
+                divisor = int(len_before/len_after)
+                # we try not to take the first feature,
+                # as the last and the first one may have different time chunkings
                 index = math.floor(len(feature_list) / 2)
                 total_num_files = json_dict.get("totalResults", 0)
                 if total_num_files > 0:
@@ -1570,11 +1630,13 @@ class CciCdc:
         feature_info = _extract_feature_info(feature)
         opendap_url = f"{feature_info[4].get('Opendap')}"
         if opendap_url == 'None':
-            download_url = f"{feature_info[4].get('Download')}"
-            if download_url == 'None' or not download_url.endswith(".tar.gz"):
-                _LOG.warning(f'Dataset is not accessible via Opendap or Download')
-                return {}, {}
-            return await self._get_variable_infos_from_tar_feature(feature, session)
+            download_url = f"{feature_info[4].get('Download', '')}"
+            if download_url.endswith(".tar.gz"):
+                return await self._get_variable_infos_from_tar_feature(feature, session)
+            elif download_url.endswith(".tif"):
+                return await self._get_variable_infos_from_tif_feature(feature, session)
+            _LOG.warning(f'Dataset is not accessible via Opendap or Download')
+            return {}, {}
         dataset = await self._get_opendap_dataset(session, opendap_url)
         if not dataset:
             _LOG.warning(f'Could not extract information about variables '
@@ -1656,65 +1718,90 @@ class CciCdc:
                 f"tar+{download_url}!{file}", chunks=dict(x=512, y=512)
             )
             var_name = file.split(".tif")[0].split("-")[-1]
-            var_infos[var_name] = {}
-            band_dim = -1
-            if "band" in array.dims:
-                band_dim  = list(array.dims).index("band")
-            dims = [d for d in array.dims if d != "band"]
-            var_infos[var_name]["dimensions"] = dims
-            var_infos[var_name]["file_dimensions"] = dims
-            var_infos[var_name]["size"] = array.size
-            var_infos[var_name]["shape"] = \
-                [s for i, s in enumerate(array.shape) if i != band_dim]
-            var_infos[var_name]["data_type"] = array.dtype.name
-            preferred_chunks = array.encoding.get("preferred_chunks", {})
-            chunk_sizes = []
-            for dim in dims:
-                if dim in preferred_chunks:
-                    chunk_sizes.append(preferred_chunks.get(dim))
-            if len(chunk_sizes) == len(dims):
-                var_infos[var_name]["chunk_sizes"] = chunk_sizes
-                var_infos[var_name]["file_chunk_sizes"] = chunk_sizes
-            for dim in dims:
-                if dim in var_infos:
-                    continue
-                var_infos[dim] = {}
-                var_infos[dim]["dimensions"] = dim
-                var_infos[dim]["file_dimensions"] = dim
-                var_infos[dim]["size"] = array[dim].size
-                var_infos[dim]["shape"] = array[dim].shape
-                var_infos[dim]["data_type"] = array[dim].dtype.name
-                var_infos[dim]["chunk_sizes"] = array[dim].shape
-                var_infos[dim]["file_chunk_sizes"] = array[dim].shape
-                if dim == "x":
-                    diff = array.x.diff(dim="x")
-                    if np.allclose(diff[0], array.x.diff(dim="x"), rtol=1e-8):
-                        attributes["geospatial_lon_resolution"] = \
-                            float(diff[0].values)
-                    attributes["bbox_minx"] = \
-                        float(array.x[0].values -
-                              attributes["geospatial_lon_resolution"])
-                    attributes["bbox_maxx"] = \
-                        float(array.x[-1].values +
-                              attributes["geospatial_lon_resolution"])
-                if dim == "y":
-                    diff = array.y.diff(dim="y")
-                    if np.allclose(diff[0], array.y.diff(dim="y"), rtol=1e-8):
-                        attributes["geospatial_lat_resolution"] = \
-                            abs(float(diff[0].values))
-                    if diff[0] > 0:
-                        min = 0
-                        max = -1
-                    else:
-                        min = -1
-                        max = 0
-                    attributes["bbox_miny"] = \
-                        float(array.y[min].values -
-                              attributes["geospatial_lat_resolution"])
-                    attributes["bbox_maxy"] = \
-                        float(array.y[max].values +
-                              attributes["geospatial_lat_resolution"])
+            self._put_variable_info_from_tif_file_var_infos_attributes(
+                array, var_name, var_infos, attributes
+            )
         return var_infos, attributes
+
+    async def _get_variable_infos_from_tif_feature(
+            self, feature: dict, session
+    ) -> (dict, dict):
+        feature_info = _extract_feature_info(feature)
+        download_url = f"{feature_info[4].get('Download')}"
+        if download_url == 'None':
+            _LOG.warning(f'Dataset is not accessible via Download')
+            return {}, {}
+        var_infos = {}
+        attributes = {}
+        array = rioxarray.open_rasterio(download_url, chunks=dict(x=512, y=512))
+        var_name = download_url.split(".tif")[0].split("-")[-1]
+        self._put_variable_info_from_tif_file_var_infos_attributes(
+            array, var_name, var_infos, attributes
+        )
+        return var_infos, attributes
+
+    @staticmethod
+    def _put_variable_info_from_tif_file_var_infos_attributes(
+            array, var_name, var_infos, attributes
+    ):
+        var_infos[var_name] = {}
+        band_dim = -1
+        if "band" in array.dims:
+            band_dim = list(array.dims).index("band")
+        dims = [d for d in array.dims if d != "band"]
+        var_infos[var_name]["dimensions"] = dims
+        var_infos[var_name]["file_dimensions"] = dims
+        var_infos[var_name]["size"] = array.size
+        var_infos[var_name]["shape"] = \
+            [s for i, s in enumerate(array.shape) if i != band_dim]
+        var_infos[var_name]["data_type"] = array.dtype.name
+        preferred_chunks = array.encoding.get("preferred_chunks", {})
+        chunk_sizes = []
+        for dim in dims:
+            if dim in preferred_chunks:
+                chunk_sizes.append(preferred_chunks.get(dim))
+        if len(chunk_sizes) == len(dims):
+            var_infos[var_name]["chunk_sizes"] = chunk_sizes
+            var_infos[var_name]["file_chunk_sizes"] = chunk_sizes
+        for dim in dims:
+            if dim in var_infos:
+                continue
+            var_infos[dim] = {}
+            var_infos[dim]["dimensions"] = dim
+            var_infos[dim]["file_dimensions"] = dim
+            var_infos[dim]["size"] = array[dim].size
+            var_infos[dim]["shape"] = array[dim].shape
+            var_infos[dim]["data_type"] = array[dim].dtype.name
+            var_infos[dim]["chunk_sizes"] = array[dim].shape
+            var_infos[dim]["file_chunk_sizes"] = array[dim].shape
+            if dim == "x":
+                diff = array.x.diff(dim="x")
+                if np.allclose(diff[0], array.x.diff(dim="x"), rtol=1e-8):
+                    attributes["geospatial_lon_resolution"] = \
+                        float(diff[0].values)
+                attributes["bbox_minx"] = \
+                    float(array.x[0].values -
+                          attributes["geospatial_lon_resolution"])
+                attributes["bbox_maxx"] = \
+                    float(array.x[-1].values +
+                          attributes["geospatial_lon_resolution"])
+            if dim == "y":
+                diff = array.y.diff(dim="y")
+                if np.allclose(diff[0], array.y.diff(dim="y"), rtol=1e-8):
+                    attributes["geospatial_lat_resolution"] = \
+                        abs(float(diff[0].values))
+                if diff[0] > 0:
+                    min = 0
+                    max = -1
+                else:
+                    min = -1
+                    max = 0
+                attributes["bbox_miny"] = \
+                    float(array.y[min].values -
+                          attributes["geospatial_lat_resolution"])
+                attributes["bbox_maxy"] = \
+                    float(array.y[max].values +
+                          attributes["geospatial_lat_resolution"])
 
     def get_opendap_dataset(self, url: str):
         return self._run_with_session(self._get_opendap_dataset, url)

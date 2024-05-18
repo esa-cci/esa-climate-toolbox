@@ -413,12 +413,2322 @@
         "verification_flags": [],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): MODIS Fire_cci Burned Area Pixel product, version 5.1"
     },
-    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel": {
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v13-fv2.0-CL": {
         "data_type": "dataset",
         "verification_flags": [],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
     },
-    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel": {
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h33v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h34v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h35v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h36v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v18-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v18-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h37v18-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v18-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v18-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v18-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v19-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v19-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v19-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v20-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v20-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v20-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v21-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v21-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v21-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v22-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v22-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v22-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v23-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v23-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v23-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v18-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v18-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v18-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v19-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v19-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v19-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v20-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v20-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v20-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v21-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v21-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v21-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v22-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v22-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v22-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v23-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v23-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v23-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v24-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v24-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h39v24-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v18-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v18-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v18-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v19-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v19-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v19-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v20-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v20-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v20-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v21-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v21-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v21-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v22-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v22-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v22-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v23-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v23-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v23-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v24-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v24-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h40v24-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v18-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v18-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v18-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v19-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v19-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v19-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v20-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v20-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v20-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v21-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v21-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v21-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v22-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v22-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v22-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v23-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v23-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v23-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v24-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v24-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v24-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v18-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v18-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v18-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v19-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v19-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v19-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v20-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v20-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v20-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v21-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v21-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v21-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v22-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v22-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v22-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v23-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v23-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v23-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v24-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v24-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h42v24-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v13-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v13-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v13-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v18-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v18-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v18-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v19-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v19-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v19-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v20-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v20-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v20-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v21-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v21-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v21-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v22-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v22-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h43v22-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v14-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v14-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v14-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v18-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v18-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v18-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v20-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v20-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v20-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v21-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v21-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v21-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v22-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v22-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v22-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v23-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v23-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h44v23-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v17-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v17-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v17-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v20-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v20-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v20-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v21-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v21-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v21-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v22-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v22-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v22-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v23-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v23-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h45v23-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v15-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v15-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v15-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v16-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v16-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v16-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v20-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v20-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v20-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v21-fv2.0-CL": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v21-fv2.0-JD": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h46v21-fv2.0-LC": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h32v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h32v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h32v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h33v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h33v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h33v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h33v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h34v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h34v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h34v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h34v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h34v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h35v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h35v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h35v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h35v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h35v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h36v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h36v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h36v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h36v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h37v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h37v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h37v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h37v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h37v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h37v18": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v18": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v19": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v20": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v21": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v22": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h38v23": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v18": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v19": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v20": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v21": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v22": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v23": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h39v24": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v18": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v19": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v20": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v21": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v22": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v23": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h40v24": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v18": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v19": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v20": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v21": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v22": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v23": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v24": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v18": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v19": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v20": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v21": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v22": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v23": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v24": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v13": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v18": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v19": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v20": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v21": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h43v22": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h44v14": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h44v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h44v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h44v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h44v18": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h44v20": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h44v21": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h44v22": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h44v23": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h45v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h45v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h45v17": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h45v20": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h45v21": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h45v22": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h45v23": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h46v15": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h46v16": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h46v20": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
+    },
+    "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h46v21": {
         "data_type": "dataset",
         "verification_flags": [],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
