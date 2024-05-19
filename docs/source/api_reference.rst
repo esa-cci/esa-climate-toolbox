@@ -64,6 +64,13 @@ Aggregation
 
 .. autofunction:: esa_climate_toolbox.ops.temporal_aggregation
 
+.. _animate:
+
+Animation
+---------
+
+.. autofunction:: esa_climate_toolbox.ops.animate_map
+
 .. _anomaly_detection:
 
 Anomalies
@@ -105,6 +112,21 @@ Data Frame Operations
 .. autofunction:: esa_climate_toolbox.ops.find_closest
 
 .. autofunction:: esa_climate_toolbox.ops.query
+
+.. _plotting:
+
+Plotting
+--------
+
+.. autofunction:: esa_climate_toolbox.ops.plot
+
+.. autofunction:: esa_climate_toolbox.ops.plot_contour
+
+.. autofunction:: esa_climate_toolbox.ops.plot_hist
+
+.. autofunction:: esa_climate_toolbox.ops.plot_line
+
+.. autofunction:: esa_climate_toolbox.ops.plot_scatter
 
 .. _resampling:
 

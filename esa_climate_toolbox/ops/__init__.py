@@ -56,6 +56,7 @@ def ect_init():
 from .aggregate import climatology
 from .aggregate import reduce
 from .aggregate import temporal_aggregation
+from .animate import animate_map
 from .anomaly import anomaly_external
 from .anomaly import anomaly_internal
 from .arithmetics import arithmetics
@@ -71,6 +72,11 @@ from .normalize import adjust_spatial_attrs
 from .normalize import adjust_temporal_attrs
 from .normalize import normalize
 from .outliers import detect_outliers
+from .plot import plot
+from .plot import plot_contour
+from .plot import plot_hist
+from .plot import plot_line
+from .plot import plot_scatter
 from .resampling import downsample_2d
 from .resampling import resample
 from .resampling import resample_2d
@@ -87,6 +93,8 @@ __all__ = [
     'climatology',
     'reduce',
     'temporal_aggregation',
+    # animation
+    'animate_map',
     # anomaly
     'anomaly_external',
     'anomaly_internal',
@@ -108,6 +116,12 @@ __all__ = [
     'adjust_spatial_attrs',
     # .outliers
     'detect_outliers',
+    # .plot
+    'plot',
+    'plot_contour',
+    'plot_hist',
+    'plot_line',
+    'plot_scatter',
     # .resampling
     'resample',
     'resample_2d',
