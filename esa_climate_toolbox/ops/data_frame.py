@@ -27,6 +27,7 @@ import pandas as pd
 import pyproj
 import shapely
 import shapely.ops
+import xarray as xr
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -34,10 +35,16 @@ from typing import Optional
 from typing import Tuple
 import warnings
 
+from xcube.core.extract import get_cube_values_for_points
+from xcube.core.gridmapping import GridMapping
+
 from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
 from esa_climate_toolbox.core.types import DataFrameLike
+from esa_climate_toolbox.core.types import DatasetLike
 from esa_climate_toolbox.core.types import GeometryLike
+from esa_climate_toolbox.core.types import GeoDataFrame
+from esa_climate_toolbox.core.types import Literal
 from esa_climate_toolbox.core.types import PolygonLike
 from esa_climate_toolbox.core.types import ValidationError
 from esa_climate_toolbox.core.types import VarName
@@ -299,6 +306,150 @@ def _data_frame_geometry_op(instance_method,
     if geometry is None:
         return False
     return instance_method(geometry)
+
+
+@op(tags=['filter'], version='1.0')
+@op_input('df', data_type=DataFrameLike)
+def to_dataset(df: DataFrameLike.TYPE) -> xr.Dataset:
+    """
+    Convert a geodataframe to a dataset.
+
+    :param df: The geodataframe.
+    :return: A dataset created from the geodataframe.
+    """
+    return DatasetLike.convert(df)
+
+
+@op(tags=['filter'], version='1.0')
+@op_input('ds', data_type=DataFrameLike)
+def to_dataframe(ds: DatasetLike.TYPE) -> pd.DataFrame:
+    """
+    Convert a dataset into a dataframe.
+
+    :param ds: The dataset.
+    :return: A dataframe created from the geodataframe.
+    """
+    return DataFrameLike.convert(ds)
+
+
+@op(tags=['filter'], version='1.0')
+@op_input('df', data_type=DataFrameLike)
+@op_input('geometry', data_type=VarName)
+@op_input('spatial_coords', data_type=VarNamesLike)
+@op_input('crs', data_type=Literal, default_value="EPSG:4362")
+def as_geodataframe(
+        df: DataFrameLike.TYPE,
+        geometry: VarName.TYPE,
+        spatial_coords: VarNamesLike.TYPE,
+        crs: Literal.TYPE
+) -> GeoDataFrame:
+    """
+    Converts a dataframe into a geodataframe, if possible. The conversion is possible
+    if the dataframe contains either a geometry column or columns containing spatial
+    coordinates.
+    This operation supports specifying which column contains geometries or spatial
+    coordinates. If nor value is given, it will be attempted to use a column
+    named "geometry"; if this is not given, common name-pair-combinations will be tried.
+
+    :param df: The dataframe.
+    :param geometry: The name of the column holding the geometry.
+    :param spatial_coords: The names of the columns holding spatial coordinates.
+        Longitudinal coordinates come first, Latitudinal second
+        Will not be considered when ``geometry`` is given.
+    :param crs: The spatial reference system of the geometry.
+        Defaults to ``EPSG:4362`` / ``WGS84``.
+    :return: A geodataframe created from the dataframe.
+    """
+    if geometry is not None:
+        return gpd.GeoDataFrame(df, geometry=geometry, crs=crs)
+    elif spatial_coords is not None:
+        if not isinstance(spatial_coords, list) or not len(spatial_coords) == 2:
+            raise ValidationError(
+                f"Invalid parameter 'spatial_coords'. "
+                f"Must be list of exactly two names, was '{spatial_coords}'."
+            )
+        return gpd.GeoDataFrame(
+            df,
+            geometry=gpd.points_from_xy(df[spatial_coords[0]], df[spatial_coords[1]]),
+            crs=crs
+        )
+    elif "geometry" in df:
+        return gpd.GeoDataFrame(df, geometry=geometry, crs=crs)
+    combination_sets = [
+        ["lon", "lat"],
+        ["longitude", "latitude"],
+        ["x", "y"]
+    ]
+    for combination_set in combination_sets:
+        if combination_set[0] in df and combination_set[1] in df:
+            return gpd.GeoDataFrame(
+                df,
+                geometry=gpd.points_from_xy(combination_set[0], combination_set[1]),
+                crs=crs
+            )
+    raise ValueError("Could not convert dataframe to geodataframe")
+
+
+@op(tags=['filter'], version='1.0')
+@op_input('gdf', data_type=GeoDataFrame)
+@op_input('ds', data_type=DatasetLike)
+@op_input('var_names', data_type=VarNamesLike)
+@op_input('interpolation', value_set=['nearest', 'linear'], default_value='nearest')
+@op_input('time_name', data_type=Literal)
+@op_input('var_prefix', data_type=Literal)
+def add_dataset_values_to_geodataframe(
+        gdf: GeoDataFrame,
+        ds: DatasetLike.TYPE,
+        var_names: VarNamesLike.TYPE,
+        interpolation: str = "nearest",
+        time_name: Literal = None,
+        var_prefix: Literal = None
+) -> GeoDataFrame:
+    """
+    For each geometry in the input geodataframe, the value of the variables
+    in the dataset will be determined. If the geometry is not a point,
+    its centroid value will be used as point of reference.
+    Note that this method also matches time.
+
+    :param gdf: The geodataframe.
+    :param ds: The dataset to read variables from.
+    :param var_names: Names of variables for which to get values
+    :param interpolation: Type of interpolation between dataset pixel centers used
+        to derive value for dataframe points.
+    :param time_name: Name of time column in the geodataframe. If not given, it is
+        either expected to be ``time`` or non-existent.
+        :param var_names: Names of variables for which to get values
+    :param var_prefix: Prefix the columns of the extracted variables will carry
+        in the geodataframe. Default is None.
+    :return: The geodataframe, enriched by values from the dataset.
+    """
+    gdfc = gdf.copy()
+
+    def maybe_convert_geometry(gdf):
+        return shapely.centroid(gdf["geometry"])
+
+    gdfc['geometry'] = gdfc.apply(maybe_convert_geometry, axis=1)
+    ds_gm = GridMapping.from_dataset(ds)
+    ds_xy_names = ds_gm.xy_var_names
+
+    gdfc[ds_xy_names[0]] = gdfc['geometry'].x
+    gdfc[ds_xy_names[1]] = gdfc['geometry'].y
+    if time_name is not None:
+        gdfc['time'] = pd.to_datetime(gdfc[time_name])
+
+    ref_name_pattern = str(var_prefix) + "_{name}" if var_prefix else "{name}"
+
+    cvs = get_cube_values_for_points(
+        ds, points=gdf,
+        var_names=var_names,
+        ref_name_pattern=ref_name_pattern,
+        method=interpolation
+    )
+
+    for var_name in var_names:
+        gdf[var_name] = cvs[var_name]
+
+    return gdf
 
 
 @op(tags=['filter'], version='1.0')
