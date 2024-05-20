@@ -80,6 +80,7 @@ from .plot import plot
 from .plot import plot_contour
 from .plot import plot_hist
 from .plot import plot_line
+from .plot import plot_map
 from .plot import plot_scatter
 from .resampling import downsample_2d
 from .resampling import resample

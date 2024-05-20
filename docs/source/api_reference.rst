@@ -134,6 +134,8 @@ Plotting
 
 .. autofunction:: esa_climate_toolbox.ops.plot_line
 
+.. autofunction:: esa_climate_toolbox.ops.plot_map
+
 .. autofunction:: esa_climate_toolbox.ops.plot_scatter
 
 .. _resampling:

@@ -519,8 +519,8 @@ def plot_scatter(ds1: xr.Dataset,
                  properties: DictLike.TYPE = None,
                  file: str = None) -> Figure:
     """
-    Create a scatter plot of two variables of two variables
-    given by datasets *ds1*, *ds2* and the variable names *var1*, *var2*.
+    Create a scatter plot of two variables given by datasets *ds1*, *ds2*
+    and the variable names *var1*, *var2*.
 
     :param ds1: Dataset that contains the variable named by *var1*.
     :param ds2: Dataset that contains the variable named by *var2*.

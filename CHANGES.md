@@ -1,4 +1,18 @@
-## Changes in 0.4.2 (in development)
+## Changes in 1.0 (in development)
+
+* Added operations:
+  * `add_dataset_values_to_geodataframe`: 
+    Adds values from a dataset to a geodataframe
+  * `as_geodataframe`: Ensures a dataframe is a geodatframe
+  * `to_dataframe`: Converts a dataset to a dataframe
+  * `to_dataset`: Converts a dataframe to a dataset
+  * `animate_map`: Creates a geographic map animation
+  * `plot`: Create a 1D/line or 2D/image plot
+  * `plot_contour`: Create a contour plot
+  * `plot_hist`: Creates a histogram of a variable
+  * `plot_line`: Creates a 1D/line plot
+  * `plot_map`: Creates a geographic map plot
+  * `plot_scatter`: Creates a scatter plot of two variables
 
 ## Changes in 0.4.1
 

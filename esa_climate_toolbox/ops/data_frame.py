@@ -312,10 +312,10 @@ def _data_frame_geometry_op(instance_method,
 @op_input('df', data_type=DataFrameLike)
 def to_dataset(df: DataFrameLike.TYPE) -> xr.Dataset:
     """
-    Convert a geodataframe to a dataset.
+    Convert a dataframe to a dataset.
 
-    :param df: The geodataframe.
-    :return: A dataset created from the geodataframe.
+    :param df: The dataframe.
+    :return: A dataset created from the dataframe.
     """
     return DatasetLike.convert(df)
 
