@@ -3,7 +3,7 @@
 * Added operations:
   * `add_dataset_values_to_geodataframe`: 
     Adds values from a dataset to a geodataframe
-  * `as_geodataframe`: Ensures a dataframe is a geodatframe
+  * `as_geodataframe`: Ensures a dataframe is a geodataframe
   * `to_dataframe`: Converts a dataset to a dataframe
   * `to_dataset`: Converts a dataframe to a dataset
   * `animate_map`: Creates a geographic map animation
