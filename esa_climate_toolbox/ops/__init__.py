@@ -62,12 +62,16 @@ from .anomaly import anomaly_internal
 from .arithmetics import arithmetics
 from .arithmetics import diff
 from .coregistration import coregister
+from .data_frame import add_dataset_values_to_geodataframe
 from .data_frame import aggregate_statistics
+from .data_frame import as_geodataframe
 from .data_frame import data_frame_max
 from .data_frame import data_frame_min
 from .data_frame import data_frame_subset
 from .data_frame import find_closest
 from .data_frame import query
+from .data_frame import to_dataframe
+from .data_frame import to_dataset
 from .normalize import adjust_spatial_attrs
 from .normalize import adjust_temporal_attrs
 from .normalize import normalize
@@ -104,12 +108,16 @@ __all__ = [
     # .coregistration
     'coregister',
     # data frame
+    'add_dataset_values_to_geodataframe',
     'aggregate_statistics',
+    'as_geodataframe',
     'data_frame_max',
     'data_frame_min',
     'data_frame_subset',
     'find_closest',
     'query',
+    'to_dataframe',
+    'to_dataset',
     # .normalize
     'normalize',
     'adjust_temporal_attrs',

@@ -101,7 +101,11 @@ Coregistration
 Data Frame Operations
 ---------------------
 
+.. autofunction:: esa_climate_toolbox.ops.add_dataset_values_to_geodataframe
+
 .. autofunction:: esa_climate_toolbox.ops.aggregate_statistics
+
+.. autofunction:: esa_climate_toolbox.ops.as_geodataframe
 
 .. autofunction:: esa_climate_toolbox.ops.data_frame_max
 
@@ -112,6 +116,10 @@ Data Frame Operations
 .. autofunction:: esa_climate_toolbox.ops.find_closest
 
 .. autofunction:: esa_climate_toolbox.ops.query
+
+.. autofunction:: esa_climate_toolbox.ops.to_dataframe
+
+.. autofunction:: esa_climate_toolbox.ops.to_dataset
 
 .. _plotting:
 
