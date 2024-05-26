@@ -1643,6 +1643,7 @@ class CciCdc:
                          f'and attributes from {opendap_url}')
             return {}, {}
         variable_infos = {}
+        time_set_as_dim = False
         for key in dataset.keys():
             fixed_key = key.replace('%2E', '_').replace('.', '_')
             data_type = dataset[key].dtype.name
@@ -1687,10 +1688,13 @@ class CciCdc:
                     copy.deepcopy(var_attrs['chunk_sizes'])
             var_attrs['data_type'] = data_type
             var_attrs['dimensions'] = list(dataset[key].dimensions)
+            if "time" in var_attrs['dimensions']:
+                time_set_as_dim: True
             var_attrs['file_dimensions'] = \
                 copy.deepcopy(var_attrs['dimensions'])
             variable_infos[fixed_key] = var_attrs
-
+        if variable_infos.get("time", {}).get("size", 1) > 1 and not time_set_as_dim:
+            variable_infos.pop("time")
         return variable_infos, dataset.attributes
 
     async def _get_tif_files_from_tar_url(self, tar_url: str, session) -> List[str]:
