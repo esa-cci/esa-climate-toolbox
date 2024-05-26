@@ -170,9 +170,9 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
         lon_min_offset = -1
         lon_max_offset = -1
 
+        time_coord_names = ["time", "time_bnds", "month", "t", "start_time", "end_time"]
         for coord_name in sorted_coords_names:
-            if coord_name == 'time' or coord_name == 'time_bnds' or \
-                    coord_name == 'month':
+            if coord_name in time_coord_names:
                 continue
             coord_attrs = self.get_attrs(coord_name)
             coord_attrs['_ARRAY_DIMENSIONS'] = coord_attrs['dimensions']
@@ -246,6 +246,11 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 self._add_remote_array(coord_name, shape, chunk_size,
                                        encoding, coord_attrs)
 
+        time_dim_name = "time"
+        if is_climatology:
+            time_dim_name = 'month'
+        if "Time" in self._dimensions:
+            time_dim_name = "Time"
         if is_climatology:
             month_attrs = {
                 "_ARRAY_DIMENSIONS": ['time'],
@@ -254,19 +259,19 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
             self._add_static_array('month', t_array, month_attrs)
         else:
             time_attrs = {
-                "_ARRAY_DIMENSIONS": ['time'],
+                "_ARRAY_DIMENSIONS": [time_dim_name],
                 "units": "seconds since 1970-01-01T00:00:00Z",
                 "calendar": "proleptic_gregorian",
                 "standard_name": "time",
                 "bounds": "time_bnds",
             }
             time_bnds_attrs = {
-                "_ARRAY_DIMENSIONS": ['time', 'bnds'],
+                "_ARRAY_DIMENSIONS": [time_dim_name, 'bnds'],
                 "units": "seconds since 1970-01-01T00:00:00Z",
                 "calendar": "proleptic_gregorian",
                 "standard_name": "time_bnds",
             }
-            self._add_static_array('time', t_array, time_attrs)
+            self._add_static_array(time_dim_name, t_array, time_attrs)
             self._add_static_array('time_bnds', t_bnds_array, time_bnds_attrs)
 
         coordinate_names = [coord for coord in coords_data.keys()
@@ -296,7 +301,6 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
             grid_mapping_name = var_attrs.get('grid_mapping', variable_name)
             if grid_mapping_name not in self._variable_names:
                 self._variable_names.append(grid_mapping_name)
-        time_dim_name = 'month' if is_climatology else 'time'
         for variable_name in self._variable_names:
             if variable_name in coords_data or variable_name == 'time_bnds':
                 remove.append(variable_name)
