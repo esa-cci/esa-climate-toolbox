@@ -43,6 +43,7 @@ COORDS_2D_ID = "esacci.ICESHEETS.unspecified.L4.SEC.multi-sensor.multi-platform.
                "UNSPECIFIED.0-1.greenland_sec_saral_altika"
 
 
+
 class DataAccessTest(unittest.TestCase):
 
     def test_get_temporal_resolution_from_id(self):
