@@ -17,6 +17,9 @@ from esa_climate_toolbox.ds.dataaccess import CciCdcDataStore
 from esa_climate_toolbox.ds.dataaccess import CciCdcDataFrameOpener
 from esa_climate_toolbox.ds.dataaccess import CciCdcDatasetOpener
 from esa_climate_toolbox.ds.dataaccess import get_temporal_resolution_from_id
+from esa_climate_toolbox.ds.dataaccess import CciCdcVectorDataCubeOpener
+from esa_climate_toolbox.ds.dataaccess import VectorDataCubeDescriptor
+from esa_climate_toolbox.ds.dataaccess import VECTOR_DATA_CUBE_TYPE
 
 AEROSOL_DAY_ID = 'esacci.AEROSOL.day.L3.AAI.multi-sensor.multi-platform.' \
                  'MSAAI.1-7.r1'
@@ -39,9 +42,9 @@ SEAICE_ID = 'esacci.SEAICE.day.L4.SICONC.multi-sensor.multi-platform.' \
             'AMSR_25kmEASE2.2-1.NH'
 SST_ID = 'esacci.SST.day.L4.SSTdepth.multi-sensor.multi-platform.OSTIA.1-1.r1'
 GHG_DS_ID = "esacci.GHG.satellite-orbit-frequency.L2.CH4.SCIAMACHY.Envisat.IMAP.v7-2.r1"
+VDC_ID = "esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.WAFRICA"
 COORDS_2D_ID = "esacci.ICESHEETS.unspecified.L4.SEC.multi-sensor.multi-platform." \
                "UNSPECIFIED.0-1.greenland_sec_saral_altika"
-
 
 
 class DataAccessTest(unittest.TestCase):
@@ -218,8 +221,8 @@ class CciCdcDatasetOpenerTest(unittest.TestCase):
                          descriptor.time_range)
         self.assertEqual('1D', descriptor.time_period)
 
-    # @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
-    #         'ECT_DISABLE_WEB_TESTS = 1')
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
     def test_describe_2d_grid_coords_data(self):
         descriptor = self.opener.describe_data(COORDS_2D_ID)
         self.assertIsNotNone(descriptor)
@@ -355,8 +358,8 @@ class CciCdcDatasetOpenerTest(unittest.TestCase):
                          dataset.ozone_mixing_ratio.dims)
         self.assertEqual({1, 32, 18}, dataset.ozone_mixing_ratio.chunk_sizes)
 
-    # @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
-    #         'ECT_DISABLE_WEB_TESTS = 1')
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
     def test_open_2d_grid_coords_data(self):
         dataset = self.opener.open_data(
             COORDS_2D_ID,
@@ -746,6 +749,71 @@ class CciCdcDataFrameOpenerTest(unittest.TestCase):
         )
 
 
+class CciCdcVectorDataCubeOpenerTest(unittest.TestCase):
+
+    def setUp(self) -> None:
+        self._opener = CciCdcVectorDataCubeOpener()
+
+    def test_dataset_names(self):
+        ds_names = self._opener.dataset_names
+        self.assertTrue(len(ds_names) > 10)
+
+    def test_get_data_types(self):
+        data_types = self._opener.get_data_types()
+        self.assertEqual(1, len(data_types))
+        self.assertEqual(VECTOR_DATA_CUBE_TYPE, data_types[0])
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_has_data(self):
+        self.assertTrue(self._opener.has_data(VDC_ID))
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_describe_data_sealevel(self):
+        descriptor = self._opener.describe_data(VDC_ID)
+        self.assertIsNotNone(descriptor)
+        self.assertIsInstance(descriptor, VectorDataCubeDescriptor)
+        self.assertEqual(VDC_ID, descriptor.data_id)
+        self.assertEqual('vectordatacube', str(descriptor.data_type))
+        self.assertEqual(['nbpoints', 'nbmonth'], list(descriptor.dims.keys()))
+        self.assertEqual(1867, descriptor.dims['nbpoints'])
+        self.assertEqual(216, descriptor.dims['nbmonth'])
+        self.assertEqual(4, len(descriptor.data_vars))
+        self.assertTrue('distance_to_coast' in descriptor.data_vars)
+        self.assertEqual(1, descriptor.data_vars['distance_to_coast'].ndim)
+        self.assertEqual(tuple(['nbpoints']),
+                         descriptor.data_vars['distance_to_coast'].dims)
+        self.assertEqual('float32', descriptor.data_vars['distance_to_coast'].dtype)
+        self.assertEqual('WGS84', descriptor.crs)
+        self.assertEqual(('2002-01-01', '2019-12-31'), descriptor.time_range)
+        self.assertEqual('1M', descriptor.time_period)
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_get_open_data_params_schema(self):
+        schema = self._opener.get_open_data_params_schema(VDC_ID).to_dict()
+        self.assertIsNotNone(schema)
+        self.assertTrue('variable_names' in schema['properties'])
+        self.assertFalse(schema['additionalProperties'])
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_open_data(self):
+        data = self._opener.open_data(VDC_ID,
+                                      variable_names=["distance_to_coast", "sla"])
+        self.assertIsNotNone(data)
+        self.assertEqual({"distance_to_coast", "sla"}, set(data.data_vars))
+        self.assertEqual({"geometry", "time", "time_bnds"}, set(data.coords))
+        self.assertEqual({"nbpoints"}, set(data.distance_to_coast.dims))
+        self.assertEqual({50}, set(data.distance_to_coast.chunk_sizes))
+        self.assertEqual({1867}, set(data.distance_to_coast.shape))
+        self.assertEqual({"nbpoints", "nbmonth"}, set(data.sla.dims))
+        self.assertEqual({50, 216}, set(data.sla.chunk_sizes))
+        self.assertEqual({1867, 216}, set(data.sla.shape))
+        self.assertIsNotNone(data.zarr_store.get())
+
+
 class CciCdcDataStoreTest(unittest.TestCase):
 
     def setUp(self) -> None:
@@ -798,11 +866,18 @@ class CciCdcDataStoreTest(unittest.TestCase):
 
     @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
             'ECT_DISABLE_WEB_TESTS = 1')
-    def test_search(self):
+    def test_search_geodataframe(self):
         geodataframe_search_result = \
             list(self.store.search_data('geodataframe'))
         self.assertIsNotNone(geodataframe_search_result)
         self.assertTrue(len(geodataframe_search_result) > 20)
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_search_vectordatacube(self):
+        vectordatacube_search_result = list(self.store.search_data('vectordatacube'))
+        self.assertIsNotNone(vectordatacube_search_result)
+        self.assertTrue(len(vectordatacube_search_result) > 10)
 
 
 class CciDataNormalizationTest(unittest.TestCase):

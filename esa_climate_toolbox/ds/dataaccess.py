@@ -23,9 +23,10 @@ from abc import abstractmethod
 import json
 import os
 from typing import Any, Iterator, List, Tuple, Optional, Dict, Union, Container
-
 import pyproj
+from shapely import Point
 import xarray as xr
+import xvec
 
 from xcube.core.normalize import normalize_dataset
 from xcube.core.store import GEO_DATA_FRAME_TYPE
@@ -55,11 +56,14 @@ from .constants import DEFAULT_NUM_RETRIES
 from .constants import DEFAULT_RETRY_BACKOFF_BASE
 from .constants import DEFAULT_RETRY_BACKOFF_MAX
 from .constants import OPENSEARCH_CEDA_URL
+from .constants import VECTORDATACUBE_OPENER_ID
 from .dataframeaccess import DataFrameAccessor
 from .normalize import normalize_coord_names
 from .normalize import normalize_dims_description
 from .normalize import normalize_variable_dims_description
 from .normalize import normalize_var_infos
+from .vdcaccess import VectorDataCubeDescriptor
+from .vdcaccess import VECTOR_DATA_CUBE_TYPE
 
 _RELEVANT_METADATA_ATTRIBUTES = \
     ['ecv', 'institute', 'processing_level', 'product_string',
@@ -131,7 +135,7 @@ class CciCdcDataOpener(DataOpener):
             )
         return data_descriptors
 
-    def describe_data(self, data_id: str) -> GeoDataFrameDescriptor:
+    def describe_data(self, data_id: str) -> DataDescriptor:
         self._assert_valid_data_id(data_id)
         try:
             ds_metadata = self._cci_cdc.get_dataset_metadata(data_id)
@@ -540,6 +544,140 @@ class CciCdcDataFrameOpener(CciCdcDataOpener):
         return cci_schema
 
 
+class CciCdcVectorDataCubeOpener(CciCdcDataOpener):
+
+    def __init__(self, normalize_data: bool = True, **cdc_params):
+        super().__init__(
+            CciCdc(**cdc_params, data_type='vectordatacube'),
+            VECTORDATACUBE_OPENER_ID,
+            VECTOR_DATA_CUBE_TYPE,
+            normalize_data=normalize_data,
+        )
+
+    @classmethod
+    def get_data_types(cls) -> Tuple[DataType, ...]:
+        return VECTOR_DATA_CUBE_TYPE,
+
+    def _get_data_descriptor_from_metadata(
+            self, data_id: str, metadata: dict
+    ) -> VectorDataCubeDescriptor:
+        ds_metadata = metadata.copy()
+        dims = self._normalize_dims(ds_metadata.get('dimensions', {}))
+        temporal_resolution = get_temporal_resolution_from_id(data_id)
+        dataset_info = self._cci_cdc.get_dataset_info(data_id, ds_metadata)
+        bbox = dataset_info['bbox']
+        crs = dataset_info['crs']
+        temporal_coverage = (
+            dataset_info['temporal_coverage_start'].split('T')[0]
+            if dataset_info['temporal_coverage_start'] else None,
+            dataset_info['temporal_coverage_end'].split('T')[0]
+            if dataset_info['temporal_coverage_end'] else None
+        )
+        var_infos = self._normalize_var_infos(
+            ds_metadata.get('variable_infos', {})
+        )
+        var_names = dataset_info["var_names"]
+        lat_lons = [("lat", "lon"), ("latitude", "longitude")]
+        for lat_lon in lat_lons:
+            if lat_lon[0] in var_names and lat_lon[1] in var_names:
+                var_names.remove(lat_lon[0])
+                var_names.remove(lat_lon[1])
+            break
+        coord_names = self._normalize_coord_names(dataset_info['coord_names'])
+        time_dim_name = 'time'
+        var_descriptors = self._get_variable_descriptors(
+            dataset_info['var_names'], var_infos, time_dim_name
+        )
+        coord_descriptors = self._get_variable_descriptors(coord_names,
+                                                           var_infos,
+                                                           time_dim_name,
+                                                           normalize_dims=False)
+        if 'variables' in ds_metadata:
+            ds_metadata.pop('variables')
+        ds_metadata.pop('dimensions')
+        ds_metadata.pop('variable_infos')
+        attrs = ds_metadata.get('attributes', {}).get('NC_GLOBAL', {})
+        ds_metadata.pop('attributes')
+        attrs.update(ds_metadata)
+        self._remove_irrelevant_metadata_attributes(attrs)
+        descriptor = VectorDataCubeDescriptor(data_id,
+                                              data_type=self._data_type,
+                                              crs=crs,
+                                              dims=dims,
+                                              coords=coord_descriptors,
+                                              data_vars=var_descriptors,
+                                              attrs=attrs,
+                                              bbox=bbox,
+                                              time_range=temporal_coverage,
+                                              time_period=temporal_resolution)
+        data_schema = self._get_open_data_params_schema(descriptor)
+        descriptor.open_params_schema = data_schema
+        return descriptor
+
+    def _get_open_data_params_schema(
+            self, vdcd: VectorDataCubeDescriptor = None
+    ) -> JsonObjectSchema:
+        # noinspection PyUnresolvedReferences
+        vectordatacube_params = dict(
+            normalize_data=JsonBooleanSchema(default=True),
+            variable_names=JsonArraySchema(items=JsonStringSchema(
+                enum=vdcd.data_vars.keys() if vdcd and vdcd.data_vars else None))
+        )
+        # TODO add this when spatial and temporal subsetting are supported
+        # if vdcd:
+        #     min_date = vdcd.time_range[0] if vdcd.time_range else None
+        #     max_date = vdcd.time_range[1] if vdcd.time_range else None
+        #     if min_date or max_date:
+        #         vectordatacube_params['time_range'] = \
+        #             JsonDateSchema.new_range(min_date, max_date)
+        # else:
+        #     vectordatacube_params['time_range'] = JsonDateSchema.new_range(None, None)
+        # if vdcd:
+        #     try:
+        #         if pyproj.CRS.from_string(vdcd.crs).is_geographic:
+        #             min_lon = vdcd.bbox[0] if vdcd and vdcd.bbox else -180
+        #             min_lat = vdcd.bbox[1] if vdcd and vdcd.bbox else -90
+        #             max_lon = vdcd.bbox[2] if vdcd and vdcd.bbox else 180
+        #             max_lat = vdcd.bbox[3] if vdcd and vdcd.bbox else 90
+        #             bbox = JsonArraySchema(items=(
+        #                 JsonNumberSchema(minimum=min_lon, maximum=max_lon),
+        #                 JsonNumberSchema(minimum=min_lat, maximum=max_lat),
+        #                 JsonNumberSchema(minimum=min_lon, maximum=max_lon),
+        #                 JsonNumberSchema(minimum=min_lat, maximum=max_lat)))
+        #             vectordatacube_params['bbox'] = bbox
+        #     except pyproj.exceptions.CRSError:
+                # do not set bbox then
+                # pass
+        cci_schema = JsonObjectSchema(
+            properties=dict(**vectordatacube_params),
+            required=[
+            ],
+            additional_properties=False
+        )
+        return cci_schema
+
+    def open_data(self, data_id: str, **open_params) -> Any:
+        cci_schema = self.get_open_data_params_schema(data_id)
+        cci_schema.validate_instance(open_params)
+        cube_kwargs, open_params = cci_schema.process_kwargs_subset(
+            open_params, ('variable_names',
+                          'time_range',
+                          'bbox')
+        )
+        chunk_store = CciChunkStore(self._cci_cdc, data_id, cube_kwargs)
+        ds = xr.open_zarr(chunk_store, consolidated=False)
+
+        def _convert_to_point(chunk):
+            return [Point(point_dict.get("coordinates")) for point_dict in chunk]
+
+        da = xr.apply_ufunc(_convert_to_point, ds.geometry,
+                            dask='parallelized', output_dtypes=["object"])
+        ds = ds.assign_coords(geometry=da)
+        ds = ds.set_xindex("geometry", xvec.GeometryIndex)
+        ds.zarr_store.set(chunk_store)
+        return ds
+
+
 class CciCdcDataStore(DataStore):
 
     def __init__(self, normalize_data=True, **store_params):
@@ -558,9 +696,13 @@ class CciCdcDataStore(DataStore):
         dataframe_opener = CciCdcDataFrameOpener(
             **cdc_kwargs
         )
+        vectordatacube_opener = CciCdcVectorDataCubeOpener(
+            **cdc_kwargs
+        )
         self._openers = {
             DATASET_OPENER_ID: dataset_opener,
-            DATAFRAME_OPENER_ID: dataframe_opener
+            DATAFRAME_OPENER_ID: dataframe_opener,
+            VECTORDATACUBE_OPENER_ID: vectordatacube_opener
         }
         dataset_states_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
@@ -597,13 +739,16 @@ class CciCdcDataStore(DataStore):
 
     @classmethod
     def get_data_types(cls) -> Tuple[str, ...]:
-        return DATASET_TYPE.alias, GEO_DATA_FRAME_TYPE.alias
+        return (DATASET_TYPE.alias, GEO_DATA_FRAME_TYPE.alias,
+                VECTOR_DATA_CUBE_TYPE.alias)
 
     def get_data_types_for_data(self, data_id: str) -> Tuple[str, ...]:
         if self.has_data(data_id, data_type=DATASET_TYPE):
             return DATASET_TYPE.alias,
         if self.has_data(data_id, data_type=GEO_DATA_FRAME_TYPE):
             return GEO_DATA_FRAME_TYPE.alias,
+        if self.has_data(data_id, data_type=VECTOR_DATA_CUBE_TYPE):
+            return VECTOR_DATA_CUBE_TYPE.alias,
         raise DataStoreError(
             f'Data resource {data_id!r} does not exist in store'
         )
@@ -620,9 +765,11 @@ class CciCdcDataStore(DataStore):
                 for opener_type in opener_types:
                     if opener_type.is_super_type_of(data_type):
                         return [opener]
-                raise ValueError(f"Opener '{opener_id}' is not compataible with "
+                raise ValueError(f"Opener '{opener_id}' is not compatible with "
                                  f"data type '{data_type}'.")
         if data_type is not None:
+            if data_type == "vectordatacube":
+                return [self._openers[VECTORDATACUBE_OPENER_ID]]
             if DATASET_TYPE.is_super_type_of(data_type):
                 return [self._openers[DATASET_OPENER_ID]]
             if GEO_DATA_FRAME_TYPE.is_super_type_of(data_type):
@@ -673,7 +820,8 @@ class CciCdcDataStore(DataStore):
             data_ids = CciCdc(data_type=data_type).dataset_names
         else:
             data_ids = CciCdc(data_type=DATASET_TYPE.alias).dataset_names + \
-                       CciCdc(data_type=GEO_DATA_FRAME_TYPE.alias).dataset_names
+                       CciCdc(data_type=GEO_DATA_FRAME_TYPE.alias).dataset_names + \
+                       CciCdc(data_type=VECTOR_DATA_CUBE_TYPE.alias).dataset_names
         ecvs = set([data_id.split('.')[1] for data_id in data_ids])
         frequencies = set(
             [data_id.split('.')[2].replace('-days', ' days').
@@ -774,6 +922,7 @@ class CciCdcDataStore(DataStore):
     @classmethod
     def _is_valid_data_type(cls, data_type: str) -> bool:
         return data_type is None \
+               or data_type == "vectordatacube" \
                or DATASET_TYPE.is_super_type_of(data_type) \
                or GEO_DATA_FRAME_TYPE.is_super_type_of(data_type)
 
@@ -781,12 +930,13 @@ class CciCdcDataStore(DataStore):
     def _assert_valid_data_type(cls, data_type):
         if not cls._is_valid_data_type(data_type):
             raise DataStoreError(
-                f'Data type must be {DATASET_TYPE!r},'
-                f' but got {data_type!r}')
+                f'Data type must be {DATASET_TYPE!r}, {GEO_DATA_FRAME_TYPE!r}, '
+                f'or {VECTOR_DATA_CUBE_TYPE!r}, but got {data_type!r}')
 
     def _assert_valid_opener_id(self, opener_id):
         if opener_id is not None and opener_id not in list(self._openers.keys()):
             raise DataStoreError(
-                f'Data opener identifier must be {DATASET_OPENER_ID!r} or '
-                f'{DATAFRAME_OPENER_ID!r}, but got {opener_id!r}'
+                f'Data opener identifier must be {DATASET_OPENER_ID!r}, '
+                f'{DATAFRAME_OPENER_ID!r}, or {VECTORDATACUBE_OPENER_ID!r},'
+                f'but got {opener_id!r}'
             )

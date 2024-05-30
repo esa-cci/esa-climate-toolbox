@@ -23,6 +23,7 @@ from esa_climate_toolbox.constants import CDC_SHORT_DATA_STORE_ID
 
 DATAFRAME_OPENER_ID = f'dataframe:geojson:{CDC_SHORT_DATA_STORE_ID}'
 DATASET_OPENER_ID = f'dataset:zarr:{CDC_SHORT_DATA_STORE_ID}'
+VECTORDATACUBE_OPENER_ID = f'vectordatacube::{CDC_SHORT_DATA_STORE_ID}'
 DATA_ARRAY_NAME = 'var_data'
 OPENSEARCH_CEDA_URL = 'https://archive.opensearch.ceda.ac.uk/opensearch/request'
 CCI_ODD_URL = 'https://archive.opensearch.ceda.ac.uk/' \
@@ -41,8 +42,10 @@ DEFAULT_NUM_RETRIES = 200
 
 CCI_MAX_IMAGE_SIZE = 2500
 
-COMMON_COORD_VAR_NAMES = ['time', 't', 'start_time', 'end_time',
-                          'lat', 'lon', 'latitude', 'longitude', 'latitude_centers',
-                          'x', 'y', 'xc', 'yc']
+COMMON_TIME_COORD_VAR_NAMES = ['time', 't', 'start_time', 'end_time']
+COMMON_SPATIAL_COORD_VAR_NAMES = [
+    'lat', 'lon', 'latitude', 'longitude',
+    'latitude_centers', 'x', 'y', 'xc', 'yc'
+]
 
 TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S"
