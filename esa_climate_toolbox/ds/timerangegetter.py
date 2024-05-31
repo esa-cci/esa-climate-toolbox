@@ -85,6 +85,19 @@ class TimeRangeGetter:
             start_time = datetime(year=start_time.year, month=1, day=1)
             end_time = datetime(year=end_time.year, month=12, day=31)
             delta = relativedelta(years=1)
+            if dataset_id.endswith("yr"):
+                num_years = int(dataset_id[-3:-2])
+                delta_years = relativedelta(years=num_years) - relativedelta(days=1)
+                request_time_ranges = []
+                this = start_time
+                after = this + delta_years
+                while after <= end_time:
+                    pd_this = pd.Timestamp(datetime.strftime(this, TIMESTAMP_FORMAT))
+                    pd_next = pd.Timestamp(datetime.strftime(after, TIMESTAMP_FORMAT))
+                    request_time_ranges.append((pd_this, pd_next))
+                    this = this + delta
+                    after = after + delta
+                return request_time_ranges
         elif time_period == 'climatology':
             return [(i + 1, i + 1) for i, month in enumerate(MONTHS)]
         else:
