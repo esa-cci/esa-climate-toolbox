@@ -1,4 +1,4 @@
-## Changes in 1.0 (in development)
+## Changes in 1.0
 
 * Added operations:
   * `add_dataset_values_to_geodataframe`: 

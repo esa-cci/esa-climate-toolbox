@@ -1,5 +1,5 @@
 # The MIT License (MIT)
-# Copyright (c) 2023 ESA Climate Change Initiative
+# Copyright (c) 2024 ESA Climate Change Initiative
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,4 +20,4 @@
 # SOFTWARE.
 
 __title__ = 'esa-climate-toolbox'
-__version__ = '0.4.2.dev0'
+__version__ = '1.0'
