@@ -13,7 +13,68 @@
   * `plot_line`: Creates a 1D/line plot
   * `plot_map`: Creates a geographic map plot
   * `plot_scatter`: Creates a scatter plot of two variables
-
+* The ESA CCI Toolbox now also affords opening the following datasets:
+  * As xarray datasets:
+    * esacci.ICESHEETS.unspecified.L4.SEC.multi-sensor.multi-platform.UNSPECIFIED.0-1.greenland_sec_saral_altika
+    *   
+    * esacci.SEALEVEL.mon.IND.MSL.multi-sensor.multi-platform.MERGED.2-0.r1
+    * esacci.SEALEVEL.mon.L4.MSLA.multi-sensor.multi-platform.MERGED.2-0.r1
+  * As geodataframes:
+    * esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.AATSR.Envisat.AATSR-ENVISAT-ENS.v2-6.r1
+    * esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.AATSR.Envisat.ADV.2-31.r1
+    * esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.AATSR.Envisat.ORAC.04-01.r1
+    * esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.AATSR.Envisat.SU.4-3.r1
+    * esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.ATSR-2.ERS-2.ADV.2-31.r1
+    * esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.ATSR-2.ERS-2.ORAC.04-01.r1
+    * esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.ATSR-2.ERS-2.SU.4-3.r1
+    * esacci.AEROSOL.satellite-orbit-frequency.L2P.AER_PRODUCTS.multi-sensor.multi-platform.ATSR2-ENVISAT-ENS.v2-6.r1
+    * esacci.AEROSOL.satellite-orbit-frequency.L2P.AOD.MERIS.Envisat.MERIS_ENVISAT.2-2.r1
+    * esacci.ICESHEETS.unspecified.Unspecified.CFL.multi-sensor.multi-platform.UNSPECIFIED.v3-0.greenland
+    * esacci.ICESHEETS.unspecified.Unspecified.GLL.multi-sensor.multi-platform.UNSPECIFIED.v1-3.greenland
+  * As vector data cubes:
+    * esacci.ICESHEETS.yr.Unspecified.GMB.GRACE-instrument.GRACE.UNSPECIFIED.1-2.greenland_gmb_mass_trends
+    * esacci.ICESHEETS.yr.Unspecified.GMB.GRACE-instrument.GRACE.UNSPECIFIED.1-3.greenland_gmb_mass_trends
+    * esacci.ICESHEETS.yr.Unspecified.GMB.GRACE-instrument.GRACE.UNSPECIFIED.1-4.greenland_gmb_mass_trends
+    * esacci.ICESHEETS.yr.Unspecified.GMB.GRACE-instrument.GRACE.UNSPECIFIED.1-5.greenland_gmb_mass_trends  
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-0.r1
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.ASA
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.BENGUELA
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.CARIBBEAN
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.GULFSTREAM
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.HUMBOLDT
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.MED_SEA
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.NE_ATL
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.N_INDIAN
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.SE_AFRICA
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.SE_ASIA
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.S_AUSTRALIA
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.WAFRICA
+    * esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.r1     
+  * In addition, the FIRE pixel datasets can be read. However, as they are 
+    subdivided by regions, they do not appear in the toolbox as single datasets,
+    but as one dataset per region:
+    * esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_1
+    * esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_2
+    * esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_3
+    * esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_4
+    * esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_5
+    * esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_6
+    * esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_1
+    * esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_2
+    * esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_3
+    * esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_4
+    * esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_5
+    * esacci.FIRE.mon.L3S.BA.multi-sensor.multi-platform.SYN.v1-1.pixel~AREA_6
+    As for the Sentinel-2 FIRE pixel dataset 
+    esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel, it is 
+    split into one dataset per region, e.g.,   
+    esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h45v23
+    As for esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel,
+    it is additionally split per variable:
+      * esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v14-fv2.0-CL
+      * esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v14-fv2.0-JD
+      * esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h32v14-fv2.0-LC
+  
 ## Changes in 0.4.1
 
 * Updated list of dataset states
