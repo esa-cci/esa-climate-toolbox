@@ -1712,7 +1712,7 @@ class CciCdc:
                        endDate=end_time,
                        drsId=dataset_name,
                        fileFormat='.nc')
-        feature_list = await self._get_feature_list(session, request)
+        feature_list = await self._get_feature_list(session, request, '.nc')
         search_string = f"{non_time_dimension} = "
         offsets = []
         offset = 0
