@@ -238,9 +238,13 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 coord_array = np.array(coord_data)
                 self._add_static_array(coord_name, coord_array, coord_attrs)
             else:
-                shape = [coords_data[coord_name].get(
+                shape = coords_data[coord_name].get(
                     'shape', coords_data[coord_name].get('size')
-                )]
+                )
+                if isinstance(shape, tuple):
+                    shape = list(shape)
+                else:
+                    shape = [shape]
                 chunk_size = coords_data[coord_name]['chunkSize']
                 if not isinstance(chunk_size, List):
                     chunk_size = [chunk_size]
@@ -390,6 +394,11 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
     def _adjust_coord_data(self, coord_name: str, min_offset: int,
                            max_offset: int, coords_data, dim_attrs: dict):
         self._dimension_chunk_offsets[coord_name] = min_offset
+        if min_offset == max_offset:
+            if min_offset == len(coords_data[coord_name]['data']) - 1:
+                min_offset -= 1
+            else:
+                max_offset += 1
         coord_data = coords_data[coord_name]['data'][min_offset:max_offset]
         shape = coord_data.shape
         self._set_chunk_sizes(dim_attrs, shape, 'chunk_sizes')
@@ -996,6 +1005,8 @@ class CciChunkStore(RemoteChunkStore):
         dim_indexes = []
         var_dimensions = self.get_attrs(var_name).get('file_dimensions', [])
         chunk_sizes = self.get_attrs(var_name).get('file_chunk_sizes', [])
+        if not isinstance(chunk_sizes, List):
+            chunk_sizes = [chunk_sizes]
         offset = 0
         # dealing with the case that time has been added
         # as additional first dimension
