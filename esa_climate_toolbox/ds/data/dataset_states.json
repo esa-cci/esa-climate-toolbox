@@ -2903,6 +2903,66 @@
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
     },
+    "esacci.GHG.satellite-orbit-frequency.L2.CH4.TANSO-FTS-2.GOSAT-2.SRFP.v2-0-2.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
+    },
+    "esacci.GHG.satellite-orbit-frequency.L2.CH4.TANSO-FTS-2.GOSAT-2.SRPR.v2-0-2.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
+    },
+    "esacci.GHG.satellite-orbit-frequency.L2.CH4.TROPOMI.Sentinel-5P.WFMD.v1-8.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
+    },
+    "esacci.GHG.satellite-orbit-frequency.L2.CO2.OCO.OCO-2.FOCAL.v10-1.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
+    },
+    "esacci.GHG.satellite-orbit-frequency.L2.CO2.TANSO-FTS-2.GOSAT-2.SRFP.v2-0-2.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
+    },
+    "esacci.GHG.satellite-orbit-frequency.L2.CO2.TANSO-FTS.GOSAT.OCFP.v7-0-1.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
+    },
     "esacci.GHG.satellite-orbit-frequency.L2.CO2.multi-sensor.multi-platform.EMMA.v2-2b.r1": {
         "data_type": "geodataframe",
         "verification_flags": [
