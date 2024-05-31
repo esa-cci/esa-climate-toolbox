@@ -743,11 +743,11 @@ class CciCdcDataStore(DataStore):
                 VECTOR_DATA_CUBE_TYPE.alias)
 
     def get_data_types_for_data(self, data_id: str) -> Tuple[str, ...]:
-        if self.has_data(data_id, data_type=DATASET_TYPE):
+        if self.has_data(data_id, data_type=DATASET_TYPE.alias):
             return DATASET_TYPE.alias,
-        if self.has_data(data_id, data_type=GEO_DATA_FRAME_TYPE):
+        if self.has_data(data_id, data_type=GEO_DATA_FRAME_TYPE.alias):
             return GEO_DATA_FRAME_TYPE.alias,
-        if self.has_data(data_id, data_type=VECTOR_DATA_CUBE_TYPE):
+        if self.has_data(data_id, data_type=VECTOR_DATA_CUBE_TYPE.alias):
             return VECTOR_DATA_CUBE_TYPE.alias,
         raise DataStoreError(
             f'Data resource {data_id!r} does not exist in store'
