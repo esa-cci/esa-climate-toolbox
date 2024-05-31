@@ -1428,10 +1428,10 @@ class CciCdc:
         return data
 
     def get_geodataframe_from_shapefile(
-            self, request: Dict, dim_indexes: Tuple, to_bytes: bool = True
+            self, request: Dict
     ) -> Optional[gpd.geodataframe]:
         gdf = self._run_with_session(
-            self._get_geodataframe_from_shapefile, request, dim_indexes, to_bytes
+            self._get_geodataframe_from_shapefile, request
         )
         return gdf
 
@@ -1582,75 +1582,75 @@ class CciCdc:
                 json_dict = await resp.json(encoding='utf-8')
                 data_source['variables'] = json_dict.get(dataset_name, [])
 
-        feature, time_dimension_size = \
-            await self._fetch_feature_and_num_nc_files_at(
+        feature, num_shapefiles = \
+            await self._fetch_feature_from_shapefile(
                 session,
                 opensearch_url,
                 dict(parentIdentifier=dataset_id,
-                     drsId=dataset_name),
+                        drsId=dataset_name),
                 1
             )
-        if feature is None:
-            feature, time_dimension_size = \
-                await self._fetch_feature_and_num_tar_files_at(
-                    session,
-                    opensearch_url,
-                    dict(parentIdentifier=dataset_id,
-                         drsId=dataset_name),
-                    1
-                )
-        if feature is None:
-            feature, time_dimension_size = \
-                await self._fetch_feature_and_num_tif_files_at(
-                    session,
-                    opensearch_url,
-                    dict(parentIdentifier=dataset_id,
-                         drsId=dataset_name),
-                    1
-                )
         if feature is not None:
             variable_infos, attributes = \
-                await self._get_variable_infos_from_feature(feature, session)
-            attributes["shapefile"] = False
-            for variable_info in variable_infos:
-                for index, dimension in enumerate(
-                        variable_infos[variable_info]['dimensions']
-                ):
-                    if dimension not in dimensions:
-                        dimensions[dimension] = \
-                            variable_infos[variable_info]['shape'][index]
-            time_name = "time"
-            if 'AEROSOL.climatology' in dataset_name:
-                time_name = 'month'
-            if "Time" in dimensions:
-                time_name = "Time"
-            if "nbmonth" in dimensions:
-                time_name = "nbmonth"
-                time_dimension_size = 1
-            dimensions[time_name] = time_dimension_size * dimensions.get(
-                time_name, 1
-            )
-            for variable_info in variable_infos.values():
-                if time_name in variable_info['dimensions']:
-                    time_index = variable_info['dimensions'].index(time_name)
-                    if 'shape' in variable_info:
-                        variable_info['shape'][time_index] = \
-                            dimensions[time_name]
-                        variable_info['size'] = np.prod(variable_info['shape'])
+                await self._get_variable_infos_from_shapefile_feature(feature)
+            attributes["shapefile"] = True
+            dimensions = {}
         else:
-            feature, num_shapefiles = \
-                await self._fetch_feature_from_shapefile(
+            feature, time_dimension_size = \
+                await self._fetch_feature_and_num_nc_files_at(
                     session,
                     opensearch_url,
                     dict(parentIdentifier=dataset_id,
                          drsId=dataset_name),
                     1
                 )
+            if feature is None:
+                feature, time_dimension_size = \
+                    await self._fetch_feature_and_num_tar_files_at(
+                        session,
+                        opensearch_url,
+                        dict(parentIdentifier=dataset_id,
+                             drsId=dataset_name),
+                        1
+                    )
+            if feature is None:
+                feature, time_dimension_size = \
+                    await self._fetch_feature_and_num_tif_files_at(
+                        session,
+                        opensearch_url,
+                        dict(parentIdentifier=dataset_id,
+                             drsId=dataset_name),
+                        1
+                    )
             if feature is not None:
                 variable_infos, attributes = \
-                    await self._get_variable_infos_from_shapefile_feature(feature)
-                attributes["shapefile"] = True
-                dimensions = {}
+                    await self._get_variable_infos_from_feature(feature, session)
+                attributes["shapefile"] = False
+                for variable_info in variable_infos:
+                    for index, dimension in enumerate(
+                            variable_infos[variable_info]['dimensions']
+                    ):
+                        if dimension not in dimensions:
+                            dimensions[dimension] = \
+                                variable_infos[variable_info]['shape'][index]
+                time_name = "time"
+                if 'AEROSOL.climatology' in dataset_name:
+                    time_name = 'month'
+                if "Time" in dimensions:
+                    time_name = "Time"
+                if "nbmonth" in dimensions:
+                    time_name = "nbmonth"
+                    time_dimension_size = 1
+                dimensions[time_name] = time_dimension_size * dimensions.get(
+                    time_name, 1
+                )
+                for variable_info in variable_infos.values():
+                    if time_name in variable_info['dimensions']:
+                        time_index = variable_info['dimensions'].index(time_name)
+                        if 'shape' in variable_info:
+                            variable_info['shape'][time_index] = \
+                                dimensions[time_name]
+                            variable_info['size'] = np.prod(variable_info['shape'])
         data_source['dimensions'] = dimensions
         data_source['variable_infos'] = variable_infos
         data_source['attributes'] = attributes

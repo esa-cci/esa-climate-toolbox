@@ -95,9 +95,7 @@ class DataFrameAccessor:
                            endDate=end_time,
                            drsId=self._df_id,
                            fileFormat='.shp')
-            gdf = self._cci_cdc.get_geodataframe_from_shapefile(
-                request, dim_indexes=(), to_bytes=False
-            )
+            gdf = self._cci_cdc.get_geodataframe_from_shapefile(request)
         else:
             gdf_data = {}
             for var_name in var_names:
