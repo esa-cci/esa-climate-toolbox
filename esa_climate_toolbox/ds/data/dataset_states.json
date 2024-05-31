@@ -4880,12 +4880,16 @@
     },
     "esacci.ICESHEETS.yr.Unspecified.SEC.SIRAL.CryoSat-2.UNSPECIFIED.2-2.greenland_sec_cryosat_2yr": {
         "data_type": "dataset",
-        "verification_flags": [],
+        "verification_flags": [
+            "open"
+        ],
         "title": "ESA Greenland Ice Sheet Climate Change Initiative (Greenland_Ice_Sheet_cci): Greenland Surface Elevation Change from Cryosat-2, v2.2"
     },
     "esacci.ICESHEETS.yr.Unspecified.SEC.SIRAL.CryoSat-2.UNSPECIFIED.2-2.greenland_sec_cryosat_5yr": {
         "data_type": "dataset",
-        "verification_flags": [],
+        "verification_flags": [
+            "open"
+        ],
         "title": "ESA Greenland Ice Sheet Climate Change Initiative (Greenland_Ice_Sheet_cci): Greenland Surface Elevation Change from Cryosat-2, v2.2"
     },
     "esacci.ICESHEETS.yr.Unspecified.SEC.multi-sensor.multi-platform.UNSPECIFIED.1-2.r1": {
