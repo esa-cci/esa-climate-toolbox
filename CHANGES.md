@@ -1,4 +1,6 @@
-## Changes in 1.0.1 (in development)
+## Changes in 1.0.1
+
+* Pinned numpy to <2.0, as numpy 2.0 causes errors
 
 ## Changes in 1.0
 
