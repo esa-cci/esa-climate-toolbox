@@ -782,7 +782,7 @@ class CciCdc:
                 continue
             else:
                 variables.append(variable_name)
-        if self._data_type == "vectordatacube":
+        if self._data_type == "vectordatacube" and "geometry" not in coords:
             coords.append("geometry")
         return variables, coords
 

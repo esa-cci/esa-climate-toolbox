@@ -2,6 +2,8 @@ import os
 import shutil
 import unittest
 
+from unittest import skipIf
+
 from xcube.core.new import new_cube
 from xcube.core.store import DataStore
 
@@ -28,6 +30,8 @@ class DsTest(unittest.TestCase):
         self.assertIn(ECT_KC_STORE_ID, provided_stores)
         self.assertIn(ECT_ZARR_STORE_ID, provided_stores)
 
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
     def test_list_ecvs(self):
         ecvs = list_ecvs()
         expected_ecvs = [
@@ -39,6 +43,8 @@ class DsTest(unittest.TestCase):
         for expected_ecv in expected_ecvs:
             self.assertIn(expected_ecv, ecvs)
 
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
     def test_list_ecv_datasets_fail(self):
         with self.assertRaises(ValueError) as ve:
             list_ecv_datasets('Wind')
@@ -47,10 +53,12 @@ class DsTest(unittest.TestCase):
             'the ESA Climate Toolbox. Please choose one of the following:'
         self.assertEqual(expected, str(ve.exception)[:len(expected)])
 
-    def test_list_ecv_datasets_lakes(self):
-        lakes_datasets = list_ecv_datasets('Lakes')
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_list_ecv_datasets_lc(self):
+        lakes_datasets = list_ecv_datasets('LC')
         expected_zarr_file = (
-            'ESACCI-LAKES-L3S-LK_PRODUCTS-MERGED-1992-09-fv2.0.1.zarr',
+            'ESACCI-LC-L4-LCCS-Map-300m-P1Y-1992-2015-v2.0.7b.zarr',
             ECT_ZARR_STORE_ID
         )
         self.assertIn(expected_zarr_file, lakes_datasets)
@@ -60,6 +68,8 @@ class DsTest(unittest.TestCase):
         self.assertIsNotNone(store)
         self.assertIsInstance(store, DataStore)
 
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
     def test_list_datasets(self):
         datasets = list_datasets(store_id=ECT_KC_STORE_ID)
         self.assertTrue(len(datasets) > 1)
@@ -71,7 +81,7 @@ class DsTest(unittest.TestCase):
         datasets = list_datasets(store_id=ECT_ZARR_STORE_ID)
         self.assertTrue(len(datasets) > 1)
         self.assertTrue(
-            'ESACCI-LAKES-L3S-LK_PRODUCTS-MERGED-1992-09-fv2.0.1.zarr'
+            'ESACCI-LC-L4-LCCS-Map-300m-P1Y-1992-2015-v2.0.7b.zarr'
             in datasets
         )
 
@@ -152,7 +162,7 @@ class DsStoresTest(unittest.TestCase):
         )
         self.assertTrue(local_zarr_store_id.startswith('local_'))
         self.assertIn(local_zarr_store_id, list_stores())
-        self.assertEquals([], list_datasets(local_zarr_store_id))
+        self.assertEqual([], list_datasets(local_zarr_store_id))
         remove_store(local_zarr_store_id, persist=False)
         self.assertFalse(local_zarr_store_id in list_stores())
 

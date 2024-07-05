@@ -831,7 +831,10 @@ class CciCdcDataStoreTest(unittest.TestCase):
         self.assertTrue('user_agent' in cci_store_params_schema['properties'])
 
     def test_get_data_types(self):
-        self.assertEqual(('dataset', "geodataframe"), CciCdcDataStore.get_data_types())
+        self.assertEqual(
+            ('dataset', "geodataframe", "vectordatacube"),
+            CciCdcDataStore.get_data_types()
+        )
 
     def test_get_data_types_for_data(self):
         data_types_for_data = self.store.get_data_types_for_data(

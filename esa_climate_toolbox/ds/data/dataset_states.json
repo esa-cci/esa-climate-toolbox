@@ -6119,8 +6119,10 @@
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): New network of virtual altimetry stations for measuring sea level along the world coastlines from 2002 to 2019, v2.2"
     },
     "esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.BENGUELA": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "vectordatacube",
+        "verification_flags": [
+            "open"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): New network of virtual altimetry stations for measuring sea level along the world coastlines from 2002 to 2019, v2.2"
     },
     "esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.CARIBBEAN": {
@@ -6194,8 +6196,10 @@
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): New network of virtual altimetry stations for measuring sea level along the world coastlines from 2002 to 2019, v2.2"
     },
     "esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-2.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
+        "data_type": "vectordatacube",
+        "verification_flags": [
+            "open"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): New network of virtual altimetry stations for measuring sea level along the world coastlines from 2002 to 2019, v2.2"
     },
     "esacci.SEALEVEL.mon.L4.MSLA.multi-sensor.multi-platform.MERGED.2-0.r1": {
