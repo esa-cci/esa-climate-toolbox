@@ -86,11 +86,8 @@ class TestDataFrameOps(TestCase):
         self.assertEqual(df2.iloc[1, 3], 0.4)
 
     def test_data_frame_query_with_geom(self):
-        self._test_data_frame_query_with_geom(TestDataFrameOps.gdf)
-        # Skipped due to new behaviour of from_features
-        # self._test_data_frame_query_with_geom(TestDataFrameOps.gdfp)
+        gdf = TestDataFrameOps.gdf
 
-    def _test_data_frame_query_with_geom(self, gdf):
         df2 = query(gdf, "not C and @almost_equals('10,10')")
         self.assertIsInstance(df2, gpd.GeoDataFrame)
         self.assertEqual(len(df2), 1)
@@ -133,7 +130,7 @@ class TestDataFrameOps(TestCase):
         self.assertEqual(df2.iloc[0, 1], 'x')
         self.assertEqual(df2.iloc[0, 2], False)
         self.assertEqual(df2.iloc[0, 3], 0.3)
-        df2 = query(gdf, "not C and geometry.within(@from_wkt('19, 9, 21, 31'))")
+        df2 = query(gdf, "not C and @within(@from_wkt('19, 9, 21, 31'))")
         self.assertIsInstance(df2, gpd.GeoDataFrame)
         self.assertEqual(len(df2), 1)
         self.assertEqual(list(df2.columns), ['A', 'B', 'C', 'D', 'geometry'])
