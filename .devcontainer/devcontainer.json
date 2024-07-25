@@ -1,14 +1,18 @@
-echo '{
+{
     "name": "ESA Climate Toolbox",
     "build": {
       "dockerfile": "Dockerfile",
       "context": ".."
     },
-    "extensions": [
-      "ms-python.python",
-      "ms-toolsai.jupyter"
-    ],
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ms-python.python",
+          "ms-toolsai.jupyter"
+        ]
+      }
+    },
     "postCreateCommand": "source activate ect",
     "remoteUser": "vscode"
-  }' > devcontainer.json
+  }
   
