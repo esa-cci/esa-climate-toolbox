@@ -1,5 +1,7 @@
 {
-    "image": "continuumio/miniconda3",
+    "build": {
+      "dockerfile": "Dockerfile"
+    },
     "customizations": {
       "vscode": {
         "extensions": [
@@ -8,7 +10,7 @@
         ]
       }
     },
-    "postCreateCommand": "conda init bash && conda create -n ect python=3.8 -y && conda activate ect",
+    "postCreateCommand": "echo 'conda activate ect' >> ~/.bashrc",
     "remoteUser": "vscode"
   }
   

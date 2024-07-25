@@ -1,6 +1,9 @@
 # Use the Miniconda base image
 FROM continuumio/miniconda3
 
+# Create a non-root user (vscode)
+RUN useradd -m vscode
+
 # Set the working directory in the container
 WORKDIR /workspace
 
@@ -18,4 +21,7 @@ ENV PYTHONUNBUFFERED=1
 SHELL ["/bin/bash", "-c"]
 
 # Automatically activate the environment when starting the container
-RUN echo "conda activate ect" >> ~/.bashrc
+RUN echo "conda activate ect" >> /home/vscode/.bashrc
+
+# Switch to non-root user
+USER vscode
