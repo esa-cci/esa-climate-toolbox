@@ -1,9 +1,5 @@
 {
-    "name": "ESA Climate Toolbox",
-    "build": {
-      "dockerfile": "Dockerfile",
-      "context": ".."
-    },
+    "image": "continuumio/miniconda3",
     "customizations": {
       "vscode": {
         "extensions": [
@@ -12,7 +8,7 @@
         ]
       }
     },
-    "postCreateCommand": "source activate ect",
+    "postCreateCommand": "conda init bash && conda create -n ect python=3.8 -y && conda activate ect",
     "remoteUser": "vscode"
   }
   
