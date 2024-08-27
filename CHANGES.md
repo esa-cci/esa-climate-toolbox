@@ -1,4 +1,4 @@
-## Changes in 1.0.2 (in development)
+## Changes in 1.0.2
 
 * Updated list of dataset states
 * Improved dependencies
