@@ -3,7 +3,9 @@
         "data_type": "dataset",
         "verification_flags": [
             "open",
-            "constrain_time"
+            "constrain_time",
+            "constrain_region",
+            "write_zarr"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 3 aerosol products from GOMOS (AERGOM algorithm), Version 3.00"
     },
@@ -249,7 +251,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from AATSR (ensemble product), Version 2.6"
     },
@@ -259,7 +261,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from AATSR (ADV Algorithm), Version 2.31"
     },
@@ -269,7 +271,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from AATSR (ORAC Algorithm), Version 4.01"
     },
@@ -279,7 +281,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from AATSR (SU Algorithm), Version 4.3"
     },
@@ -289,7 +291,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from ATSR-2 (ADV algorithm), Version 2.31"
     },
@@ -299,7 +301,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from ATSR-2 (ORAC algorithm), Version 4.01"
     },
@@ -309,7 +311,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from ATSR-2 (SU algorithm), Version 4.3"
     },
@@ -319,7 +321,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol_cci): Level 2 aerosol products from ATSR-2 (ensemble product), Version 2.6"
     },
@@ -329,7 +331,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Aerosol Climate Change Initiative (Aerosol CCI): Level 2 aerosol products from MERIS (ALAMO algorithm), Version 2.2"
     },
@@ -361,6 +363,56 @@
         ],
         "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2017, 2018, 2019 and 2020, v4"
     },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.CHANGE.5-0.2016-2015": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.CHANGE.5-0.2017-2016": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.CHANGE.5-0.2018-2017": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.CHANGE.5-0.2019-2018": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.CHANGE.5-0.2020-2010": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.CHANGE.5-0.2020-2019": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.CHANGE.5-0.2021-2020": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
     "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.MERGED.2-0.r1": {
         "data_type": "dataset",
         "verification_flags": [
@@ -384,6 +436,46 @@
             "constrain_time"
         ],
         "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2017, 2018, 2019 and 2020, v4"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.MERGED.5-0.10000m": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.MERGED.5-0.1000m": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.MERGED.5-0.100m": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.MERGED.5-0.25000m": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
+    },
+    "esacci.BIOMASS.yr.L4.AGB.multi-sensor.multi-platform.MERGED.5-0.50000m": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
+        "title": "ESA Biomass Climate Change Initiative (Biomass_cci): Global datasets of forest above-ground biomass for the years 2010, 2015, 2016, 2017, 2018, 2019, 2020 and 2021, v5.01"
     },
     "esacci.CLOUD.mon.L3C.CLD_PRODUCTS.MODIS.Aqua.MODIS_AQUA.2-0.r1": {
         "data_type": "dataset",
@@ -1360,7 +1452,8 @@
     "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h38v22-fv2.0-CL": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
     },
@@ -2135,7 +2228,8 @@
     "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.2-0.pixel~h41v19-fv2.0-JD": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 2.0"
     },
@@ -3821,13 +3915,17 @@
     },
     "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v19": {
         "data_type": "dataset",
-        "verification_flags": [],
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
     },
     "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v20": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
     },
@@ -3857,7 +3955,10 @@
     },
     "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h41v24": {
         "data_type": "dataset",
-        "verification_flags": [],
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
         "title": "ESA Fire Climate Change Initiative (Fire_cci): Small Fire Dataset (SFD) Burned Area pixel product for Sub-Saharan Africa, version 1.1"
     },
     "esacci.FIRE.mon.L3S.BA.MSI-(Sentinel-2).Sentinel-2A.MSI.v1-1.pixel~h42v13": {
@@ -4286,7 +4387,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from SCIAMACHY generated with the IMAP-DOAS algorithm (CH4_SCI_IMAP), v7.2"
     },
@@ -4301,7 +4402,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": ""
     },
@@ -4311,7 +4412,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": ""
     },
@@ -4321,7 +4422,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 Merged Product generated with the EMMA algorithm (CH4_EMMA), version 1.2"
     },
@@ -4331,7 +4432,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from GOSAT generated with the OCFP (UoL-FP) algorithm (CH4_GOS_OCFP), version 2.1"
     },
@@ -4341,7 +4442,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from GOSAT generated with the OCPR (UoL-PR) Proxy algorithm (CH4_GOS_OCPR), v7.0"
     },
@@ -4351,7 +4452,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from GOSAT generated with the SRFP (RemoTeC) Full Physics algorithm (CH4_GOS_SRFP), version 2.3.8"
     },
@@ -4361,7 +4462,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CH4 from GOSAT generated with the SRPR (RemoTeC) Proxy Retrieval algorithm (CH4_GOS_SRPR), version 2.3.8"
     },
@@ -4371,7 +4472,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
     },
@@ -4386,14 +4487,9 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
-    },
-    "esacci.GHG.satellite-orbit-frequency.L2.CO2.SCIAMACHY.Envisat.WFMD.v4-0.r1": {
-        "data_type": "geodataframe",
-        "verification_flags": [],
-        "title": ""
     },
     "esacci.GHG.satellite-orbit-frequency.L2.CO2.TANSO-FTS-2.GOSAT-2.SRFP.v2-0-2.r1": {
         "data_type": "geodataframe",
@@ -4401,7 +4497,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
     },
@@ -4411,7 +4507,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
     },
@@ -4421,7 +4517,17 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
+        ],
+        "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
+    },
+    "esacci.GHG.satellite-orbit-frequency.L2.CO2.TANSO-FTS.GOSAT.SRFP.v2-3-8.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
     },
@@ -4431,7 +4537,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column-averaged CO2 from SCIAMACHY generated with the WFMD algorithm (CO2_SCI_WFMD), v4.0"
     },
@@ -4439,19 +4545,17 @@
         "data_type": "geodataframe",
         "verification_flags": [
             "open",
-
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
     },
-
     "esacci.GHG.satellite-orbit-frequency.L2.CO2.multi-sensor.multi-platform.EMMA.v2-2b.r1": {
         "data_type": "geodataframe",
         "verification_flags": [
             "open",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenhouse Gases Climate Change Initiative (GHG_cci): Column averaged CO2 Merged Product generated with the EMMA algorithm (CO2_EMMA), v2.2"
     },
@@ -4482,7 +4586,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenland Ice Sheet Climate Change Initiative (Greenland_Ice_Sheet_cci): Greenland Calving Front Locations, v3.0"
     },
@@ -4492,7 +4596,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Greenland Ice Sheet Climate Change Initiative (Greenland_Ice_Sheet_cci): Grounding Line Locations from SAR Interferometry,  v1.3"
     },
@@ -4683,7 +4787,8 @@
     "esacci.ICESHEETS.unspecified.Unspecified.IV.SAR-C-(Sentinel-1).multi-platform.UNSPECIFIED.1-0.greenland_map_winter_2016_2017": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
         "title": "ESA Greenland Ice Sheet Climate Change Initiative (Greenland_Ice_Sheet_cci): Greenland Ice Velocity Map, Winter 2016-2017, v1.0"
     },
@@ -5608,6 +5713,7 @@
         "verification_flags": [
             "open",
             "constrain_time",
+            "constrain_region",
             "write_zarr"
         ],
         "title": "ESA Ocean Colour Climate Change Initiative (Ocean_Colour_cci): Global chlorophyll-a data products gridded on a geographic projection at 4km resolution, Version 6.0"
@@ -6049,14 +6155,33 @@
         ],
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Southern hemisphere sea ice thickness from the CryoSat-2 satellite on a monthly grid (L3C), v3.0"
     },
+    "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.RA-2.Envisat.NH.2-0.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "write_geojson"
+        ],
+        "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Northern hemisphere sea ice thickness from Envisat on the satellite swath (L2P), v2.0"
+    },
     "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.RA-2.Envisat.NH.3-0.r1": {
         "data_type": "geodataframe",
         "verification_flags": [
             "open",
             "constrain_time",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Northern hemisphere sea ice thickness from Envisat on the satellite swath (L2P), v3.0"
+    },
+    "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.RA-2.Envisat.SH.2-0.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Southern hemisphere sea ice thickness from Envisat on the satellite swath (L2P), v2.0"
     },
     "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.RA-2.Envisat.SH.3-0.r1": {
         "data_type": "geodataframe",
@@ -6064,9 +6189,19 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Southern hemisphere sea ice thickness from Envisat on the satellite swath (L2P), v3.0"
+    },
+    "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.SIRAL.CryoSat-2.NH.2-0.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Northern hemisphere sea ice thickness from CryoSat-2   on the satellite swath (L2P), v2.0"
     },
     "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.SIRAL.CryoSat-2.NH.3-0.r1": {
         "data_type": "geodataframe",
@@ -6077,6 +6212,16 @@
 	    "write_geojson"
         ],
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Northern hemisphere sea ice thickness from CryoSat-2   on the satellite swath (L2P), v3.0"
+    },
+    "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.SIRAL.CryoSat-2.SH.2-0.r1": {
+        "data_type": "geodataframe",
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+	        "write_geojson"
+        ],
+        "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Southern hemisphere sea ice thickness from CryoSat-2 on the satellite swath (L2P), v2.0"
     },
     "esacci.SEAICE.satellite-orbit-frequency.L2P.SITHICK.SIRAL.CryoSat-2.SH.3-0.r1": {
         "data_type": "geodataframe",
@@ -6094,11 +6239,6 @@
             "open",
             "constrain_time"
         ],
-        "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Oceanic Indicators of Mean Sea Level Changes,  Version 2.0"
-    },
-    "esacci.SEALEVEL.mon.IND.MSLAMPH.multi-sensor.multi-platform.MERGED.2-0.r1": {
-        "data_type": "dataset",
-        "verification_flags": [],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Oceanic Indicators of Mean Sea Level Changes,  Version 2.0"
     },
     "esacci.SEALEVEL.mon.IND.MSLTR.multi-sensor.multi-platform.MERGED.2-0.r1": {
@@ -6218,7 +6358,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
@@ -6227,7 +6367,7 @@
         "verification_flags": [
             "open",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
@@ -6236,7 +6376,7 @@
         "verification_flags": [
             "open",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
@@ -6246,7 +6386,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
@@ -6255,7 +6395,7 @@
         "verification_flags": [
             "open",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
@@ -6264,7 +6404,7 @@
         "verification_flags": [
             "open",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
@@ -6273,7 +6413,7 @@
         "verification_flags": [
             "open",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
@@ -6283,7 +6423,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
     },
@@ -6292,9 +6432,14 @@
         "verification_flags": [
             "open",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Fundamental Climate Data Records of sea level anomalies and altimeter standards, Version 2.0"
+    },
+    "esacci.SEALEVEL.unspecified.IND.MSLAMPH.multi-sensor.multi-platform.MERGED.2-0.r1": {
+        "data_type": "dataset",
+        "verification_flags": [],
+        "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Oceanic Indicators of Mean Sea Level Changes,  Version 2.0"
     },
     "esacci.SEASTATE.mon.L4.SWH.multi-sensor.multi-platform.MULTI_1M.3-0.r1": {
         "data_type": "dataset",
@@ -6330,14 +6475,6 @@
             "write_zarr"
         ],
         "title": "ESA Sea Surface Salinity Climate Change Initiative (Sea_Surface_Salinity_cci): Monthly sea surface salinity product, v03.21, for 2010 to 2020"
-    },
-    "esacci.SEASURFACESALINITY.15-days.L4.SSS.multi-sensor.multi-platform.POLAR-MERGED_OI_7DAY_RUNNINGMEAN_DAILY_25kmEASE2-SH.4-41.r1": {
-        "data_type": "dataset",
-        "verification_flags": [
-            "open",
-            "constrain_time"
-        ],
-        "title": "ESA Sea Surface Salinity Climate Change Initiative (Sea_Surface_Salinity_cci): Weekly sea surface salinity product for the Southern Hemisphere on a 25km EASE grid, v04.41, for 2010 to 2022"
     },
     "esacci.SEASURFACESALINITY.15-days.L4.SSS.multi-sensor.multi-platform.POLAR-MERGED_OI_Monthly_CENTRED_15Day_25kmEASE2-NH.4-41.r1": {
         "data_type": "dataset",
@@ -6390,6 +6527,14 @@
             "constrain_time"
         ],
         "title": "ESA Sea Surface Salinity Climate Change Initiative (Sea_Surface_Salinity_cci): Weekly sea surface salinity product for the Northern Hemisphere on a 25km EASE grid, v04.41, for 2010 to 2022"
+    },
+    "esacci.SEASURFACESALINITY.day.L4.SSS.multi-sensor.multi-platform.POLAR-MERGED_OI_7DAY_RUNNINGMEAN_DAILY_25kmEASE2-SH.4-41.r1": {
+        "data_type": "dataset",
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
+        "title": "ESA Sea Surface Salinity Climate Change Initiative (Sea_Surface_Salinity_cci): Weekly sea surface salinity product for the Southern Hemisphere on a 25km EASE grid, v04.41, for 2010 to 2022"
     },
     "esacci.SNOW.day.L3C.SCFG.AATSR.Envisat.AATSR_ENVISAT.v1-0.r1": {
         "data_type": "dataset",

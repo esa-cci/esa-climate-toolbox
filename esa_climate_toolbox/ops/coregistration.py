@@ -457,9 +457,9 @@ def _nested_groupby_apply(array: xr.DataArray,
     :return: groupby-split-map result
     """
     if len(groupby) == 1:
-        return array.groupby(groupby[0], squeeze=True).map(apply_fn, **kwargs)
+        return array.groupby(groupby[0], squeeze=False).map(apply_fn, **kwargs)
     else:
-        return array.groupby(groupby[0], squeeze=True).map(
+        return array.groupby(groupby[0], squeeze=False).map(
             _nested_groupby_apply, groupby=groupby[1:],
             apply_fn=apply_fn, kwargs=kwargs
         )
