@@ -1,6 +1,6 @@
-# Development Environment Setup
+# Run ESA CCI Toolkit on GitHub Codespace
 
-Welcome to the development environment setup for the ESA Climate Toolbox. This document provides instructions on how to set up and run the Codespace using Visual Studio Code, GitHub Codespaces, and the beta 'Open in Jupyter Lab' feature.
+This guide will help run the ESA CCI Toolkit on GitHub Codespace. Each GitHub account has a free tier for Codespaces which should be sufficient to run this demo.
 
 ## Prerequisites
 
@@ -16,31 +16,41 @@ Before you begin, ensure that you have the following:
 
 1. Navigate to the GitHub repository for the ESA Climate Toolbox.
 2. Click on the **Code** button and select **Open with Codespaces**.
-3. If a Codespace does not already exist, create a new one by clicking **+ New Codespace**.
+3. If a Codespace does not already exist, create a new one by clicking **+ New Codespace** or **[Create codespace on main]**.
 
-### 2. Environment Setup
+This should spawn the codespace in a new browser tab.
+![Click [Create codespace on main]](<images/Screenshot 2024-09-06 at 5.11.58 PM.png>)
 
-The Codespace is configured to use a custom Docker image based on Miniconda. The setup includes the necessary dependencies and tools, including the ESA Climate Toolbox and Jupyter Lab.
+### 2. Install Docker Extension
 
-#### Key Files and Configuration
+Once you start your Codespace, it should look like this.
 
-- **Dockerfile**: Specifies the base image and dependencies.
-- **.devcontainer.json**: Configures the development environment, including extensions and environment variables.
+![Codespace](<images/Screenshot 2024-09-06 at 5.16.30 PM.png>)
 
-### 3. Using the Codespace
+You will be asked if you want to install the Docker extension - click [Install].
 
-#### Opening in Jupyter Lab (Beta)
+![click [Install]](<images/Screenshot 2024-09-06 at 5.15.17 PM.png>)
 
-1. After the Codespace has started, you can use the beta 'Open in Jupyter Lab' option:
-   - Look for the option in the GitHub Codespaces interface.
-   - Click on 'Open in Jupyter Lab' to access a Jupyter Lab environment directly in your browser.
+### 3. Open Notebook
 
-2. This feature allows for seamless interaction with Jupyter notebooks without manually starting the Jupyter Lab server.
+In the Explorer pane, open up the notebooks folder, and select the notebook you would like to open.
 
-#### Manual Activation and Usage
+![select the notebook](<images/Screenshot 2024-09-06 at 5.17.58 PM.png>)
 
-If needed, you can still manually activate the Conda environment and start Jupyter Lab:
+### 4. Select Kernel
 
-1. **Activate the Conda Environment**: The environment should be activated automatically. If not, you can manually activate it:
-   ```bash
-   conda activate ect
+In the upper right corner, click 'Select Kernal'.
+
+![click 'Select Kernal](<images/Screenshot 2024-09-06 at 5.20.42 PM.png>)
+
+This will open the kernel selection dialogue at the top. Choose 'Python Environments...'
+
+![Choose 'Python Environments...'](<images/Screenshot 2024-09-06 at 5.21.24 PM-1.png>)
+
+Select the ect environment.
+
+![select ect environment](<images/Screenshot 2024-09-06 at 5.22.54 PM.png>)
+
+### 5. Run Notebook Cells
+
+Run through the notebook cells by clicking the [>] 'arrow' button on each cell, or using [shift]+[return].
