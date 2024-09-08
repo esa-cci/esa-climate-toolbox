@@ -27,7 +27,7 @@ Once you start your Codespace, it should look like this.
 
 ![Codespace](<images/Screenshot 2024-09-06 at 5.16.30 PM.png>)
 
-You will be asked if you want to install the Docker extension - click [Install].
+If you are asked, you should install the Docker extension - click [Install].
 
 ![click [Install]](<images/Screenshot 2024-09-06 at 5.15.17 PM.png>)
 
