@@ -1,15 +1,21 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm", "aiohttp", "lxml", "nest-asyncio"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "esa_climate_toolbox"
-version = "0.4.2.dev0"
+version = "1.0.3.dev0"
 authors = [
   { name="ESA CCI Toolbox Development Team" },
 ]
-description = "The ESA CCI Toolbox is designed to provide access to CCI data from the ESA Open Data Portal."
-readme = "README.md"
+description = """\
+    The ESA CCI Toolbox is designed to provide access to CCI data
+    from the ESA Open Data Portal.
+    """
+keywords = [
+  "data science", "cci", "climate data"
+]
+readme = {file = "README.md", content-type = "text/markdown"}
 license = {file = "LICENSE"}
 requires-python = ">=3.8"
 classifiers = [
@@ -22,6 +28,34 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+    "aiohttp>=3.6",
+    "cartopy",
+    "cftime",
+    "dask",
+    "geopandas",
+    "lxml>=4.5",
+    "matplotlib",
+    "nest-asyncio>=1.3",
+    "numcodecs",
+    "numpy<2",
+    "pandas",
+    "pydap==3.3",
+    "pyproj",
+    "python-dateutil",
+    "rioxarray",
+    "shapely",
+    "six",
+    "xarray",
+    "xcube-core>=1.4.0",
+    "xvec"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-cov"
+]
 
 [project.entry-points."xcube_plugins"]
     esa-climate-toolbox = "esa_climate_toolbox.plugin:init_plugin"
@@ -32,6 +66,17 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/esa-cci/esa-climate-toolbox"
 "Bug Tracker" = "https://github.com/esa-cci/esa-climate-toolbox/issues"
+"Changelog" = "https://github.com/esa-cci/esa-climate-toolbox/CHANGES.md"
+"Documentation" = "https://esa-climate-toolbox.readthedocs.io"
+"Download" = "https://pypi.org/project/esa-climate-toolbox/#files"
+"Release notes" = "https://github.com/esa-cci/esa-climate-toolbox/releases"
 
 [tool.setuptools]
 include-package-data = true
+
+[tool.setuptools.packages.find]
+exclude = [
+  "test*",
+  "docs*",
+  "notebooks*"
+]
