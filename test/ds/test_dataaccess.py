@@ -148,8 +148,6 @@ class CciCdcDatasetOpenerTest(unittest.TestCase):
         self.assertIsNotNone(descriptor)
         self.assertTrue('Lambert_Azimuthal_Grid' in
                         descriptor.data_vars.keys())
-        self.assertTrue('lat' in descriptor.coords.keys())
-        self.assertTrue('lon' in descriptor.coords.keys())
         self.assertTrue('xc' in descriptor.coords.keys())
         self.assertTrue('yc' in descriptor.coords.keys())
         self.assertEqual('Lambert Azimuthal Equal Area', descriptor.crs)

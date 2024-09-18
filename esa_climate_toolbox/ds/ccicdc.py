@@ -764,18 +764,10 @@ class CciCdc:
                 coords.append(variable_name)
             elif variable_name.endswith('bounds') or variable_name.endswith('bnds'):
                 coords.append(variable_name)
-            elif variable_name in COMMON_TIME_COORD_VAR_NAMES \
-                    and len(variable_info.get("dimensions")) == 1:
+            elif variable_name in COMMON_TIME_COORD_VAR_NAMES:
                 coords.append(variable_name)
             elif variable_name == 'geometry':
                 coords.append(variable_name)
-            elif variable_name in COMMON_SPATIAL_COORD_VAR_NAMES \
-                    and len(variable_info.get("dimensions")) == 1:
-                if self._data_type != "vectordatacube":
-                    coords.append(variable_name)
-                else:
-                    pass
-                    # ignore
             elif variable_info.get('data_type', '') == 'bytes1024' \
                     and len(variable_info['dimensions']) > 0:
                 # add as neither coordinate nor variable
