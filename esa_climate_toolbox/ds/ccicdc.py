@@ -49,9 +49,9 @@ from shapely.geometry import mapping
 from typing import List, Dict, Tuple, Optional, Union, Mapping
 from urllib.parse import quote
 
-from pydap.handlers.dap import BaseProxy
+from pydap.handlers.dap import BaseProxyDap2
 from pydap.handlers.dap import SequenceProxy
-from pydap.handlers.dap import unpack_data
+from pydap.handlers.dap import unpack_dap2_data
 from pydap.lib import BytesReader
 from pydap.lib import combine_slices
 from pydap.lib import fix_slice
@@ -59,7 +59,7 @@ from pydap.lib import hyperslab
 from pydap.lib import walk
 from pydap.model import BaseType, SequenceType, GridType
 from pydap.parsers import parse_ce
-from pydap.parsers.dds import build_dataset
+from pydap.parsers.dds import dds_to_dataset
 from pydap.parsers.das import parse_das, add_attributes
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
@@ -68,7 +68,6 @@ from .constants import DEFAULT_NUM_RETRIES
 from .constants import DEFAULT_RETRY_BACKOFF_MAX
 from .constants import DEFAULT_RETRY_BACKOFF_BASE
 from .constants import OPENSEARCH_CEDA_URL
-from .constants import COMMON_SPATIAL_COORD_VAR_NAMES
 from .constants import COMMON_TIME_COORD_VAR_NAMES
 from .constants import TIMESTAMP_FORMAT
 
@@ -848,11 +847,11 @@ class CciCdc:
             if bbox:
                 if float(data_source_info.get('bbox_minx', np.inf)) > bbox[2]:
                     continue
-                if float(data_source_info.get('bbox_maxx', np.NINF)) < bbox[0]:
+                if float(data_source_info.get('bbox_maxx', -np.inf)) < bbox[0]:
                     continue
                 if float(data_source_info.get('bbox_miny', np.inf)) > bbox[3]:
                     continue
-                if float(data_source_info.get('bbox_maxy', np.NINF)) < bbox[1]:
+                if float(data_source_info.get('bbox_maxy', -np.inf)) < bbox[1]:
                     continue
             if start_date:
                 data_source_end = datetime.strptime(
@@ -2119,7 +2118,7 @@ class CciCdc:
         if res_dict['dds'] == '':
             _LOG.warning('Could not open opendap url. dds file is empty.')
             return
-        dataset = build_dataset(res_dict['dds'])
+        dataset = dds_to_dataset(res_dict['dds'])
         add_attributes(dataset, parse_das(res_dict['das']))
 
         # remove any projection from the url, leaving selections
@@ -2129,7 +2128,7 @@ class CciCdc:
 
         # now add data proxies
         for var in walk(dataset, BaseType):
-            var.data = BaseProxy(url, var.id, var.dtype, var.shape)
+            var.data = BaseProxyDap2(url, var.id, var.dtype, var.shape)
         for var in walk(dataset, SequenceType):
             template = copy.copy(var)
             var.data = SequenceProxy(url, template)
@@ -2188,9 +2187,9 @@ class CciCdc:
         dds, data = content.split(b'\nData:\n', 1)
         dds = str(dds, 'utf-8')
         # Parse received dataset:
-        dataset = build_dataset(dds)
+        dataset = dds_to_dataset(dds)
         try:
-            dataset.data = unpack_data(BytesReader(data), dataset)
+            dataset.data = unpack_dap2_data(BytesReader(data), dataset)
         except ValueError:
             _LOG.warning(f'Could not read data from "{url}"')
             return None

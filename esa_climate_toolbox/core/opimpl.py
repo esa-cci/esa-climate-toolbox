@@ -477,10 +477,10 @@ def subset_spatial_impl(ds: xr.Dataset,
     # Create a grid of pixel vertices
     lon_pixel = abs(ds.lon[1] - ds.lon[0])
     lat_pixel = abs(ds.lat[1] - ds.lat[0])
-    lon_min = ds_subset.lon[0] - lon_pixel / 2
-    lon_max = ds_subset.lon[-1] + lon_pixel / 2
-    lat_min = ds_subset.lat[0] - lat_pixel / 2
-    lat_max = ds_subset.lat[-1] + lat_pixel / 2
+    lon_min = float(ds_subset.lon[0] - lon_pixel / 2.)
+    lon_max = float(ds_subset.lon[-1] + lon_pixel / 2.)
+    lat_min = float(ds_subset.lat[0] - lat_pixel / 2.)
+    lat_max = float(ds_subset.lat[-1] + lat_pixel / 2.)
 
     lat_grid = np.linspace(
         lat_min, lat_max, ds_subset.lat.size + 1, dtype='float32'
