@@ -1,6 +1,7 @@
 ## Changes in 1.1 (in development)
 
 * Support numpy >= 2.0 and pydap >= 3.4
+* Automatically publish packages on pypi at release
 
 ## Changes in 1.0.2
 
