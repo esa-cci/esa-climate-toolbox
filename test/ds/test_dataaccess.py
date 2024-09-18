@@ -27,7 +27,7 @@ AEROSOL_DAY_ENVISAT_ID = 'esacci.AEROSOL.day.L3C.AER_PRODUCTS.AATSR.Envisat.' \
                          'ATSR2-ENVISAT-ENS_DAILY.v2-6.r1'
 AEROSOL_CLIMATOLOGY_ID = 'esacci.AEROSOL.climatology.L3.AAI.multi-sensor.' \
                          'multi-platform.MSAAI.1-7.r1'
-FIRE_ID = 'esacci.FIRE.mon.L4.BA.MODIS.Terra.MODIS_TERRA.v5-1.grid'
+CLOUD_ID = "esacci.CLOUD.mon.L3C.CLD_PRODUCTS.MODIS.Terra.MODIS_TERRA.2-0.r1"
 ICESHEETS_ID = 'esacci.ICESHEETS.yr.Unspecified.IV.PALSAR.ALOS.UNSPECIFIED.' \
                '1-1.greenland_margin_2006_2011'
 LAKES_ID = 'esacci.LAKES.day.L3S.LK_PRODUCTS.multi-sensor.multi-platform.' \
@@ -377,22 +377,20 @@ class CciCdcDatasetOpenerTest(unittest.TestCase):
             'ECT_DISABLE_WEB_TESTS = 1')
     def test_search(self):
         search_result = list(self.opener.search_data(cci_attrs=dict(
-            ecv='FIRE',
+            ecv='CLOUD',
             product_string='MODIS_TERRA'))
         )
         self.assertIsNotNone(search_result)
-        self.assertEqual(2, len(search_result))
-        self.assertIsInstance(search_result[1], DatasetDescriptor)
-        self.assertEqual(5, len(search_result[1].dims))
-        self.assertEqual(6, len(search_result[1].data_vars))
-        self.assertEqual(FIRE_ID, search_result[1].data_id)
-        self.assertEqual('1M', search_result[1].time_period)
-        self.assertEqual(0.25, search_result[1].spatial_res)
-        self.assertEqual(DATASET_TYPE, search_result[1].data_type)
-        self.assertEqual(('2001-01-01', '2020-12-31'),
-                         search_result[1].time_range)
+        self.assertEqual(1, len(search_result))
+        self.assertIsInstance(search_result[0], DatasetDescriptor)
+        self.assertEqual(22, len(search_result[0].dims))
+        self.assertEqual(147, len(search_result[0].data_vars))
+        self.assertEqual(CLOUD_ID, search_result[0].data_id)
+        self.assertEqual('1M', search_result[0].time_period)
+        self.assertEqual(0.5, search_result[0].spatial_res)
+        self.assertEqual(DATASET_TYPE, search_result[0].data_type)
+        self.assertEqual(('2000-02-01', '2014-12-31'), search_result[0].time_range)
         self.assertEqual('dataset', search_result[0].data_type.alias)
-        self.assertEqual('dataset', search_result[1].data_type.alias)
 
 
 class CciOdpDatasetOpenerTimeSeriesTest(unittest.TestCase):
@@ -650,7 +648,7 @@ class CciOdpDatasetOpenerNormalizeTest(unittest.TestCase):
             cci_attrs=(dict(ecv='LAKES')))
         )
         self.assertIsNotNone(search_result)
-        self.assertEqual(3, len(search_result))
+        self.assertEqual(4, len(search_result))
         self.assertIsInstance(search_result[1], DatasetDescriptor)
         self.assertEqual(4, len(search_result[1].dims))
         self.assertEqual(52, len(search_result[1].data_vars))
