@@ -97,8 +97,7 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
         logging.debug('Determined time ranges')
         if not self._time_ranges:
             raise ValueError('Could not determine any valid time stamps')
-
-        self._time_chunking = self.get_attrs('time').get('file_chunk_sizes', 1)
+        self._time_chunking = self.get_time_chunking()
         if isinstance(self._time_chunking, List):
             self._time_chunking = self._time_chunking[0]
         if self._time_chunking > 1 and 'time_range' in cube_params:
@@ -589,6 +588,10 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def get_time_chunking(self) -> int:
+        pass
+
+    @abstractmethod
     def get_default_time_range(self, ds_id: str) -> Tuple[str, str]:
         return '', ''
 
@@ -892,6 +895,11 @@ class CciChunkStore(RemoteChunkStore):
     def get_time_ranges(self, dataset_id: str,
                         cube_params: Mapping[str, Any]) -> List[Tuple]:
         return self._time_range_getter.get_time_ranges(dataset_id, cube_params)
+
+    def get_time_chunking(self) -> int:
+        return self._metadata.get(
+            "time_chunking", self.get_attrs('time').get('file_chunk_sizes', 1)
+        )
 
     def get_default_time_range(self, ds_id: str):
         return self._time_range_getter.get_default_time_range(ds_id)

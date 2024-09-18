@@ -1641,9 +1641,9 @@ class CciCdc:
                 if "nbmonth" in dimensions:
                     time_name = "nbmonth"
                     time_dimension_size = 1
-                dimensions[time_name] = time_dimension_size * dimensions.get(
-                    time_name, 1
-                )
+                data_source["time_chunking"] = dimensions.get(time_name, 1)
+                dimensions[time_name] = (
+                        time_dimension_size * data_source["time_chunking"])
                 for variable_info in variable_infos.values():
                     if time_name in variable_info['dimensions']:
                         time_index = variable_info['dimensions'].index(time_name)
