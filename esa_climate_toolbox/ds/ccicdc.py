@@ -806,7 +806,7 @@ class CciCdc:
             for dataset_name in self.dataset_names:
                 _, ecv, frequency, processing_level, data_type, sensor, \
                 platform, product_string, product_version, _ = \
-                    dataset_name.split('.')
+                    dataset_name.split("~")[0].split('.')
                 if cci_attrs.get('ecv', ecv) != ecv:
                     continue
                 if cci_attrs.get('processing_level', processing_level) \
@@ -840,7 +840,7 @@ class CciCdc:
         self._run_with_session(self._ensure_in_data_sources, candidate_names)
         for candidate_name in candidate_names:
             data_source_info = self._data_sources.get(candidate_name, None)
-            if not data_source_info:
+            if data_source_info is None:
                 continue
             institute = cci_attrs.get('institute')
             if institute is not None and \
@@ -1322,7 +1322,7 @@ class CciCdc:
                 )
                 lat_lon_data = np.array((lon_data, lat_data)).T
                 geometry_data = [mapping(Point(ll)) for ll in lat_lon_data]
-                np_array = np.array(geometry_data, copy=False, dtype=object)
+                np_array = np.array(geometry_data, dtype=object)
             else:
                 data_type = (data_source.get('variable_infos', {}).get(var_name, {}).
                              get('data_type'))
@@ -1422,7 +1422,7 @@ class CciCdc:
             if data.size > 1:
                 data = [d.decode() for d in data]
         else:
-            data = np.array(data, copy=False, dtype=data_type)
+            data = np.array(data, dtype=data_type)
         if to_bytes:
             return data.flatten().tobytes()
         return data
