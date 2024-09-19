@@ -761,7 +761,10 @@ class CciCdcDataStore(DataStore):
             self, opener_id: str = None, data_type: str = None
     ) -> List[CciCdcDataOpener]:
         self._assert_valid_opener_id(opener_id)
-        self._assert_valid_data_type(data_type)
+        try:
+            self._assert_valid_data_type(data_type)
+        except DataStoreError:
+            return []
         if opener_id is not None:
             opener = self._openers[opener_id]
             if data_type is not None:
