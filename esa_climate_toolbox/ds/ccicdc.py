@@ -1320,7 +1320,7 @@ class CciCdc:
                 data = await self._get_data_from_opendap_dataset(
                     dataset, session, var_name, ds_dim_indexes
                 )
-                np_array = np.array(data, copy=False, dtype=data_type)
+                np_array = np.array(data, dtype=data_type)
             if res is None:
                 res = np_array
             else:
@@ -1334,6 +1334,11 @@ class CciCdc:
                 codec = numcodecs.JSON()
                 return codec.encode(res)
             else:
+                if res.shape[geometry_index] < _VECTOR_DATACUBE_CHUNKING:
+                    new_shape =
+                    fill_value = (
+                        data_source.get("variable_infos", {}).get("fill_value", np.nan))
+                    to_fill =
                 return res.flatten().tobytes()
         return res
 
