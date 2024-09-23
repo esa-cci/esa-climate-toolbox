@@ -105,8 +105,13 @@ class TimeRangeGetter:
             end_time_str = datetime.strftime(end_time, TIMESTAMP_FORMAT)
             iso_end_time = extract_time_as_string(end_time_str)
             request_time_ranges = self._cci_cdc.get_time_ranges_from_data(
-                dataset_id, iso_start_time, iso_end_time)
+                dataset_id, iso_start_time, iso_end_time
+            )
             return request_time_ranges
+        drs_end = dataset_id.split('.')[9]
+        if drs_end == "greenland_gmb_mass_trends":
+            return self.extract_greenland_gmb_time_series(
+                dataset_id, iso_start_time, end_time, delta)
         request_time_ranges = []
         this = start_time
         while this < end_time:
@@ -116,6 +121,38 @@ class TimeRangeGetter:
             request_time_ranges.append((pd_this, pd_next))
             this = after
         return request_time_ranges
+
+    def extract_greenland_gmb_time_series(
+            self, dataset_id: str, iso_start_time: str,
+            end_time: datetime, delta: pd.Timedelta
+    )  -> List[Tuple]:
+        end_time = end_time.replace(hour=23, minute=59, second=59)
+        end_time_str = datetime.strftime(end_time, TIMESTAMP_FORMAT)
+        iso_end_time = extract_time_as_string(end_time_str)
+        request_time_ranges = self._cci_cdc.get_time_ranges_from_data(
+            dataset_id, iso_start_time, iso_end_time
+        )
+        start_time = request_time_ranges[0][0]
+        end_time = request_time_ranges[-1][1]
+        num_years = end_time.year - start_time.year + 1
+        span_delta = relativedelta(
+            years=num_years - self._metadata["time_chunking"]
+        )
+        adjusted_time_ranges = []
+        span_start_time = start_time
+        span_end_time = start_time + span_delta
+        span_end_time = span_end_time.replace(hour=23, minute=59, second=59)
+        while span_end_time <= end_time:
+            pd_this = pd.Timestamp(datetime.strftime(
+                span_start_time, TIMESTAMP_FORMAT)
+            )
+            pd_next = pd.Timestamp(datetime.strftime(
+                span_end_time, TIMESTAMP_FORMAT)
+            )
+            adjusted_time_ranges.append((pd_this, pd_next))
+            span_start_time += delta
+            span_end_time += delta
+        return adjusted_time_ranges
 
     @staticmethod
     def _extract_time_range_as_datetime(
