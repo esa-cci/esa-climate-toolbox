@@ -1277,7 +1277,7 @@ class CciCdc:
         data_source = self._data_sources[drsId]
         dimensions = (data_source.get('variable_infos', {}).
                       get(var_name, {}).get('file_dimensions'))
-        geometry_index = dimensions.index(data_source.get("geometry_dimension"), -1)
+        geometry_index = dimensions.index(data_source.get("geometry_dimension"))
         geom_start_index = dim_indexes[geometry_index].start
         geom_stop_index = dim_indexes[geometry_index].stop
         start = bisect.bisect_right(
@@ -1335,10 +1335,19 @@ class CciCdc:
                 return codec.encode(res)
             else:
                 if res.shape[geometry_index] < _VECTOR_DATACUBE_CHUNKING:
-                    new_shape =
+                    fill_size = _VECTOR_DATACUBE_CHUNKING - res.shape[geometry_index]
+                    padding = []
+                    for i in range(len(res.shape)):
+                        if i == geometry_index:
+                            padding.append((0, fill_size))
+                        else:
+                            padding.append((0, 0))
+                    padding = tuple(padding)
                     fill_value = (
-                        data_source.get("variable_infos", {}).get("fill_value", np.nan))
-                    to_fill =
+                        data_source.get("variable_infos", {}).get(var_name, {}).
+                        get("fill_value", np.nan)
+                    )
+                    res = np.pad(res, pad_width=padding, constant_values=fill_value)
                 return res.flatten().tobytes()
         return res
 
