@@ -482,11 +482,7 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 continue
             valid_dim_chunk_sizes = []
             if sum_chunks > _MAX_CHUNK_SIZE:
-                valid_dim_chunk_sizes.append(chunk)
-                half_chunk = chunk
-                while half_chunk % 2 == 0:
-                    half_chunk /= 2
-                    valid_dim_chunk_sizes.append(int(half_chunk))
+                valid_dim_chunk_sizes = common_divisors(chunk)
             else:  # sum_chunks < _MIN_CHUNK_SIZE
                 # handle case that the size cannot be
                 # divided evenly by the chunk
@@ -535,9 +531,7 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                     continue
             else:
                 test_chunk_size = np.prod(test_chunks, dtype=np.int64)
-                test_indexes = cls.index_of_list(valid_sizes, test_chunks)
-                test_deviation = cls.compare_lists(test_indexes,
-                                                   orig_indexes)
+                test_deviation = cls.determine_deviation(test_chunks, time_dimension)
             if cls._is_of_acceptable_chunk_size(test_chunk_size):
                 if test_deviation < best_deviation:
                     best_chunk_size = test_chunk_size
@@ -551,12 +545,10 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                                             where=where)
                     best_min_chunk = np.max(best_chunks, initial=0,
                                             where=where)
-                    if best_min_chunk > test_min_chunk:
+                    if best_min_chunk < test_min_chunk:
                         best_chunk_size = test_chunk_size
                         best_chunks = test_chunks.copy()
                         best_deviation = test_deviation
-                else:
-                    break
         return best_chunks, best_chunk_size, best_deviation
 
     @classmethod
@@ -571,6 +563,18 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
         deviation = 0
         for i in range(len(list1)):
             deviation += abs(list1[i] - list2[i])
+        return deviation
+
+    @classmethod
+    def determine_deviation(cls, list1, time_dimension):
+        deviation = 0
+        for i in range(0, len(list1)):
+            if i == time_dimension:
+                continue
+            for j in range(i+1, len(list1)):
+                if j == time_dimension:
+                    continue
+                deviation += abs(list1[i] - list1[j])
         return deviation
 
     @classmethod
@@ -1035,14 +1039,15 @@ class CciChunkStore(RemoteChunkStore):
         return tuple(dim_indexes)
 
 
-def greatest_common_divisor(a: int, b: int, c: int):
-    return _greatest_common_divisor_two_numbers(
-        a,
-        _greatest_common_divisor_two_numbers(b, c)
-    )
-
-
-def _greatest_common_divisor_two_numbers(a: int, b: int) -> int:
-    if b == 0:
-        return a
-    return _greatest_common_divisor_two_numbers(b, a % b)
+def common_divisors(orig_number: int) -> List[int]:
+    sqrt = math.sqrt(orig_number)
+    factor = int(math.floor(sqrt))
+    divisors = []
+    if sqrt - factor < 1e-8:
+        divisors.append(factor)
+    while factor > 0:
+        if orig_number % factor == 0:
+            divisors.append(factor)
+            divisors.append(int(orig_number / factor))
+        factor -= 1
+    return sorted(divisors, reverse=True)

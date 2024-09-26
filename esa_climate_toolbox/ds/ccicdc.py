@@ -69,6 +69,7 @@ from .constants import DEFAULT_RETRY_BACKOFF_MAX
 from .constants import DEFAULT_RETRY_BACKOFF_BASE
 from .constants import OPENSEARCH_CEDA_URL
 from .constants import COMMON_TIME_COORD_VAR_NAMES
+from .constants import TIFF_VARS
 from .constants import TIMESTAMP_FORMAT
 
 from esa_climate_toolbox.util.time import get_time_strings_from_string
@@ -1202,6 +1203,12 @@ class CciCdc:
                            fileFormat='.shp')
 
             feature_list = await self._get_feature_list(session, request, '.shp')
+        if len(feature_list) == 0:
+            request = dict(parentIdentifier=dataset_id,
+                           startDate=start_time,
+                           endDate=end_time,
+                           drsId=dataset_name)
+            feature_list = await self._get_feature_list(session, request, '.tif')
         request_time_ranges = [feature[0:2] for feature in feature_list]
         return request_time_ranges
 
@@ -1265,7 +1272,7 @@ class CciCdc:
         data = await self._get_data_from_opendap_dataset(
             dataset, session, var_name, ds_dim_indexes
         )
-        return np.array(data, copy=False, dtype=data_type)
+        return np.asarray(data, dtype=data_type)
 
     async def _get_vectordatacube_chunk(
             self, session, request: Dict, dim_indexes: Tuple, to_bytes: bool = True
@@ -1313,14 +1320,14 @@ class CciCdc:
                 )
                 lat_lon_data = np.array((lon_data, lat_data)).T
                 geometry_data = [mapping(Point(ll)) for ll in lat_lon_data]
-                np_array = np.array(geometry_data, dtype=object)
+                np_array = np.asarray(geometry_data, dtype=object)
             else:
                 data_type = (data_source.get('variable_infos', {}).get(var_name, {}).
                              get('data_type'))
                 data = await self._get_data_from_opendap_dataset(
                     dataset, session, var_name, ds_dim_indexes
                 )
-                np_array = np.array(data, dtype=data_type)
+                np_array = np.asarray(data, dtype=data_type)
             if res is None:
                 res = np_array
             else:
@@ -1388,7 +1395,7 @@ class CciCdc:
                         self._tif_to_array[file_path] = array
                     array = self._tif_to_array[file_path]
                     data = array.isel(sel_chunks)
-                    data = np.array(data, copy=False, dtype=data_type)
+                    data = np.asarray(data, dtype=data_type)
                     if to_bytes:
                         return data.flatten().tobytes()
                     return data
@@ -1405,12 +1412,15 @@ class CciCdc:
                         di = dim_indexes[offset + i]
                         chunks[dims[i]] = di.stop - di.start
                         sel_chunks[dims[i]] = di
+                    band_index = self._data_sources[drs_id].get("variable_infos", {}).get(var_name, {}).get("band_index")
+                    if band_index is not None:
+                        sel_chunks["band"] = band_index
                     if tif_url not in self._tif_to_array:
                         array = rioxarray.open_rasterio(tif_url, chunks=chunks)
                         self._tif_to_array[tif_url] = array
                     array = self._tif_to_array[tif_url]
                     data = array.isel(sel_chunks)
-                    data = np.array(data, copy=False, dtype=data_type)
+                    data = np.asarray(data, dtype=data_type)
                     if to_bytes:
                         return data.flatten().tobytes()
                     return data
@@ -1427,7 +1437,7 @@ class CciCdc:
             if data.size > 1:
                 data = [d.decode() for d in data]
         else:
-            data = np.array(data, dtype=data_type)
+            data = np.asarray(data, dtype=data_type)
         if to_bytes:
             return data.flatten().tobytes()
         return data
@@ -1770,7 +1780,7 @@ class CciCdc:
         if len(sdrsid) == 2:
             paging_query_args["drsId"] = sdrsid[0]
             name_filter = sdrsid[1]
-            paging_query_args["maximumRecords"] = 348
+            paging_query_args["maximumRecords"] = 10000
         url = base_url + '?' + urllib.parse.urlencode(paging_query_args)
         resp = await self.get_response(session, url)
         if resp:
@@ -2028,27 +2038,51 @@ class CciCdc:
         var_infos = {}
         attributes = {}
         array = rioxarray.open_rasterio(download_url, chunks=dict(x=512, y=512))
-        var_name = download_url.split(".tif")[0].split("-")[-1]
-        self._put_variable_info_from_tif_file_var_infos_attributes(
-            array, var_name, var_infos, attributes
-        )
+        # print(array.encoding)
+        # print(array.chunks)
+        # var_name = download_url.split(".tif")[0].split("-")[-1]
+        var_dicts = self._get_var_names_from_download_url(download_url)
+        for var_name, var_dict in var_dicts.items():
+            self._put_variable_info_from_tif_file_var_infos_attributes(
+                array, var_name, var_dict, var_infos, attributes
+            )
         return var_infos, attributes
+
+    def _get_var_names_from_download_url(self, download_url: str) -> Dict[str, Dict]:
+        file_name = download_url.split("/")[-1].split(".tif")[0]
+        for var_name, var_dict in TIFF_VARS.items():
+            if var_name in file_name:
+                return var_dict
+        # file_name.split("-")[-1]
+        # return [download_url.split(".tif")[0].split("-")[-1]]
 
     @staticmethod
     def _put_variable_info_from_tif_file_var_infos_attributes(
-            array, var_name, var_infos, attributes
+            array, var_name, var_dict, var_infos, attributes
     ):
         var_infos[var_name] = {}
         band_dim = -1
+        divisor = 1
         if "band" in array.dims:
             band_dim = list(array.dims).index("band")
+            divisor = array["band"].size
         dims = [d for d in array.dims if d != "band"]
         var_infos[var_name]["dimensions"] = dims
         var_infos[var_name]["file_dimensions"] = dims
-        var_infos[var_name]["size"] = array.size
+        var_infos[var_name]["size"] = array.size / divisor
         var_infos[var_name]["shape"] = \
             [s for i, s in enumerate(array.shape) if i != band_dim]
         var_infos[var_name]["data_type"] = array.dtype.name
+        if "band_index" in var_dict:
+            var_infos[var_name]["band_index"] = var_dict["band_index"]
+        if "description" in var_dict:
+            var_infos[var_name]["description"] = var_dict["description"]
+        if "min_value" in var_dict:
+            var_infos[var_name]["min_value"] = var_dict["min_value"]
+        if "max_value" in var_dict:
+            var_infos[var_name]["max_value"] = var_dict["max_value"]
+        if "fill_value" in var_dict:
+            var_infos[var_name]["fill_value"] = var_dict["fill_value"]
         preferred_chunks = array.encoding.get("preferred_chunks", {})
         chunk_sizes = []
         for dim in dims:
