@@ -14,7 +14,7 @@ from esa_climate_toolbox.version import __version__
 # -- Project information
 
 project = 'ESA CCI Toolbox'
-copyright = '2023, Brockmann Consult GmbH'
+copyright = '2024, Brockmann Consult GmbH'
 author = 'Brockmann Consult GmbH'
 
 release = __version__

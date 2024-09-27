@@ -41,5 +41,5 @@ Jupyter Notebooks
    notebooks/6-ECT_Kerchunk_Access
    notebooks/7-ECT_Finding_Operations
    notebooks/8-ECT_Using_Operations
-
-
+   notebooks/9-ECT_Access_Vector_Data_Cubes
+   notebooks/10-ECT_Using_xcube_viewer

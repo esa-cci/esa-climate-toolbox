@@ -50,6 +50,25 @@ Reading and Writing Data
 .. autofunction:: esa_climate_toolbox.core.write_data
 
 
+Functions
+=========
+
+.. _regions:
+
+Region
+------
+
+.. autofunction:: esa_climate_toolbox.functions.regions.get_land_mask
+
+.. autofunction:: esa_climate_toolbox.functions.regions.get_regions_mask
+
+.. autofunction:: esa_climate_toolbox.functions.regions.make_regions_dataset
+
+.. autofunction:: esa_climate_toolbox.functions.regions.mask_dataset_by_land
+
+.. autofunction:: esa_climate_toolbox.functions.regions.mask_dataset_by_regions
+
+
 Operations
 ==========
 
