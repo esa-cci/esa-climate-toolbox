@@ -5034,7 +5034,7 @@
             "open",
             "constrain_time"
         ],
-        "title": "ESA Land Cover Climate Change Initiative (Land_Cover_cci):  Water Bodies Map, v4.0"
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Africa (Eastern Sahel region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.CHANGE.multi-sensor.multi-platform.HRLCC30-A02.v1-2.Amazonia": {
         "data_type": "dataset",
@@ -5042,14 +5042,14 @@
             "open",
             "constrain_time"
         ],
-        "title": "ESA Land Cover Climate Change Initiative (Land_Cover_cci):  Water Bodies Map, v4.0"
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Amazonia (Eastern Amazonas region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.CHANGE.multi-sensor.multi-platform.HRLCC30-A03.v1-2.Siberia": {
         "data_type": "dataset",
         "verification_flags": [
             "open"
         ],
-        "title": "ESA Land Cover Climate Change Initiative (Land_Cover_cci):  Water Bodies Map, v4.0"
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Siberia (Norther Siberia region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.13-yrs.L4.WB.ASAR.Envisat.Map.4-0.r1": {
         "data_type": "dataset",
@@ -5082,212 +5082,242 @@
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A01.v1-2.Africa~MAP-CL01-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Africa (Eastern Sahel region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A01.v1-2.Africa~UNCERT-CL02-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Africa (Eastern Sahel region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A01.v1-2.Africa~UNCERT-PS01-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Africa (Eastern Sahel region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A01.v1-2.Africa~UNCERT-PS02-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Africa (Eastern Sahel region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A01.v1-2.Africa~UNCERT-IQIX-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Africa (Eastern Sahel region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A02.v1-2.Amazonia~MAP-CL01-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Amazonia (Eastern Amazonas region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A02.v1-2.Amazonia~UNCERT-CL02-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Amazonia (Eastern Amazonas region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A02.v1-2.Amazonia~UNCERT-PS01-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Amazonia (Eastern Amazonas region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A02.v1-2.Amazonia~UNCERT-PS02-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Amazonia (Eastern Amazonas region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A02.v1-2.Amazonia~UNCERT-IQIX-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Amazonia (Eastern Amazonas region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A03.v1-2.Siberia~MAP-CL01-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Siberia (Norther Siberia region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A03.v1-2.Siberia~UNCERT-CL02-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Siberia (Norther Siberia region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A03.v1-2.Siberia~UNCERT-PS01-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Siberia (Norther Siberia region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A03.v1-2.Siberia~UNCERT-PS02-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Siberia (Norther Siberia region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.5-yrs.L4.Map.multi-sensor.multi-platform.HRLC30-A03.v1-2.Siberia~UNCERT-IQIX-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover and Land Cover Change Maps in Siberia (Norther Siberia region) at 30m spatial resolution in GeoTiff format, 1990-2019, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A01.v1-2.Africa~MAP-CL01-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Africa (Eastern Sahel region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A01.v1-2.Africa~UNCERT-CL02-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Africa (Eastern Sahel region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A01.v1-2.Africa~UNCERT-PS01-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Africa (Eastern Sahel region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A01.v1-2.Africa~UNCERT-PS02-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Africa (Eastern Sahel region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A01.v1-2.Africa~UNCERT-IQIX-A01MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Africa (Eastern Sahel region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A02.v1-2.Amazonia~MAP-CL01-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Amazonia (Eastern Amazonas region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A02.v1-2.Amazonia~UNCERT-CL02-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Amazonia (Eastern Amazonas region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A02.v1-2.Amazonia~UNCERT-PS01-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Amazonia (Eastern Amazonas region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A02.v1-2.Amazonia~UNCERT-PS02-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Amazonia (Eastern Amazonas region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A02.v1-2.Amazonia~UNCERT-IQIX-A02MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Amazonia (Eastern Amazonas region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A03.v1-2.Siberia~MAP-CL01-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Siberia (Northern Siberia region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A03.v1-2.Siberia~UNCERT-CL02-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Siberia (Northern Siberia region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A03.v1-2.Siberia~UNCERT-PS01-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Siberia (Northern Siberia region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A03.v1-2.Siberia~UNCERT-PS02-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Siberia (Northern Siberia region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LC.yr.L4.Map.multi-sensor.multi-platform.HRLC10-A03.v1-2.Siberia~UNCERT-IQIX-A03MOSAIC": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
-        "title": ""
+        "title": "ESA High Resolution Land Cover Climate Change Initiative (High_Resolution_Land_Cover_cci): High Resolution Land Cover Maps in Siberia (Northern Siberia region) at 10m spatial resolution for 2019 in Geotiff format, v1.2"
     },
     "esacci.LST.3-hours.L3S.LST.multi-sensor.multi-platform.IRMGP.1-00.r1": {
         "data_type": "dataset",
