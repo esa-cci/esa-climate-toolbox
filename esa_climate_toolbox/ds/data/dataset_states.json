@@ -5022,20 +5022,25 @@
     },
     "esacci.LAKES.day.L3S.LK_PRODUCTS.multi-sensor.multi-platform.MERGED.v2-1-0.r1": {
         "data_type": "dataset",
-        "verification_flags": [],
+        "verification_flags": [
+            "open",
+            "constrain_time"
+        ],
         "title": ""
     },
     "esacci.LC.5-yrs.L4.CHANGE.multi-sensor.multi-platform.HRLCC30-A01.v1-2.Africa": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
         "title": "ESA Land Cover Climate Change Initiative (Land_Cover_cci):  Water Bodies Map, v4.0"
     },
     "esacci.LC.5-yrs.L4.CHANGE.multi-sensor.multi-platform.HRLCC30-A02.v1-2.Amazonia": {
         "data_type": "dataset",
         "verification_flags": [
-            "open"
+            "open",
+            "constrain_time"
         ],
         "title": "ESA Land Cover Climate Change Initiative (Land_Cover_cci):  Water Bodies Map, v4.0"
     },
@@ -6103,7 +6108,9 @@
         "data_type": "dataset",
         "verification_flags": [
             "open",
-            "constrain_time"
+            "constrain_time",
+            "constrain_region",
+            "write_zarr"
         ],
         "title": "ESA Ozone Climate Change Initiative (Ozone CCI): GOMOS Level 3 Limb Ozone Monthly Zonal Mean (MZM) Profiles, Version 1"
     },
@@ -6111,7 +6118,9 @@
         "data_type": "dataset",
         "verification_flags": [
             "open",
-            "constrain_time"
+            "constrain_time",
+            "constrain_region",
+            "write_zarr"
         ],
         "title": "ESA Ozone Climate Change Initiative (Ozone CCI): MIPAS Level 3 Limb Ozone Monthly Zonal Mean (MZM) Profiles, Version 1"
     },
@@ -6119,7 +6128,9 @@
         "data_type": "dataset",
         "verification_flags": [
             "open",
-            "constrain_time"
+            "constrain_time",
+            "constrain_region",
+            "write_zarr"
         ],
         "title": "ESA Ozone Climate Change Initiative (Ozone CCI): OSIRIS Level 3 Limb Ozone Monthly Zonal Mean (MZM) Profiles, Version 1"
     },
@@ -6127,7 +6138,9 @@
         "data_type": "dataset",
         "verification_flags": [
             "open",
-            "constrain_time"
+            "constrain_time",
+            "constrain_region",
+            "write_zarr"
         ],
         "title": "ESA Ozone Climate Change Initiative (Ozone CCI): SCIAMACHY Level 3 Limb Ozone Monthly Zonal Mean (MZM) Profiles, Version 1"
     },
@@ -6135,7 +6148,9 @@
         "data_type": "dataset",
         "verification_flags": [
             "open",
-            "constrain_time"
+            "constrain_time",
+            "constrain_region",
+            "write_zarr"
         ],
         "title": "ESA Ozone Climate Change Initiative (Ozone CCI): ODIN/SMR (544.6 GHz) Level 3 Limb Ozone Monthly Zonal Mean (MZM) Profiles, Version 1"
     },
@@ -6143,7 +6158,9 @@
         "data_type": "dataset",
         "verification_flags": [
             "open",
-            "constrain_time"
+            "constrain_time",
+            "constrain_region",
+            "write_zarr"
         ],
         "title": "ESA Ozone Climate Change Initiative (Ozone CCI): ODIN/SMR Level 3 Limb Ozone Monthly Zonal Mean (MZM) Profiles, Version 1"
     },
@@ -6460,7 +6477,7 @@
             "open",
             "constrain_time",
             "constrain_region",
-	    "write_geojson"
+	        "write_geojson"
         ],
         "title": "ESA Sea Ice Climate Change Initiative (Sea_Ice_cci):  Southern hemisphere sea ice thickness from CryoSat-2 on the satellite swath (L2P), v3.0"
     },
@@ -6468,7 +6485,9 @@
         "data_type": "dataset",
         "verification_flags": [
             "open",
-            "constrain_time"
+            "constrain_time",
+            "constrain_region",
+            "write_zarr"
         ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Oceanic Indicators of Mean Sea Level Changes,  Version 2.0"
     },
@@ -6669,7 +6688,12 @@
     },
     "esacci.SEALEVEL.unspecified.IND.MSLAMPH.multi-sensor.multi-platform.MERGED.2-0.r1": {
         "data_type": "dataset",
-        "verification_flags": [],
+        "verification_flags": [
+            "open",
+            "constrain_time",
+            "constrain_region",
+            "write_zarr"
+        ],
         "title": "ESA Sea Level Climate Change Initiative (Sea_Level_cci): Oceanic Indicators of Mean Sea Level Changes,  Version 2.0"
     },
     "esacci.SEASTATE.mon.L4.SWH.multi-sensor.multi-platform.MULTI_1M.3-0.r1": {
