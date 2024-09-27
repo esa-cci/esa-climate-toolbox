@@ -1,54 +1,69 @@
 version: '{build}'
 
 image:
+  - Ubuntu2204
   - macOS
-  - Ubuntu2004
 
 configuration: Release
 
 platform:
   - x64
 
-environment:
-  # For the unit-tests, disable Numba JIT, otherwise Coverage wont reach the actual Python code
-  NUMBA_DISABLE_JIT: 1
+# Do not build feature branch with open Pull Requests.
+# Note that a feature branch build may still occur on the first push to
+# the branch -- see
+# https://help.appveyor.com/discussions/questions/18437-skip_branch_with_pr-setting-doesnt-work
+skip_branch_with_pr: true
 
 for:
 -
   matrix:
     only:
-      - image: macos
+      - image: macOS
   install:
-    - curl -L https://repo.anaconda.com/miniconda/Miniconda3-py310_23.3.1-0-MacOSX-x86_64.sh > miniconda.sh
-    - bash miniconda.sh -b -p $HOME/miniconda
+    - curl -Ls https://micro.mamba.pm/api/micromamba/osx-64/latest | tar -xvj bin/micromamba
+    - mv bin/micromamba ./micromamba
 -
   matrix:
     only:
-      - image: Ubuntu2004
+      - image: Ubuntu2204
   install:
-    - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-    - bash miniconda.sh -b -p $HOME/miniconda
+    - curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
+    - mv bin/micromamba ./micromamba
 
 build_script:
-  - export PATH="$HOME/miniconda/bin:$PATH"
+  # Diagnostics
+  - echo $PLATFORM
+  - echo $APPVEYOR_BUILD_WORKER_IMAGE
+  - echo $APPVEYOR_BUILD_FOLDER
+  - uname -a
+  - pwd
+  - ls
+
+  # Set up micromamba
+  - ./micromamba shell init -s bash --root-prefix ~/micromamba
+  - source ~/.bashrc
+  - source ~/.profile
   - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  # - conda update -q conda # makes travis build fail
-  # Useful for debugging any issues with conda
-  - conda info -a
-  - conda init bash
-  - export CONDA_BASE=$(conda info --base)
-  - source $CONDA_BASE/etc/profile.d/conda.sh
+  - mkdir -p ~/micromamba/pkgs/
+  - export MAMBA_ROOT_PREFIX=~/micromamba
+  - export MAMBA_EXE=$(pwd)/micromamba
+  - . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
 
-  # Install mamba as a dramatically faster conda replacement. Specifying a
-  # fixed version makes the installation of mamba itself much faster, and
-  # avoids potential breakage due to changes in mamba behaviour.
-  - conda install -c conda-forge mamba
-
-  - mamba env create
-  - conda activate ect
+  # Create environment from build folder environment.yml and install xcube
+  - micromamba create --name ect --file $APPVEYOR_BUILD_FOLDER/environment.yml
+  - micromamba activate ect
+  - cd $APPVEYOR_BUILD_FOLDER
   - pip install --no-deps .
-  - conda list
 
-  # Run the test suite.
-  - pytest -v --cov=esa-climate-toolbox test
+  # Make sure pytest is installed
+  - micromamba install --yes --name ect --channel conda-forge pytest attrs
+
+  # Print some diagnostics (useful for debugging)
+  - git status
+  - micromamba list
+  - xcube --version
+  - python -c "from esa_climate_toolbox import __version__; print(f'ESA CCI Toolbox version {__version__}')"
+
+  # Run the test suite
+  - pytest -v --cov=esa_climate_toolbox
