@@ -62,7 +62,6 @@ build_script:
   # Print some diagnostics (useful for debugging)
   - git status
   - micromamba list
-  - xcube --version
   - python -c "from esa_climate_toolbox import __version__; print(f'ESA CCI Toolbox version {__version__}')"
 
   # Run the test suite
