@@ -256,6 +256,8 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
             time_dim_name = 'month'
         if "Time" in self._dimensions:
             time_dim_name = "Time"
+        elif "nbmonth" in self._dimensions:
+            time_dim_name = "nbmonth"
         if is_climatology:
             month_attrs = {
                 "_ARRAY_DIMENSIONS": ['time'],
@@ -274,10 +276,12 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 "_ARRAY_DIMENSIONS": [time_dim_name, 'bnds'],
                 "units": "seconds since 1970-01-01T00:00:00Z",
                 "calendar": "proleptic_gregorian",
-                "standard_name": "time_bnds",
+                "standard_name": f"{time_dim_name}_bnds",
             }
             self._add_static_array(time_dim_name, t_array, time_attrs)
-            self._add_static_array('time_bnds', t_bnds_array, time_bnds_attrs)
+            self._add_static_array(
+                f'{time_dim_name}_bnds', t_bnds_array, time_bnds_attrs
+            )
 
         coordinate_names = [coord for coord in coords_data.keys()
                             if coord not in COMMON_COORD_VAR_NAMES]
