@@ -45,7 +45,7 @@ In the upper right corner, click 'Select Kernel'.
 
 This will open the kernel selection dialogue at the top. Choose 'Python Environments...'
 
-![Choose 'Python Environments...'](<images/Screenshot 2024-09-06 at 5.21.24 PM-1.png>)
+![Choose 'Python Environments...'](<images/Screenshot 2024-09-06 at 5.21.24 PM.png>)
 
 Select the ect environment.
 
