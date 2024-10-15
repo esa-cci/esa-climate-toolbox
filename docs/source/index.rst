@@ -96,4 +96,5 @@ For support with the CCI Toolbox, please visit our `Helpdesk`_.
    about
    installation_guide
    quick_start
+   viewer
    api_reference

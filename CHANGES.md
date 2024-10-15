@@ -1,3 +1,25 @@
+## Changes in 1.1
+
+* Support numpy >= 2.0 and pydap >= 3.4
+* Automatically publish packages on pypi at release
+* Improved support of vector data cubes
+* Support HR LC data
+* Added user functions for regions:
+  * `get_land_mask`:  Gets a land mask for a dataset.
+  * `get_regions_mask`: Gets a regions mask for a dataset.
+  * `make_regions_dataset`: Rasterize country and continent polygons into a 
+grid provided by a template dataset.
+  * `mask_dataset_by_land`: Masks out non-land-pixels of a dataset.
+  * `mask_dataset_by_regions`: Masks out pixels of a dataset which are not in 
+one of the specified regions.
+* Added notebooks:
+  * `ESA CCI Toolbox Vector Data Cube Access`: Explaining the handling of 
+vector data cubes
+  * `Using the ESA CCI Toolbox with the xcube Viewer`: Explaining how to access
+the xcube viewer from within a Jupyter Notebook
+* Extended documentation by a section on how to configure an xcube server to 
+serve data from the ESA CCI Toolbox
+
 ## Changes in 1.0.2
 
 * Updated list of dataset states

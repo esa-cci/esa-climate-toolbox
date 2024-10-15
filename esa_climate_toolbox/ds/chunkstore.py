@@ -97,8 +97,7 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
         logging.debug('Determined time ranges')
         if not self._time_ranges:
             raise ValueError('Could not determine any valid time stamps')
-
-        self._time_chunking = self.get_attrs('time').get('file_chunk_sizes', 1)
+        self._time_chunking = self.get_time_chunking()
         if isinstance(self._time_chunking, List):
             self._time_chunking = self._time_chunking[0]
         if self._time_chunking > 1 and 'time_range' in cube_params:
@@ -257,6 +256,8 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
             time_dim_name = 'month'
         if "Time" in self._dimensions:
             time_dim_name = "Time"
+        elif "nbmonth" in self._dimensions:
+            time_dim_name = "nbmonth"
         if is_climatology:
             month_attrs = {
                 "_ARRAY_DIMENSIONS": ['time'],
@@ -275,10 +276,12 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 "_ARRAY_DIMENSIONS": [time_dim_name, 'bnds'],
                 "units": "seconds since 1970-01-01T00:00:00Z",
                 "calendar": "proleptic_gregorian",
-                "standard_name": "time_bnds",
+                "standard_name": f"{time_dim_name}_bnds",
             }
             self._add_static_array(time_dim_name, t_array, time_attrs)
-            self._add_static_array('time_bnds', t_bnds_array, time_bnds_attrs)
+            self._add_static_array(
+                f'{time_dim_name}_bnds', t_bnds_array, time_bnds_attrs
+            )
 
         coordinate_names = [coord for coord in coords_data.keys()
                             if coord not in COMMON_COORD_VAR_NAMES]
@@ -371,8 +374,8 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 var_attrs['file_chunk_sizes'] = chunk_sizes[1:].copy()
             elif len(var_attrs.get('file_dimensions', [])) > 0:
                 var_attrs['file_chunk_sizes'] = chunk_sizes.copy()
-                var_attrs['file_chunk_sizes'][time_dimension] \
-                    = self._time_chunking
+                if time_dimension >= 0:
+                    var_attrs['file_chunk_sizes'][time_dimension] = self._time_chunking
             self._add_remote_array(variable_name,
                                    sizes,
                                    chunk_sizes,
@@ -483,11 +486,7 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                 continue
             valid_dim_chunk_sizes = []
             if sum_chunks > _MAX_CHUNK_SIZE:
-                valid_dim_chunk_sizes.append(chunk)
-                half_chunk = chunk
-                while half_chunk % 2 == 0:
-                    half_chunk /= 2
-                    valid_dim_chunk_sizes.append(int(half_chunk))
+                valid_dim_chunk_sizes = common_divisors(chunk)
             else:  # sum_chunks < _MIN_CHUNK_SIZE
                 # handle case that the size cannot be
                 # divided evenly by the chunk
@@ -536,9 +535,7 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                     continue
             else:
                 test_chunk_size = np.prod(test_chunks, dtype=np.int64)
-                test_indexes = cls.index_of_list(valid_sizes, test_chunks)
-                test_deviation = cls.compare_lists(test_indexes,
-                                                   orig_indexes)
+                test_deviation = cls.determine_deviation(test_chunks, time_dimension)
             if cls._is_of_acceptable_chunk_size(test_chunk_size):
                 if test_deviation < best_deviation:
                     best_chunk_size = test_chunk_size
@@ -552,12 +549,10 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
                                             where=where)
                     best_min_chunk = np.max(best_chunks, initial=0,
                                             where=where)
-                    if best_min_chunk > test_min_chunk:
+                    if best_min_chunk < test_min_chunk:
                         best_chunk_size = test_chunk_size
                         best_chunks = test_chunks.copy()
                         best_deviation = test_deviation
-                else:
-                    break
         return best_chunks, best_chunk_size, best_deviation
 
     @classmethod
@@ -575,6 +570,18 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
         return deviation
 
     @classmethod
+    def determine_deviation(cls, list1, time_dimension):
+        deviation = 0
+        for i in range(0, len(list1)):
+            if i == time_dimension:
+                continue
+            for j in range(i+1, len(list1)):
+                if j == time_dimension:
+                    continue
+                deviation += abs(list1[i] - list1[j])
+        return deviation
+
+    @classmethod
     def _is_of_acceptable_chunk_size(cls, size: int):
         return _MIN_CHUNK_SIZE <= size <= _MAX_CHUNK_SIZE
 
@@ -586,6 +593,10 @@ class RemoteChunkStore(MutableMapping, metaclass=ABCMeta):
     def get_time_ranges(
             self, cube_id: str, cube_params: Mapping[str, Any]
     ) -> List[Tuple]:
+        pass
+
+    @abstractmethod
+    def get_time_chunking(self) -> int:
         pass
 
     @abstractmethod
@@ -893,6 +904,11 @@ class CciChunkStore(RemoteChunkStore):
                         cube_params: Mapping[str, Any]) -> List[Tuple]:
         return self._time_range_getter.get_time_ranges(dataset_id, cube_params)
 
+    def get_time_chunking(self) -> int:
+        return self._metadata.get(
+            "time_chunking", self.get_attrs('time').get('file_chunk_sizes', 1)
+        )
+
     def get_default_time_range(self, ds_id: str):
         return self._time_range_getter.get_default_time_range(ds_id)
 
@@ -1027,14 +1043,15 @@ class CciChunkStore(RemoteChunkStore):
         return tuple(dim_indexes)
 
 
-def greatest_common_divisor(a: int, b: int, c: int):
-    return _greatest_common_divisor_two_numbers(
-        a,
-        _greatest_common_divisor_two_numbers(b, c)
-    )
-
-
-def _greatest_common_divisor_two_numbers(a: int, b: int) -> int:
-    if b == 0:
-        return a
-    return _greatest_common_divisor_two_numbers(b, a % b)
+def common_divisors(orig_number: int) -> List[int]:
+    sqrt = math.sqrt(orig_number)
+    factor = int(math.floor(sqrt))
+    divisors = []
+    if sqrt - factor < 1e-8:
+        divisors.append(factor)
+    while factor > 0:
+        if orig_number % factor == 0:
+            divisors.append(factor)
+            divisors.append(int(orig_number / factor))
+        factor -= 1
+    return sorted(divisors, reverse=True)

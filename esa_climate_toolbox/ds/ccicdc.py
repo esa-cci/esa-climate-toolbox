@@ -49,9 +49,9 @@ from shapely.geometry import mapping
 from typing import List, Dict, Tuple, Optional, Union, Mapping
 from urllib.parse import quote
 
-from pydap.handlers.dap import BaseProxy
+from pydap.handlers.dap import BaseProxyDap2
 from pydap.handlers.dap import SequenceProxy
-from pydap.handlers.dap import unpack_data
+from pydap.handlers.dap import unpack_dap2_data
 from pydap.lib import BytesReader
 from pydap.lib import combine_slices
 from pydap.lib import fix_slice
@@ -59,7 +59,7 @@ from pydap.lib import hyperslab
 from pydap.lib import walk
 from pydap.model import BaseType, SequenceType, GridType
 from pydap.parsers import parse_ce
-from pydap.parsers.dds import build_dataset
+from pydap.parsers.dds import dds_to_dataset
 from pydap.parsers.das import parse_das, add_attributes
 from six.moves.urllib.parse import urlsplit, urlunsplit
 
@@ -68,8 +68,8 @@ from .constants import DEFAULT_NUM_RETRIES
 from .constants import DEFAULT_RETRY_BACKOFF_MAX
 from .constants import DEFAULT_RETRY_BACKOFF_BASE
 from .constants import OPENSEARCH_CEDA_URL
-from .constants import COMMON_SPATIAL_COORD_VAR_NAMES
 from .constants import COMMON_TIME_COORD_VAR_NAMES
+from .constants import TIFF_VARS
 from .constants import TIMESTAMP_FORMAT
 
 from esa_climate_toolbox.util.time import get_time_strings_from_string
@@ -764,18 +764,10 @@ class CciCdc:
                 coords.append(variable_name)
             elif variable_name.endswith('bounds') or variable_name.endswith('bnds'):
                 coords.append(variable_name)
-            elif variable_name in COMMON_TIME_COORD_VAR_NAMES \
-                    and len(variable_info.get("dimensions")) == 1:
+            elif variable_name in COMMON_TIME_COORD_VAR_NAMES:
                 coords.append(variable_name)
             elif variable_name == 'geometry':
                 coords.append(variable_name)
-            elif variable_name in COMMON_SPATIAL_COORD_VAR_NAMES \
-                    and len(variable_info.get("dimensions")) == 1:
-                if self._data_type != "vectordatacube":
-                    coords.append(variable_name)
-                else:
-                    pass
-                    # ignore
             elif variable_info.get('data_type', '') == 'bytes1024' \
                     and len(variable_info['dimensions']) > 0:
                 # add as neither coordinate nor variable
@@ -806,7 +798,7 @@ class CciCdc:
             for dataset_name in self.dataset_names:
                 _, ecv, frequency, processing_level, data_type, sensor, \
                 platform, product_string, product_version, _ = \
-                    dataset_name.split('.')
+                    dataset_name.split("~")[0].split('.')
                 if cci_attrs.get('ecv', ecv) != ecv:
                     continue
                 if cci_attrs.get('processing_level', processing_level) \
@@ -840,7 +832,7 @@ class CciCdc:
         self._run_with_session(self._ensure_in_data_sources, candidate_names)
         for candidate_name in candidate_names:
             data_source_info = self._data_sources.get(candidate_name, None)
-            if not data_source_info:
+            if data_source_info is None:
                 continue
             institute = cci_attrs.get('institute')
             if institute is not None and \
@@ -856,11 +848,11 @@ class CciCdc:
             if bbox:
                 if float(data_source_info.get('bbox_minx', np.inf)) > bbox[2]:
                     continue
-                if float(data_source_info.get('bbox_maxx', np.NINF)) < bbox[0]:
+                if float(data_source_info.get('bbox_maxx', -np.inf)) < bbox[0]:
                     continue
                 if float(data_source_info.get('bbox_miny', np.inf)) > bbox[3]:
                     continue
-                if float(data_source_info.get('bbox_maxy', np.NINF)) < bbox[1]:
+                if float(data_source_info.get('bbox_maxy', -np.inf)) < bbox[1]:
                     continue
             if start_date:
                 data_source_end = datetime.strptime(
@@ -1211,6 +1203,12 @@ class CciCdc:
                            fileFormat='.shp')
 
             feature_list = await self._get_feature_list(session, request, '.shp')
+        if len(feature_list) == 0:
+            request = dict(parentIdentifier=dataset_id,
+                           startDate=start_time,
+                           endDate=end_time,
+                           drsId=dataset_name)
+            feature_list = await self._get_feature_list(session, request, '.tif')
         request_time_ranges = [feature[0:2] for feature in feature_list]
         return request_time_ranges
 
@@ -1274,7 +1272,7 @@ class CciCdc:
         data = await self._get_data_from_opendap_dataset(
             dataset, session, var_name, ds_dim_indexes
         )
-        return np.array(data, copy=False, dtype=data_type)
+        return np.asarray(data, dtype=data_type)
 
     async def _get_vectordatacube_chunk(
             self, session, request: Dict, dim_indexes: Tuple, to_bytes: bool = True
@@ -1286,7 +1284,7 @@ class CciCdc:
         data_source = self._data_sources[drsId]
         dimensions = (data_source.get('variable_infos', {}).
                       get(var_name, {}).get('file_dimensions'))
-        geometry_index = dimensions.index(data_source.get("geometry_dimension"), -1)
+        geometry_index = dimensions.index(data_source.get("geometry_dimension"))
         geom_start_index = dim_indexes[geometry_index].start
         geom_stop_index = dim_indexes[geometry_index].stop
         start = bisect.bisect_right(
@@ -1322,14 +1320,14 @@ class CciCdc:
                 )
                 lat_lon_data = np.array((lon_data, lat_data)).T
                 geometry_data = [mapping(Point(ll)) for ll in lat_lon_data]
-                np_array = np.array(geometry_data, copy=False, dtype=object)
+                np_array = np.asarray(geometry_data, dtype=object)
             else:
                 data_type = (data_source.get('variable_infos', {}).get(var_name, {}).
                              get('data_type'))
                 data = await self._get_data_from_opendap_dataset(
                     dataset, session, var_name, ds_dim_indexes
                 )
-                np_array = np.array(data, copy=False, dtype=data_type)
+                np_array = np.asarray(data, dtype=data_type)
             if res is None:
                 res = np_array
             else:
@@ -1343,6 +1341,20 @@ class CciCdc:
                 codec = numcodecs.JSON()
                 return codec.encode(res)
             else:
+                if res.shape[geometry_index] < _VECTOR_DATACUBE_CHUNKING:
+                    fill_size = _VECTOR_DATACUBE_CHUNKING - res.shape[geometry_index]
+                    padding = []
+                    for i in range(len(res.shape)):
+                        if i == geometry_index:
+                            padding.append((0, fill_size))
+                        else:
+                            padding.append((0, 0))
+                    padding = tuple(padding)
+                    fill_value = (
+                        data_source.get("variable_infos", {}).get(var_name, {}).
+                        get("fill_value", np.nan)
+                    )
+                    res = np.pad(res, pad_width=padding, constant_values=fill_value)
                 return res.flatten().tobytes()
         return res
 
@@ -1383,7 +1395,7 @@ class CciCdc:
                         self._tif_to_array[file_path] = array
                     array = self._tif_to_array[file_path]
                     data = array.isel(sel_chunks)
-                    data = np.array(data, copy=False, dtype=data_type)
+                    data = np.asarray(data, dtype=data_type)
                     if to_bytes:
                         return data.flatten().tobytes()
                     return data
@@ -1400,12 +1412,15 @@ class CciCdc:
                         di = dim_indexes[offset + i]
                         chunks[dims[i]] = di.stop - di.start
                         sel_chunks[dims[i]] = di
+                    band_index = self._data_sources[drs_id].get("variable_infos", {}).get(var_name, {}).get("band_index")
+                    if band_index is not None:
+                        sel_chunks["band"] = band_index
                     if tif_url not in self._tif_to_array:
                         array = rioxarray.open_rasterio(tif_url, chunks=chunks)
                         self._tif_to_array[tif_url] = array
                     array = self._tif_to_array[tif_url]
                     data = array.isel(sel_chunks)
-                    data = np.array(data, copy=False, dtype=data_type)
+                    data = np.asarray(data, dtype=data_type)
                     if to_bytes:
                         return data.flatten().tobytes()
                     return data
@@ -1422,7 +1437,7 @@ class CciCdc:
             if data.size > 1:
                 data = [d.decode() for d in data]
         else:
-            data = np.array(data, copy=False, dtype=data_type)
+            data = np.asarray(data, dtype=data_type)
         if to_bytes:
             return data.flatten().tobytes()
         return data
@@ -1641,9 +1656,9 @@ class CciCdc:
                 if "nbmonth" in dimensions:
                     time_name = "nbmonth"
                     time_dimension_size = 1
-                dimensions[time_name] = time_dimension_size * dimensions.get(
-                    time_name, 1
-                )
+                data_source["time_chunking"] = dimensions.get(time_name, 1)
+                dimensions[time_name] = (
+                        time_dimension_size * data_source["time_chunking"])
                 for variable_info in variable_infos.values():
                     if time_name in variable_info['dimensions']:
                         time_index = variable_info['dimensions'].index(time_name)
@@ -1765,7 +1780,7 @@ class CciCdc:
         if len(sdrsid) == 2:
             paging_query_args["drsId"] = sdrsid[0]
             name_filter = sdrsid[1]
-            paging_query_args["maximumRecords"] = 348
+            paging_query_args["maximumRecords"] = 10000
         url = base_url + '?' + urllib.parse.urlencode(paging_query_args)
         resp = await self.get_response(session, url)
         if resp:
@@ -2023,27 +2038,51 @@ class CciCdc:
         var_infos = {}
         attributes = {}
         array = rioxarray.open_rasterio(download_url, chunks=dict(x=512, y=512))
-        var_name = download_url.split(".tif")[0].split("-")[-1]
-        self._put_variable_info_from_tif_file_var_infos_attributes(
-            array, var_name, var_infos, attributes
-        )
+        # print(array.encoding)
+        # print(array.chunks)
+        # var_name = download_url.split(".tif")[0].split("-")[-1]
+        var_dicts = self._get_var_names_from_download_url(download_url)
+        for var_name, var_dict in var_dicts.items():
+            self._put_variable_info_from_tif_file_var_infos_attributes(
+                array, var_name, var_dict, var_infos, attributes
+            )
         return var_infos, attributes
+
+    def _get_var_names_from_download_url(self, download_url: str) -> Dict[str, Dict]:
+        file_name = download_url.split("/")[-1].split(".tif")[0]
+        for var_name, var_dict in TIFF_VARS.items():
+            if var_name in file_name:
+                return var_dict
+        # file_name.split("-")[-1]
+        # return [download_url.split(".tif")[0].split("-")[-1]]
 
     @staticmethod
     def _put_variable_info_from_tif_file_var_infos_attributes(
-            array, var_name, var_infos, attributes
+            array, var_name, var_dict, var_infos, attributes
     ):
         var_infos[var_name] = {}
         band_dim = -1
+        divisor = 1
         if "band" in array.dims:
             band_dim = list(array.dims).index("band")
+            divisor = array["band"].size
         dims = [d for d in array.dims if d != "band"]
         var_infos[var_name]["dimensions"] = dims
         var_infos[var_name]["file_dimensions"] = dims
-        var_infos[var_name]["size"] = array.size
+        var_infos[var_name]["size"] = array.size / divisor
         var_infos[var_name]["shape"] = \
             [s for i, s in enumerate(array.shape) if i != band_dim]
         var_infos[var_name]["data_type"] = array.dtype.name
+        if "band_index" in var_dict:
+            var_infos[var_name]["band_index"] = var_dict["band_index"]
+        if "description" in var_dict:
+            var_infos[var_name]["description"] = var_dict["description"]
+        if "min_value" in var_dict:
+            var_infos[var_name]["min_value"] = var_dict["min_value"]
+        if "max_value" in var_dict:
+            var_infos[var_name]["max_value"] = var_dict["max_value"]
+        if "fill_value" in var_dict:
+            var_infos[var_name]["fill_value"] = var_dict["fill_value"]
         preferred_chunks = array.encoding.get("preferred_chunks", {})
         chunk_sizes = []
         for dim in dims:
@@ -2127,7 +2166,7 @@ class CciCdc:
         if res_dict['dds'] == '':
             _LOG.warning('Could not open opendap url. dds file is empty.')
             return
-        dataset = build_dataset(res_dict['dds'])
+        dataset = dds_to_dataset(res_dict['dds'])
         add_attributes(dataset, parse_das(res_dict['das']))
 
         # remove any projection from the url, leaving selections
@@ -2137,7 +2176,7 @@ class CciCdc:
 
         # now add data proxies
         for var in walk(dataset, BaseType):
-            var.data = BaseProxy(url, var.id, var.dtype, var.shape)
+            var.data = BaseProxyDap2(url, var.id, var.dtype, var.shape)
         for var in walk(dataset, SequenceType):
             template = copy.copy(var)
             var.data = SequenceProxy(url, template)
@@ -2196,9 +2235,9 @@ class CciCdc:
         dds, data = content.split(b'\nData:\n', 1)
         dds = str(dds, 'utf-8')
         # Parse received dataset:
-        dataset = build_dataset(dds)
+        dataset = dds_to_dataset(dds)
         try:
-            dataset.data = unpack_data(BytesReader(data), dataset)
+            dataset.data = unpack_dap2_data(BytesReader(data), dataset)
         except ValueError:
             _LOG.warning(f'Could not read data from "{url}"')
             return None

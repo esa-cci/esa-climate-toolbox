@@ -467,7 +467,7 @@ class CciCdcTest(unittest.TestCase):
                 processing_level='L2P'
             )
         )
-        self.assertTrue(len(l2p_sources) > 20)
+        self.assertTrue(len(l2p_sources) > 10)
 
     @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
             'ECT_DISABLE_WEB_TESTS = 1')

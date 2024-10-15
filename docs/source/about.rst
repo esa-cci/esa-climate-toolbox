@@ -104,5 +104,8 @@ In addition to operations provided by the ESA CII Toolbox, the Python packages
 `xarray`_, `pandas`_, and `geopandas`_ provide a rich and powerful low-level
 data processing interface for the datasets opened through the Toolbox.
 
-You can find detailed listings of the provided functionality in
+Also, there are further functions which are not operations but which have been found
+to be useful for working with cci data.
+
+You can find detailed listings of the provided functionalities in
 :doc:`api_reference`.

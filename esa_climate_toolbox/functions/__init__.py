@@ -19,5 +19,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-__title__ = 'esa-climate-toolbox'
-__version__ = '1.1'
+"""
+Description
+===========
+
+The ``esa_climate_toolbox.functions`` package provides functions that represent current
+work patterns.
+
+This package is independent of other ``esa_climate_toolbox.*``packages
+and can therefore be used stand-alone.
+
+Verification
+============
+
+The module's unit-tests are located in
+`test/util
+<https://github.com/esa-cci/esa-climate-toolbox/tree/main/test/functions>`_ and may
+be executed using $ py.test test/util --cov=esa_climate_toolbox/functions``
+for extra code coverage information.
+
+Components
+==========
+"""
+
+__author__ = "Tonio Fincke (Brockmann Consult GmbH)"

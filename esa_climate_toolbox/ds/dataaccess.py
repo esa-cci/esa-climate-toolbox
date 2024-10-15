@@ -322,7 +322,9 @@ class CciCdcDatasetOpener(CciCdcDataOpener):
                 time_attrs = {
                     "units": "seconds since 1970-01-01T00:00:00Z",
                     "calendar": "proleptic_gregorian",
-                    "standard_name": "time"
+                    "standard_name": "time",
+                    "shape": [dims[time_dim_name]],
+                    "size": dims[time_dim_name]
                 }
                 coord_descriptors[time_dim_name] = VariableDescriptor(
                     time_dim_name, dtype='int64', dims=(time_dim_name,),
@@ -336,6 +338,8 @@ class CciCdcDatasetOpener(CciCdcDataOpener):
                     "units": "seconds since 1970-01-01T00:00:00Z",
                     "calendar": "proleptic_gregorian",
                     "standard_name": "time_bnds",
+                    "shape": [2, dims[time_dim_name]],
+                    "size": 2 * dims[time_dim_name]
                 }
                 coord_descriptors['time_bnds'] = \
                     VariableDescriptor('time_bnds',
@@ -757,7 +761,10 @@ class CciCdcDataStore(DataStore):
             self, opener_id: str = None, data_type: str = None
     ) -> List[CciCdcDataOpener]:
         self._assert_valid_opener_id(opener_id)
-        self._assert_valid_data_type(data_type)
+        try:
+            self._assert_valid_data_type(data_type)
+        except DataStoreError:
+            return []
         if opener_id is not None:
             opener = self._openers[opener_id]
             if data_type is not None:
