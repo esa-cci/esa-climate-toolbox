@@ -2,7 +2,7 @@
 
 ![Unsupported](https://img.shields.io/badge/status-unsupported-red)
 
-Welcome to the **external_user_examples** folder!
+Welcome to the **user_examples** folder!
 
 ## Purpose
 
