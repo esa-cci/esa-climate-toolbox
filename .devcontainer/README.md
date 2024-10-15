@@ -41,7 +41,7 @@ In the Explorer pane, open up the notebooks folder, and select the notebook you 
 
 In the upper right corner, click 'Select Kernel'.
 
-![click 'Select Kernal](<images/Screenshot 2024-09-06 at 5.20.42 PM.png>)
+![click 'Select Kernel](<images/Screenshot 2024-09-06 at 5.20.42 PM.png>)
 
 This will open the kernel selection dialogue at the top. Choose 'Python Environments...'
 
