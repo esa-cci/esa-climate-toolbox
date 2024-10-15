@@ -20,6 +20,11 @@ ENV PYTHONUNBUFFERED=1
 # Set the default shell to bash
 SHELL ["/bin/bash", "-c"]
 
+# Ensure that the Git repository is up-to-date
+RUN git config --global pull.ff only && \
+    git config --global init.defaultBranch main && \
+    git -C /workspace pull origin main || true
+
 # Automatically activate the environment when starting the container
 RUN echo "conda activate ect" >> /home/vscode/.bashrc
 
