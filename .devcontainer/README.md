@@ -39,7 +39,7 @@ In the Explorer pane, open up the notebooks folder, and select the notebook you 
 
 ### 4. Select Kernel
 
-In the upper right corner, click 'Select Kernal'.
+In the upper right corner, click 'Select Kernel'.
 
 ![click 'Select Kernal](<images/Screenshot 2024-09-06 at 5.20.42 PM.png>)
 
