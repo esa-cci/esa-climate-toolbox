@@ -12,6 +12,9 @@ RUN conda update -n base -c defaults conda -y \
     && conda create --name ect --channel conda-forge esa-climate-toolbox jupyter ipykernel -y \
     && conda clean -afy
 
+# Install the Conda environment as a Jupyter kernel
+RUN /opt/conda/envs/ect/bin/python -m ipykernel install --name "ect" --user
+
 # Set environment variables
 ENV PATH /opt/conda/envs/ect/bin:$PATH
 ENV CONDA_DEFAULT_ENV=ect
