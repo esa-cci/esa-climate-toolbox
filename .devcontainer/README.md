@@ -25,7 +25,7 @@ This should spawn the codespace in a new browser tab.
 
 Once you start your Codespace, it should look like this.
 
-![Codespace](<images/Screenshot 2024-09-06 at 5.16.30 PM.png>)
+![Codespace](<images/Screenshot 2024-10-15 at 3.59.17 PM.png>)
 
 If you are asked, you should install the Docker extension - click [Install].
 
