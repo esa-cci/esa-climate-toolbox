@@ -7,9 +7,9 @@ RUN useradd -m vscode
 # Set the working directory in the container
 WORKDIR /workspace
 
-# Update conda and install the ESA Climate Toolbox in a new environment
+# Update conda and install the ESA Climate Toolbox, Jupyter, and ipykernel in a new environment
 RUN conda update -n base -c defaults conda -y \
-    && conda create --name ect --channel conda-forge esa-climate-toolbox jupyter -y \
+    && conda create --name ect --channel conda-forge esa-climate-toolbox jupyter ipykernel -y \
     && conda clean -afy
 
 # Set environment variables
