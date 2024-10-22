@@ -1,3 +1,6 @@
+## Changes in 1.1.1 (in development)
+
+
 ## Changes in 1.1
 
 * Support numpy >= 2.0 and pydap >= 3.4
