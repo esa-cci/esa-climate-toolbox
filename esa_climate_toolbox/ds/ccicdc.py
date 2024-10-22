@@ -2015,6 +2015,7 @@ class CciCdc:
             _LOG.warning(f'Dataset is not accessible via Download')
             return {}, {}
         tif_files = await self._get_tif_files_from_tar_url(download_url, session)
+        var_dict = {}
         var_infos = {}
         attributes = {}
         for file in tif_files:
@@ -2023,7 +2024,7 @@ class CciCdc:
             )
             var_name = file.split(".tif")[0].split("-")[-1]
             self._put_variable_info_from_tif_file_var_infos_attributes(
-                array, var_name, var_infos, attributes
+                array, var_name, var_dict, var_infos, attributes
             )
         return var_infos, attributes
 
@@ -2053,8 +2054,6 @@ class CciCdc:
         for var_name, var_dict in TIFF_VARS.items():
             if var_name in file_name:
                 return var_dict
-        # file_name.split("-")[-1]
-        # return [download_url.split(".tif")[0].split("-")[-1]]
 
     @staticmethod
     def _put_variable_info_from_tif_file_var_infos_attributes(
