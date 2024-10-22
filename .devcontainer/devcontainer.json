@@ -1,0 +1,12 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-toolsai.jupyter"]
+    }
+  },
+  "postCreateCommand": "grep -qxF 'conda activate ect' ~/.bashrc || echo 'conda activate ect' >> ~/.bashrc && git pull origin main",
+  "remoteUser": "vscode"
+}
