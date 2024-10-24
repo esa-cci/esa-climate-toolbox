@@ -1,7 +1,7 @@
 import unittest
 
 from xcube.util.extension import ExtensionRegistry
-from esa_climate_toolbox.ds.dataaccess import CciCdcDataStore
+from xcube_cci.dataaccess import CciCdcDataStore
 
 from esa_climate_toolbox.plugin import init_plugin
 
