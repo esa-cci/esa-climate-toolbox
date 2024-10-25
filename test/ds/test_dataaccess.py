@@ -267,14 +267,16 @@ class CciCdcDatasetOpenerTest(unittest.TestCase):
         self.assertTrue('bbox' in schema['properties'])
         self.assertFalse(schema['additionalProperties'])
 
-    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
-            'ECT_DISABLE_WEB_TESTS = 1')
+    # @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+    #         'ECT_DISABLE_WEB_TESTS = 1')
     def test_open_data_sst(self):
         dataset = self.opener.open_data(
-            SST_ID,
-            variable_names=['analysed_sst'],
-            bbox=[-30, 20, -29, 21],
-            time_range=['2008-07-01','2008-07-01'])
+            "esacci.FIRE.mon.L3S.BA.MODIS.Terra.MODIS_TERRA.v5-1.pixel~AREA_1"
+            # SST_ID,
+            # variable_names=['analysed_sst'],
+            # bbox=[-30, 20, -29, 21],
+            # time_range=['2008-07-01','2008-07-01']
+        )
 
         self.assertIsNotNone(dataset)
         self.assertEqual({'analysed_sst'}, set(dataset.data_vars))
@@ -793,8 +795,8 @@ class CciCdcVectorDataCubeOpenerTest(unittest.TestCase):
         self.assertTrue('variable_names' in schema['properties'])
         self.assertFalse(schema['additionalProperties'])
 
-    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
-            'ECT_DISABLE_WEB_TESTS = 1')
+    # @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+    #         'ECT_DISABLE_WEB_TESTS = 1')
     def test_open_data(self):
         data = self._opener.open_data(VDC_ID,
                                       variable_names=["distance_to_coast", "sla"])
@@ -808,6 +810,7 @@ class CciCdcVectorDataCubeOpenerTest(unittest.TestCase):
         self.assertEqual({50, 216}, set(data.sla.chunk_sizes))
         self.assertEqual({1867, 216}, set(data.sla.shape))
         self.assertIsNotNone(data.zarr_store.get())
+        print(data.sla.values)
 
 
 class CciCdcDataStoreTest(unittest.TestCase):
