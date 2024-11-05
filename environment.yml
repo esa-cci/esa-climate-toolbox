@@ -5,26 +5,21 @@ dependencies:
   # Python
   - python >=3.8
   # Required
-  - aiohttp >= 3.6
   - cartopy
   - cftime
   - dask
   - geopandas
-  - lxml >= 4.5
   - matplotlib-base
-  - nest-asyncio >= 1.3
   - numcodecs
   - numpy
   - pandas
-  - pydap >= 3.4
   - pyproj
   - python-dateutil
-  - rioxarray
   - shapely
   - six
   - xarray
   - xcube >= 1.4.0
-  - xvec
+  - xcube-cci >= 0.11.1
   # Test libs
   - pytest
   - pytest-cov

@@ -208,7 +208,7 @@ class WriteTest(unittest.TestCase):
         self.assertEqual(
             "value must be an instance of "
             "<class 'xcube.core.store.store.MutableDataStore'>, "
-            "was <class 'esa_climate_toolbox.ds.dataaccess.CciCdcDataStore'>",
+            "was <class 'xcube_cci.dataaccess.CciOdpDataStore'>",
             str(te.exception)
         )
 

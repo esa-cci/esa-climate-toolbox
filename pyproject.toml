@@ -29,7 +29,6 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "aiohttp>=3.6",
     "cartopy",
     "cftime",
     "dask",
@@ -40,15 +39,13 @@ dependencies = [
     "numcodecs",
     "numpy>=2",
     "pandas",
-    "pydap>=3.4",
     "pyproj",
     "python-dateutil",
-    "rioxarray",
     "shapely",
     "six",
     "xarray",
     "xcube-core>=1.4.0",
-    "xvec"
+    "xcube-cci>=0.11.1",
 ]
 
 [project.optional-dependencies]
@@ -57,8 +54,6 @@ dev = [
   "pytest-cov"
 ]
 
-[project.entry-points."xcube_plugins"]
-    esa-climate-toolbox = "esa_climate_toolbox.plugin:init_plugin"
 [project.entry-points."esa_climate_toolbox_plugins"]
     esa-climate-esa_climate_toolbox_ops = "esa_climate_toolbox.ops:ect_init"
     esa-climate-esa_climate_toolbox_ds = "esa_climate_toolbox.ds:ect_init"

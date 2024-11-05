@@ -44,17 +44,11 @@ setup(
     include_package_data=True,
     data_files=[(
         'esa_climate_toolbox', [
-            'esa_climate_toolbox/ds/data/excluded_data_sources',
-            'esa_climate_toolbox/ds/data/dataset_states.json',
-            'esa_climate_toolbox/ds/data/stores.yml',
-            'esa_climate_toolbox/ds/data/kc_refs.json'
+            'esa_climate_toolbox/ds/data/stores.yml'
             ]
     )],
     install_requires=requirements,
     entry_points={
-        'xcube_plugins': [
-            'esa-climate-toolbox = esa_climate_toolbox.plugin:init_plugin',
-        ],
         'esa_climate_toolbox_plugins': [
             'esa_climate_toolbox_ops = esa_climate_toolbox.ops:ect_init',
             'esa_climate_toolbox_ds = esa_climate_toolbox.ds:ect_init',
