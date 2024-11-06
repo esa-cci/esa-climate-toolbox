@@ -1,4 +1,4 @@
-## Changes in 1.1.1 (in development)
+## Changes in 1.2
 
 * Added dockerfile to run the `ESA CCI Toolbox` in a GitHub Codespace,
   allowing users to use the toolbox and in particular Jupyter Notebooks
