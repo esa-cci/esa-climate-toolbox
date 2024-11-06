@@ -1,5 +1,15 @@
 ## Changes in 1.1.1 (in development)
 
+* Added dockerfile to run the `ESA CCI Toolbox` in a GitHub Codespace,
+  allowing users to use the toolbox and in particular Jupyter Notebooks
+  on GitHub. A dedicated readme file with instructions is in the `.devcontainer`
+  sub-folder.
+* Introduced `user_examples` section in notebooks folder, where example 
+  notebooks from users can be collected.
+* Changed toolbox to use external `xcube-cci` package for access to the ODP and
+  removed redundant modules in the toolbox. This change has no functional effect
+  on the toolbox, as together with the `xcube-cci` package it can be used as
+  before.
 
 ## Changes in 1.1
 
