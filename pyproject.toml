@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "esa_climate_toolbox"
-version = "1.2"
+version = "1.2.1.dev0"
 authors = [
   { name="ESA CCI Toolbox Development Team" },
 ]

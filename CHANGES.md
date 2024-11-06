@@ -1,3 +1,5 @@
+## Changes in 1.2.1 (in development)
+
 ## Changes in 1.2
 
 * Added dockerfile to run the `ESA CCI Toolbox` in a GitHub Codespace,
