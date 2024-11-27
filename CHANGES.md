@@ -1,5 +1,6 @@
 ## Changes in 1.2.1 (in development)
 * Made Python 3.10 the minimal supported version
+* Improved error handling of coregistration op
 
 ## Changes in 1.2
 
