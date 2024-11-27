@@ -86,6 +86,7 @@ from .resampling import downsample_2d
 from .resampling import resample
 from .resampling import resample_2d
 from .resampling import upsample_2d
+from .select import select_var
 from .subset import subset_spatial
 from .subset import subset_temporal
 from .subset import subset_temporal_index
@@ -136,6 +137,8 @@ __all__ = [
     'resample_2d',
     'downsample_2d',
     'upsample_2d',
+    # .select
+    'select_var',
     # .subset
     'subset_spatial',
     'subset_temporal',
