@@ -729,7 +729,7 @@ def resample(
         var_configs[k] = var_config
 
     return resample_in_space(
-        dataset=ds,
+        ds,
         source_gm=source_gm,
         target_gm=target_gm,
         var_configs=var_configs
