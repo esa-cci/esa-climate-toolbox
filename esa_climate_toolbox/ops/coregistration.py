@@ -91,10 +91,10 @@ def coregister(ds_primary: xr.Dataset,
     :return: The replica dataset resampled on the grid of the primary
     """
     try:
-        grids = (('replica', ds_replica['lat'].values, -90),
-                 ('replica', ds_replica['lon'].values, -180),
-                 ('primary', ds_primary['lat'].values, -90),
-                 ('primary', ds_primary['lon'].values, -180))
+        grids = (('replica', ds_replica['lat'], -90),
+                 ('replica', ds_replica['lon'], -180),
+                 ('primary', ds_primary['lat'], -90),
+                 ('primary', ds_primary['lon'], -180))
     except KeyError:
         raise ValidationError(
             'Coregistration requires that both datasets are spatial datasets '
@@ -130,7 +130,8 @@ def coregister(ds_primary: xr.Dataset,
                 'The {} dataset grid does not fall into required boundaries. '
                 'Required boundaries are ({}, {}), dataset boundaries are '
                 '({}, {}). Running the normalize operation may help.'.format(
-                    array[0], array[2], abs(array[2]), array[1][0], array[1][-1]
+                    array[0], array[2], abs(array[2]),
+                    array[1][0].values, array[1][-1].values
                 )
             )
         if not _is_equidistant(array[1]):
@@ -157,23 +158,25 @@ def coregister(ds_primary: xr.Dataset,
     )
 
 
-def _is_equidistant(array: np.ndarray) -> bool:
+def _is_equidistant(array: xr.DataArray) -> bool:
     """
     Check if the given 1D array is equidistant. The distance between all
     elements of the array should be equal.
 
     :param array: The array that should be equidistant
     """
-    step = abs(array[1] - array[0])
-    for i in range(0, len(array) - 1):
-        curr_step = abs(array[i + 1] - array[i])
-        if not math.isclose(curr_step, step, rel_tol=1e-3):
-            return False
+    diff = array.diff(dim=array.dims[0])
+    atol = np.abs(np.divide(diff[0], 100.00)).values
 
-    return True
+    # If a bounding box intersects with the anti-meridian, compute its correct width
+    ct_neg = diff.where(diff < 0).count().values
+    if ct_neg == 1:
+        diff = xr.where(diff < 0, diff + 360.0, diff)
+
+    return np.allclose(diff[0], diff, atol=atol)
 
 
-def _is_pixel_registered(array: np.ndarray, origin) -> bool:
+def _is_pixel_registered(array: xr.DataArray, origin) -> bool:
     """
     Check if the given coordinate array is pixel registered. Values should
     denote the 'middle' point of a pixel.
@@ -181,7 +184,7 @@ def _is_pixel_registered(array: np.ndarray, origin) -> bool:
     :param array: The array that should be pixel registered
     :param origin: The origin value for the values in the given array
     """
-    step = abs(array[1] - array[0])
+    step = abs(array[1].values - array[0].values)
     return math.isclose(
         (((array[0] - step / 2) - origin) % step), 0, abs_tol=0.1
     )
@@ -200,7 +203,7 @@ def _is_valid_array(array: xr.DataArray) -> bool:
             and 'lon' in array.dims)
 
 
-def _within_bounds(array: np.ndarray, low_bound) -> bool:
+def _within_bounds(array: xr.DataArray, low_bound) -> bool:
     """
     Check if the given array falls into the given bounds. We work with
     grids that are symmetrical around zero.
@@ -209,7 +212,7 @@ def _within_bounds(array: np.ndarray, low_bound) -> bool:
     :param low_bound: lower boundary
     :return: True if falls into bounds
     """
-    return array[0] >= low_bound and array[-1] <= abs(low_bound)
+    return array[0].values >= low_bound and array[-1].values <= abs(low_bound)
 
 
 def _resample_slice(
@@ -323,6 +326,23 @@ def _resample_dataset(
     :param monitor: a progress monitor.
     :return: xr.Dataset The resampled replica dataset
     """
+    primary_lat_inverted = ds_primary["lat"][0].values > ds_primary["lat"][-1].values
+    replica_lat_inverted = ds_replica["lat"][0].values > ds_replica["lat"][-1].values
+    if replica_lat_inverted and primary_lat_inverted:
+        raise ValueError(
+            "ds_primary and ds_replica have inverted latitude values. "
+            "Please normalise the datasets before coregistration."
+        )
+    if primary_lat_inverted and not replica_lat_inverted:
+        raise ValueError(
+            "ds_primary has inverted latitude values. "
+            "Please normalise the dataset before coregistration."
+        )
+    if replica_lat_inverted and not primary_lat_inverted:
+        raise ValueError(
+            "ds_replica has inverted latitude values. "
+            "Please normalise the dataset before coregistration."
+        )
     # Find lat/lon bounds of the intersection of master and replica grids. The
     # bounds should fall on pixel boundaries for both spatial dimensions for
     # both datasets
