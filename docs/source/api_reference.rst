@@ -164,16 +164,14 @@ Resampling
 
 .. autofunction:: esa_climate_toolbox.ops.resample
 
-.. autofunction:: esa_climate_toolbox.ops.resample_2d
-
-.. autofunction:: esa_climate_toolbox.ops.downsample_2d
-
-.. autofunction:: esa_climate_toolbox.ops.upsample_2d
-
 .. _subsetting:
 
 Subsetting
 ----------
+
+.. autofunction:: esa_climate_toolbox.ops.select_features
+
+.. autofunction:: esa_climate_toolbox.ops.select_var
 
 .. autofunction:: esa_climate_toolbox.ops.subset_spatial
 

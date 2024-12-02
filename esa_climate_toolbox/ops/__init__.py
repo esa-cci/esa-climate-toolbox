@@ -86,6 +86,7 @@ from .resampling import downsample_2d
 from .resampling import resample
 from .resampling import resample_2d
 from .resampling import upsample_2d
+from .select import select_features
 from .select import select_var
 from .subset import subset_spatial
 from .subset import subset_temporal
@@ -131,13 +132,12 @@ __all__ = [
     'plot_contour',
     'plot_hist',
     'plot_line',
+    'plot_map',
     'plot_scatter',
     # .resampling
     'resample',
-    'resample_2d',
-    'downsample_2d',
-    'upsample_2d',
     # .select
+    'select_features',
     'select_var',
     # .subset
     'subset_spatial',
