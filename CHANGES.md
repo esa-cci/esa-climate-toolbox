@@ -1,4 +1,4 @@
-## Changes in 1.2.1 (in development)
+## Changes in 1.3
 * Made Python 3.10 the minimal supported version
 * Improved error handling of coregistration op
 * Added function to list ecv datasets of titles
