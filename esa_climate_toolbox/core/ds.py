@@ -139,12 +139,15 @@ def list_ecv_datasets(
                          f'one of the following: {", ".join(ecvs)}')
     ecv = ecv.upper()
     ecv_datasets = []
+    limitators = [".{0}.", "-{0}-", "_{0}-"]
     for store_instance_id in ECT_DATA_STORE_POOL.store_instance_ids:
         store = ECT_DATA_STORE_POOL.get_store(store_instance_id)
         data_ids = store.list_data_ids(data_type, include_attrs)
-        for data_id in data_ids:
-            if ecv in data_id.upper():
-                ecv_datasets.append((data_id, store_instance_id))
+        for limitator in limitators:
+            ecv = limitator.format(ecv)
+            for data_id in data_ids:
+                if ecv in data_id.upper():
+                    ecv_datasets.append((data_id, store_instance_id))
     return ecv_datasets
 
 
