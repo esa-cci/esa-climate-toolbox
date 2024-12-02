@@ -151,6 +151,26 @@ def list_ecv_datasets(
     return ecv_datasets
 
 
+def list_ecv_datasets_of_titles(
+        titles: Union[str, List[str]]
+) -> List[Tuple[str, str]]:
+    if isinstance(titles, str):
+        titles = [titles]
+    ecv_datasets = []
+    for store_instance_id in ECT_DATA_STORE_POOL.store_instance_ids:
+        store = ECT_DATA_STORE_POOL.get_store(store_instance_id)
+        extended_ids = store.list_data_ids(include_attrs=['title'])
+        for title in titles:
+            # it might happen that there is more than one dataset
+            # with the same title
+            for extended_id in extended_ids:
+                if isinstance(extended_id, str):
+                    continue
+                if extended_id[1].get('title', '') == title:
+                    ecv_datasets.append((extended_id[0], store_instance_id))
+    return ecv_datasets
+
+
 def _get_store_id_from_prefix(prefix: str) -> str:
     count = 1
     store_id = f'{prefix}_{count}'

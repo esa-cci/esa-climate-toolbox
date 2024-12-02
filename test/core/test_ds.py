@@ -16,6 +16,7 @@ from esa_climate_toolbox.core.ds import get_store
 from esa_climate_toolbox.core.ds import list_datasets
 from esa_climate_toolbox.core.ds import list_ecvs
 from esa_climate_toolbox.core.ds import list_ecv_datasets
+from esa_climate_toolbox.core.ds import list_ecv_datasets_of_titles
 from esa_climate_toolbox.core.ds import list_stores
 from esa_climate_toolbox.core.ds import remove_store
 from esa_climate_toolbox.core.ds import write_data
@@ -62,6 +63,30 @@ class DsTest(unittest.TestCase):
             ECT_ZARR_STORE_ID
         )
         self.assertIn(expected_zarr_file, lakes_datasets)
+
+    @skipIf(os.environ.get('ECT_DISABLE_WEB_TESTS', '1') == '1',
+            'ECT_DISABLE_WEB_TESTS = 1')
+    def test_list_ecv_datasets_of_titles(self):
+        lst_datasets = list_ecv_datasets_of_titles(
+            "ESA Land Surface Temperature Climate Change Initiative (LST_cci): "
+            "All-weather MicroWave Land Surface Temperature (MW-LST) "
+            "global data record (1996-2020), v2.33"
+        )
+        expected_lst_datasets = [
+            ("esacci.LST.day.L3C.LST.multi-sensor.multi-platform.SSMI_SSMIS.v2-33.ASC",
+             "esa-cci"),
+            ("esacci.LST.day.L3C.LST.multi-sensor.multi-platform.SSMI_SSMIS.v2-33.DES",
+             "esa-cci"),
+            ("esacci.LST.mon.L3C.LST.multi-sensor.multi-platform.SSMI_SSMIS.v2-33.ASC",
+             "esa-cci"),
+            ("esacci.LST.mon.L3C.LST.multi-sensor.multi-platform.SSMI_SSMIS.v2-33.DES",
+             "esa-cci"),
+            ("esacci.LST.yr.L3C.LST.multi-sensor.multi-platform.SSMI_SSMIS.v2-33.ASC",
+             "esa-cci"),
+            ("esacci.LST.yr.L3C.LST.multi-sensor.multi-platform.SSMI_SSMIS.v2-33.DES",
+             "esa-cci"),
+        ]
+        self.assertEqual(expected_lst_datasets, lst_datasets)
 
     def test_get_store(self):
         store = get_store(store_id=ECT_STORE_ID)
