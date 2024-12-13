@@ -34,6 +34,10 @@ from datetime import timezone
 import dask.array as da
 import numpy as np
 import pandas as pd
+from typing import List
+from typing import Union
+
+import scipy.stats
 import xarray as xr
 from xarray.core.resample import DatasetResample
 
@@ -401,5 +405,66 @@ def reduce(ds: DatasetLike.TYPE,
                 retset[var_name] = retset[var_name].reduce(ufuncs[method],
                                                            dim=intersection,
                                                            keep_attrs=True)
+
+    return retset
+
+
+@op(tags=['aggregate', 'statistics'], version='1.0')
+@op_input('ds', data_type=DatasetLike)
+@op_input('var', value_set_source='ds', data_type=VarNamesLike)
+@op_input('dim', value_set_source='ds', data_type=DimNamesLike)
+@op_input('methods', any_of=["count", "mean", "median", "sum", "std", "min", "max"])
+@op_return(add_history=True)
+def statistics(ds: DatasetLike.TYPE,
+               var: VarNamesLike.TYPE = None,
+               dim: DimNamesLike.TYPE = None,
+               methods: Union[str, List[str]] = 'mean',
+               monitor: Monitor = Monitor.NONE) -> xr.Dataset:
+    """
+    Computes statistics for the given variables of the given dataset along the
+    given dimensions for the given methods.
+    If no variables are given, all variables of the dataset will be reduced. If
+    no dimensions are given, all dimensions will be reduced.
+
+    :param ds: Dataset to aggregate statistics for
+    :param var: Variables in the dataset to aggregate
+    :param dim: Dataset dimensions along which to aggregate
+    :param methods: One or more methods to create statistics from. Must be one or more
+        of the following: 'count', 'mean', 'median', 'sum', 'std', 'min', 'max'
+    :param monitor: A progress monitor
+    """
+    if isinstance(methods, str):
+        methods = [methods]
+    ufuncs = {'min': np.nanmin, 'max': np.nanmax, 'mean': np.nanmean,
+              'median': np.nanmedian, 'sum': np.nansum, "count": np.count_nonzero,
+              "std": np.std}
+    funcs = dict()
+    for k, v in ufuncs.items():
+        if k in methods:
+            funcs[k] = v
+    # funcs = {k, v for k, v in ufuncs.items() if k in methods}
+
+    ds = DatasetLike.convert(ds)
+
+    if not var:
+        var = list(ds.data_vars.keys())
+    var_names = VarNamesLike.convert(var)
+
+    if not dim:
+        dim = list(ds.coords.keys())
+    else:
+        dim = DimNamesLike.convert(dim)
+
+    retset = ds.copy()
+
+    with monitor.starting("Aggregating statistics", total_work=100):
+        work = int(100 / (len(var_names) + len(funcs)))
+        for var_name in var_names:
+            intersection = [value for value in dim if value in retset[var_name].dims]
+            for func_name, func in funcs.items():
+                with monitor.child(work).observing("Reduce"):
+                    retset[f"{var_name}_{func_name}"] = retset[var_name].reduce(
+                        func, dim=intersection, keep_attrs=True
+                    )
 
     return retset

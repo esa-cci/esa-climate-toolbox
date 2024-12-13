@@ -81,6 +81,8 @@ Aggregation
 
 .. autofunction:: esa_climate_toolbox.ops.reduce
 
+.. autofunction:: esa_climate_toolbox.ops.statistics
+
 .. autofunction:: esa_climate_toolbox.ops.temporal_aggregation
 
 .. _animate:

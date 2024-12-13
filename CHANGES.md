@@ -1,4 +1,5 @@
 ## Changes in 1.3.1 (in development)
+* Added new operation `statistics` to compute statistics for a dataset 
 
 ## Changes in 1.3
 * Made Python 3.10 the minimal supported version
