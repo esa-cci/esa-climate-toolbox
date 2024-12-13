@@ -538,6 +538,7 @@ def op_input(input_name: str,
              nullable=UNDEFINED,
              value_set_source=UNDEFINED,
              value_set=UNDEFINED,
+             any_of=UNDEFINED,
              value_range=UNDEFINED,
              script_lang=UNDEFINED,
              deprecated=UNDEFINED,
@@ -583,7 +584,9 @@ def op_input(input_name: str,
     :param value_set_source: The name of an input, which can be used to
         generate a dynamic value set.
     :param value_set: A sequence of the valid values. Note that all values in
-        this sequence must be compatible with *data_type*.
+        this sequence must be compatible with *data_type*. Exactly one value is allowed.
+    :param any_of: A sequence of the valid values. All values in this sequence must
+        be compatible with *data_type*. Multiple values are allowed
     :param value_range: A sequence specifying the possible range of valid
         values.
     :param script_lang: The programming language for a parameter of data_type
@@ -615,6 +618,7 @@ def op_input(input_name: str,
                               nullable=nullable,
                               value_set_source=value_set_source,
                               value_set=value_set,
+                              any_of=any_of,
                               value_range=value_range,
                               script_lang=script_lang,
                               deprecated=deprecated,

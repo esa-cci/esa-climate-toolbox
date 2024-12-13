@@ -385,8 +385,10 @@ class OpMetaInfo:
                                   is None
                 value_set = input_properties.get('value_set')
                 value_set_has_none = value_set and (None in value_set)
+                any_of = input_properties.get('any_of')
+                any_of_has_none = any_of and (None in any_of)
                 nullable = input_properties.get('nullable', False)
-                if not (default_is_none or value_set_has_none or nullable):
+                if not (default_is_none or value_set_has_none or any_of_has_none or nullable):
                     raise validation_exception_class(
                         "Input '%s' for operation '%s' must be given." %
                         (name, self.qualified_name))
@@ -401,6 +403,18 @@ class OpMetaInfo:
                 raise validation_exception_class(
                     "Input '%s' for operation '%s' must be one of %s." % (
                         name, self.qualified_name, value_set))
+            any_of = input_properties.get('any_of', None)
+            if any_of and (value not in any_of):
+                if isinstance(value, List):
+                    for v in value:
+                        if v not in any_of:
+                            raise validation_exception_class(
+                                "Input '%s' for operation '%s' must be one of %s." % (
+                                    name, self.qualified_name, any_of))
+                else:
+                    raise validation_exception_class(
+                        "Input '%s' for operation '%s' must be one of %s." % (
+                            name, self.qualified_name, any_of))
             value_range = input_properties.get('value_range', None)
             if value_range and (value is None or not (
                     value_range[0] <= value <= value_range[1])
