@@ -1,4 +1,4 @@
-## Changes in 1.3.1 (in development)
+## Changes in 1.3.1
 * Added new operation `statistics` to compute statistics for a dataset 
 
 ## Changes in 1.3
