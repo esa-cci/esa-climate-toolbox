@@ -1,3 +1,5 @@
+## Changes in 1.3.2.dev0
+
 ## Changes in 1.3.1
 * Added new operation `statistics` to compute statistics for a dataset 
 
