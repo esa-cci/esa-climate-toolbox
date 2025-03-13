@@ -384,12 +384,15 @@ OP_REGISTRY = _DefaultOpRegistry()
 
 
 def list_operations(op_registry: OpRegistry = OP_REGISTRY,
+                    tag: str = None,
                     include_qualified_name: bool = False):
     """
     Lists the operations that are provided by the ESA Climate Toolbox.
 
     :param op_registry: An optional OpRegistry, in case the default one should
         not be used.
+    :param tag: If given, only operations valid for the specified tag will be
+        returned.
     :param include_qualified_name: If true, a more expressive qualified name
         will be returned along with the method name. Default is false.
 
@@ -434,12 +437,12 @@ def list_operations(op_registry: OpRegistry = OP_REGISTRY,
         return sorted(
             [(op_name, op_reg.op_meta_info.qualified_name)
              for op_name, op_reg in op_regs.items()
-             if _is_op_selected(op_name, op_reg, None, False, False)]
+             if _is_op_selected(op_name, op_reg, tag, False, False)]
         )
     else:
         return sorted(
             [op_name for op_name, op_reg in op_regs.items()
-            if _is_op_selected(op_name, op_reg, None, False, False)]
+            if _is_op_selected(op_name, op_reg, tag, False, False)]
         )
 
 
@@ -481,6 +484,7 @@ def op(tags=UNDEFINED,
        res_pattern=UNDEFINED,
        deprecated=UNDEFINED,
        registry=OP_REGISTRY,
+       ecvs=UNDEFINED,
        **properties):
     """
     ``op`` is a decorator function that registers a Python function or class in
@@ -512,6 +516,8 @@ def op(tags=UNDEFINED,
         operation to use instead. If set to ``True``, the operation's doc-string
         should explain the deprecation.
     :param registry: The operation registry.
+    :param ecvs: The names of Essential Climate Variables for which the op was designed.
+        If not given, it is assumed the op is open to all forms of datasets.
     :param properties: Other properties (keyword arguments) that will be added
         to the meta-information of operation.
     """
@@ -521,6 +527,7 @@ def op(tags=UNDEFINED,
                               version=version,
                               res_pattern=res_pattern,
                               deprecated=deprecated,
+                              ecvs=ecvs,
                               **properties)
         op_registration = registry.add_op(op_func, fail_if_exists=False)
         op_registration.op_meta_info.header.update(

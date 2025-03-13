@@ -5,6 +5,7 @@ from unittest import TestCase
 
 import xarray as xr
 
+from esa_climate_toolbox.core.op import list_operations
 from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
 from esa_climate_toolbox.core.op import op_output
@@ -41,6 +42,21 @@ class OpTest(TestCase):
 
     def tearDown(self):
         self.registry = None
+
+    def test_list_operations(self):
+        self.assertEqual(0, len(list_operations(self.registry)))
+
+        @op(tags=["LC"], registry=self.registry)
+        @op_input('a', value_range=[0., 1.], registry=self.registry)
+        @op_return(registry=self.registry)
+        def f_op_inp_ret_list_test(a: float, w=4.9) -> str:
+            return str(a + w)
+
+        self.assertEqual(1, len(list_operations(self.registry)))
+        self.assertEqual(0, len(list_operations(self.registry, tag="LAKES")))
+        self.assertEqual(1, len(list_operations(self.registry, tag="LC")))
+        self.registry.remove_op(f_op_inp_ret_list_test)
+
 
     def test_new_executable_op_without_ds(self):
         sub_op = new_subprocess_op(
