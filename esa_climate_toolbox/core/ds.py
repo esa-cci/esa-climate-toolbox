@@ -117,7 +117,7 @@ def list_ecvs() -> List[str]:
 def list_ecv_datasets(
         ecv: str,
         data_type: xcube_store.DataTypeLike = None,
-        include_attrs: Container[str] = None
+        include_attrs: Container[str] | bool = False
 ) -> Union[List[str], List[Tuple[str, Dict[str, Any]]]]:
     """
     Returns the names of datasets for a given essential climate variable.
@@ -132,6 +132,7 @@ def list_ecv_datasets(
         tuples, each consisting of a name and a dictionary with additional
         information.
     """
+    # include_attrs = include_attrs or False
     ecvs = list_ecvs()
     if ecv.upper() not in ecvs:
         raise ValueError(f'"{ecv}" is not an Essential Climate Variable '
@@ -144,9 +145,11 @@ def list_ecv_datasets(
         store = ECT_DATA_STORE_POOL.get_store(store_instance_id)
         data_ids = store.list_data_ids(data_type, include_attrs)
         for limitator in limitators:
-            ecv = limitator.format(ecv)
+            formatted_ecv = limitator.format(ecv)
             for data_id in data_ids:
-                if ecv in data_id.upper():
+                if isinstance(data_id, tuple):
+                    data_id = data_id[0]
+                if formatted_ecv in data_id.upper():
                     ecv_datasets.append((data_id, store_instance_id))
     return ecv_datasets
 
@@ -289,7 +292,7 @@ def get_store(store_id: str):
 def list_datasets(
         store_id: str = None,
         data_type: xcube_store.DataTypeLike = None,
-        include_attrs: Container[str] = None
+        include_attrs: Container[str] | bool = False,
 ) -> Union[List[str], List[Tuple[str, Dict[str, Any]]]]:
     """
     Returns the names of datasets of a given store.

@@ -18,7 +18,7 @@ dependencies:
   - shapely
   - six
   - xarray
-  - xcube >= 1.4.0
+  - xcube >= 1.8.0
   - xcube-cci >= 0.11.1
   - zarr <3  # until we can ensure zarr 3 compatibility
   # Test libs
