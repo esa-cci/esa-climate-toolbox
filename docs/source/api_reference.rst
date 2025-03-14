@@ -53,6 +53,17 @@ Reading and Writing Data
 Functions
 =========
 
+.. _output_arrays:
+
+Output Images
+-------------
+
+.. autofunction:: esa_climate_toolbox.functions.output_arrays.output_animation
+
+.. autofunction:: esa_climate_toolbox.functions.output_arrays.output_array_as_image
+
+.. autofunction:: esa_climate_toolbox.functions.output_arrays.output_dataset_as_geotiff
+
 .. _regions:
 
 Region

@@ -1,5 +1,8 @@
 ## Changes in 1.4 (in development)
 * Allow searching for operations with specific tags
+* Allow writing xarray dataarrays as png or geotiff images
+* Allow writing xarray datarrays as sequence of images
+* Allow writing xarray datasets as single geotiff image
 
 ## Changes in 1.3.2
 * Maintenance release to handle changes from external package
