@@ -29,6 +29,9 @@ Functions
 =========
 """
 
+import dask.array as da
+import pandas as pd
+import scipy
 import xarray as xr
 
 from esa_climate_toolbox.core.op import op
@@ -98,7 +101,7 @@ def tseries_point(ds: xr.Dataset,
 @op_input('var', value_set_source='ds', data_type=VarNamesLike)
 @op_return(add_history=True)
 def tseries_mean(ds: xr.Dataset,
-                 var: VarNamesLike.TYPE,
+                 var: VarNamesLike.TYPE = None,
                  mean_suffix: str = '_mean',
                  std_suffix: str = '_std',
                  monitor: Monitor = Monitor.NONE) -> xr.Dataset:
@@ -143,3 +146,62 @@ def tseries_mean(ds: xr.Dataset,
     retset = retset.drop_vars(names)
 
     return retset
+
+
+@op(tags=['timeseries', 'temporal', 'fourier', 'analysis'], version='1.0')
+@op_input('ds')
+@op_input('var', value_set_source='ds', data_type=VarNamesLike)
+@op_return(add_history=True)
+def fourier_analysis(ds: xr.Dataset,
+                 var: VarNamesLike.TYPE = None,
+                 compute_frequencies: bool = True,
+                 monitor: Monitor = Monitor.NONE) -> xr.Dataset:
+    """
+    Performs a fourier analysis on a 1-dimensional dataset, determining
+    phase and amplitude, and, if requested, frequencies.
+
+    :param ds: The dataset for which to perform a discrete fourier transform.
+    :param var: Variables for which to perform discrete fourier transform.
+    :param monitor: a progress monitor.
+    :return: Dataset with timeseries variables
+    """
+    if not var:
+        var = '*'
+
+    retset = select_var(ds, var)
+    names = list(retset.data_vars.keys())
+
+    with monitor.starting("Calculate phases and amplitudes",
+                          total_work=len(names)):
+        num_time_steps = len(ds["time"])
+        if compute_frequencies:
+            d = ds["time"].diff(dim="time")
+            frequency = scipy.fft.fftfreq(
+                len(ds["time"]), pd.to_timedelta(d[0].values).total_seconds()
+            )
+            retset = retset.assign({"frequency": frequency})
+                                       # scipy.fft.fftfreq(len(ds["time"]),
+                                       #         pd.to_timedelta(d[0].values).total_seconds())}
+            # )
+        for name in names:
+            var_fft = scipy.fft.fft(ds[name])
+            ampl_name = f"{name}_ampl"
+            phase_name = f"{name}_phase"
+            amplitude = (1 / num_time_steps) * da.abs(var_fft)
+            # amplitude = (2 / num_time_steps) * da.abs(var_fft[:num_time_steps // 2])
+            phase = da.angle(var_fft)
+            retset = retset.assign({
+                ampl_name: xr.DataArray(amplitude, dims="time"),
+                # ampl_name: xr.DataArray(amplitude, dims="time"),
+                phase_name: xr.DataArray(phase, dims="time")
+                # phase_name: da.angle(var_fft[:num_time_steps // 2])
+            })
+            retset[ampl_name].attrs['ESA_Climate_Toolbox_Description'] = \
+                'Amplitude of Discrete Fourier Transform of \'{}\''.format(name)
+            retset[phase_name].attrs['ESA_Climate_Toolbox_Description'] = \
+                'Phase of Discrete Fourier Transform ov \'{}\''.format(name)
+        retset = retset.drop_vars(names)
+
+        return retset
+
+

@@ -201,6 +201,7 @@ Timeseries
 
 .. autofunction:: esa_climate_toolbox.ops.tseries_mean
 
+.. autofunction:: esa_climate_toolbox.ops.fourier_analysis
 
 Misc
 ----

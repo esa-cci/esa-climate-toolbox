@@ -7,9 +7,12 @@ from unittest import TestCase
 import numpy as np
 import xarray as xr
 
+from xcube.core.new import new_cube
+
 from esa_climate_toolbox.core.op import OP_REGISTRY
 from esa_climate_toolbox.util.misc import object_to_qualified_name
 
+from esa_climate_toolbox.ops.timeseries import fourier_analysis
 from esa_climate_toolbox.ops.timeseries import tseries_mean
 from esa_climate_toolbox.ops.timeseries import tseries_point
 
@@ -120,4 +123,43 @@ class TimeSeriesMean(TestCase):
             'lon': np.linspace(-157.5, 157.5, 8),
             'time': ['2000-01-01', '2000-02-01', '2000-03-01', '2000-04-01',
                      '2000-05-01', '2000-06-01']})
+        assertDatasetEqual(expected, actual)
+
+class FourierAnalysisTest(TestCase):
+
+    def test_fourier_analysis(self):
+        dataset = new_cube(
+            width=4,
+            height=8,
+            y_start=-67.5,
+            y_res=6,
+            x_start=157.5,
+            x_res=8,
+            time_periods=6,
+            variables=(dict(abs=1, bbs=1))
+        )
+
+        tseries = tseries_mean(dataset, var='*bs')
+
+        actual = fourier_analysis(tseries, compute_frequencies=False)
+
+        expected = new_cube(
+            width=4,
+            height=8,
+            y_start=-67.5,
+            y_res=6,
+            x_start=157.5,
+            x_res=8,
+            time_periods=6,
+        )
+        expected = expected.assign(
+            abs_mean_ampl=xr.DataArray([1., 0., 0., 0., 0., 0.], dims="time"),
+            abs_mean_phase=xr.DataArray([0., 0., 0., 0., 0., 0.], dims="time"),
+            abs_std_ampl=xr.DataArray([0., 0., 0., 0., 0., 0.], dims="time"),
+            abs_std_phase=xr.DataArray([0., 0., 0., 0., 0., 0.], dims="time"),
+            bbs_mean_ampl=xr.DataArray([1., 0., 0., 0., 0., 0.], dims="time"),
+            bbs_mean_phase=xr.DataArray([0., 0., 0., 0., 0., 0.], dims="time"),
+            bbs_std_ampl=xr.DataArray([0., 0., 0., 0., 0., 0.], dims="time"),
+            bbs_std_phase=xr.DataArray([0., 0., 0., 0., 0., 0.], dims="time")
+        )
         assertDatasetEqual(expected, actual)
