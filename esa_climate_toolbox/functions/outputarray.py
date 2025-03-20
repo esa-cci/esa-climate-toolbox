@@ -130,4 +130,4 @@ def output_animation(array: xr.DataArray, output_folder: str = "animation", img_
     for i in range(len(array.time)):
         timestamp = pd.Timestamp(array.time.values[i]).strftime("%Y-%m-%dT%H:%M:%S")
         sub_array = array.isel(time=i).squeeze()
-        output_array_as_image(sub_array, f"{output_folder}/{timestamp}.{img_format}")
+        output_array_as_image(sub_array, f"{output_folder}/{timestamp}.{img_format}", out_format=img_format)

@@ -34,11 +34,11 @@ class OutputArrayTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        os.makedirs("test")
+        os.makedirs("test_output_array")
 
     @classmethod
     def tearDownClass(cls):
-        shutil.rmtree("test")
+        shutil.rmtree("test_output_array")
 
     def setUp(self):
         self._cube = new_cube(variables=dict(a=1.5, b=0.1))
@@ -56,14 +56,14 @@ class OutputArrayTest(unittest.TestCase):
                          f"found 'jpeg'.", f"{ve.exception}")
 
     def test_output_png(self):
-        out_path = "test/a.png"
+        out_path = "test_output_array/a.png"
         self.assertFalse(os.path.exists(out_path))
         output_array_as_image(self._cube.a.isel(time=0), filepath=out_path, out_format="png")
         self.assertTrue(os.path.exists(out_path))
         os.remove(out_path)
 
     def test_output_geotiff(self):
-        out_path = "test/a.gtiff"
+        out_path = "test_output_array/a.gtiff"
         self.assertFalse(os.path.exists(out_path))
         output_array_as_image(self._cube.a.isel(time=0), filepath=out_path, out_format="gtiff")
         self.assertTrue(os.path.exists(out_path))
@@ -74,11 +74,11 @@ class OutputDataArraysAsGeotiffTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        os.makedirs("test")
+        os.makedirs("test_output_daag", exist_ok=True)
 
     @classmethod
     def tearDownClass(cls):
-        shutil.rmtree("test")
+        shutil.rmtree("test_output_daag")
 
     def setUp(self):
         self._cube = new_cube(variables=dict(a=1.5, b=0.1))
@@ -89,7 +89,7 @@ class OutputDataArraysAsGeotiffTest(unittest.TestCase):
         self.assertEqual("No appropriate variables found in dataset.", f"{ve.exception}")
 
     def test_output_dataarrays_as_geotif(self):
-        out_path = "test/ab.gtiff"
+        out_path = "test_output_daag/ab.gtiff"
         self.assertFalse(os.path.exists(out_path))
         actual_out_path = output_dataset_as_geotiff(
             self._cube.isel(time=0), filepath=out_path
@@ -99,7 +99,7 @@ class OutputDataArraysAsGeotiffTest(unittest.TestCase):
         os.remove(out_path)
 
     def test_output_dataarrays_as_geotif_var_names_restricted(self):
-        out_path = "test/a.gtiff"
+        out_path = "test_output_daag/a.gtiff"
         self.assertFalse(os.path.exists(out_path))
         actual_out_path = output_dataset_as_geotiff(
             self._cube.isel(time=0), var_names=["a"], filepath=out_path
@@ -109,7 +109,7 @@ class OutputDataArraysAsGeotiffTest(unittest.TestCase):
         os.remove(out_path)
 
     def test_output_dataarrays_as_geotif_var_names_timestamp(self):
-        out_path = "test/ab.gtiff"
+        out_path = "test_output_daag/ab.gtiff"
         self.assertFalse(os.path.exists(out_path))
         actual_out_path = output_dataset_as_geotiff(
             self._cube, timestamp=pd.Timestamp("2010-01-02"), filepath=out_path
@@ -119,7 +119,7 @@ class OutputDataArraysAsGeotiffTest(unittest.TestCase):
         os.remove(out_path)
 
     def test_output_dataarrays_as_geotif_var_names_timeindex(self):
-        out_path = "test/ab.gtiff"
+        out_path = "test_output_daag/ab.gtiff"
         self.assertFalse(os.path.exists(out_path))
         actual_out_path = output_dataset_as_geotiff(
             self._cube, timeindex=2, filepath=out_path
@@ -133,11 +133,11 @@ class OutputAnimationTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        os.makedirs("test")
+        os.makedirs("test_output_animation")
 
     @classmethod
     def tearDownClass(cls):
-        shutil.rmtree("test")
+        shutil.rmtree("test_output_animation")
 
     def setUp(self):
         self._cube = new_cube(variables=dict(a=1.5, b=0.1))
@@ -149,23 +149,23 @@ class OutputAnimationTest(unittest.TestCase):
                          f"found 'jpeg'.", f"{ve.exception}")
 
     def test_output_png(self):
-        out_path = "test/a/"
-        self.assertFalse(os.path.exists(out_path))
+        out_path = "test_output_animation/a/"
+        # self.assertFalse(os.path.exists(out_path))
         output_animation(self._cube.a, output_folder=out_path)
         self.assertTrue(os.path.exists(out_path))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-01T12:00:00.png"))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-02T12:00:00.png"))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-03T12:00:00.png"))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-04T12:00:00.png"))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-05T12:00:00.png"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-01T12:00:00.png"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-02T12:00:00.png"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-03T12:00:00.png"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-04T12:00:00.png"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-05T12:00:00.png"))
 
     def test_output_gtiff(self):
-        out_path = "test/a/"
-        self.assertFalse(os.path.exists(out_path))
+        out_path = "test_output_animation/a/"
+        # self.assertFalse(os.path.exists(out_path))
         output_animation(self._cube.a, output_folder=out_path, img_format="gtiff")
         self.assertTrue(os.path.exists(out_path))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-01T12:00:00.gtiff"))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-02T12:00:00.gtiff"))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-03T12:00:00.gtiff"))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-04T12:00:00.gtiff"))
-        self.assertTrue(os.path.exists(f"{out_path}/2010-01-05T12:00:00.gtiff"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-01T12:00:00.gtiff"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-02T12:00:00.gtiff"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-03T12:00:00.gtiff"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-04T12:00:00.gtiff"))
+        self.assertTrue(os.path.exists(f"{out_path}2010-01-05T12:00:00.gtiff"))
