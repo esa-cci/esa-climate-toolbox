@@ -1,0 +1,21 @@
+default:
+  default_args:
+    start_date: '2025-03-21'
+test_cci_dag:
+  catchup: false
+  default_args:
+    owner: add_your_name_here
+  description: add your description here
+  schedule_interval: 0 0 * * *
+  tags:
+  - dag_factory
+  task_groups:
+    same_operator_on_multiple_datasets:
+      tooltip: this is a ml task group
+  tasks:
+    select_operation:
+      op_kwargs:
+        op_name: "select_var"
+      operator: airflow.operators.python.PythonOperator
+      python_callable: esa_climate_toolbox.core.get_op
+      task_group_name: same_operator_on_multiple_datasets
