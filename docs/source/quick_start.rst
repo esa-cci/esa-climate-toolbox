@@ -43,4 +43,5 @@ Jupyter Notebooks
    notebooks/8-ECT_Using_Operations
    notebooks/9-ECT_Access_Vector_Data_Cubes
    notebooks/10-ECT_Using_xcube_viewer
+   notebooks/11-ECT_Reproject_Dataset
    notebooks/12-ECT_Filter_Operations
