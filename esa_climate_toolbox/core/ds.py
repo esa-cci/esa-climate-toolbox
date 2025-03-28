@@ -393,6 +393,7 @@ def open_data(dataset_id: str,
               region: PolygonLike.TYPE = None,
               var_names: VarNamesLike.TYPE = None,
               data_store_id: str = None,
+              read_as_vectordatacube: bool = False,
               monitor: Monitor = Monitor.NONE) -> Tuple[Any, str]:
     """
     Open a dataset from a data store.
@@ -406,6 +407,10 @@ def open_data(dataset_id: str,
         If given, it must be a :py:class:`VarNamesLike`.
     :param data_store_id: Optional data store identifier. If given, *ds_id*
         will only be looked up from the specified data store.
+    :param read_as_vectordatacube: Whether it shall be attempted to read in the
+        data as vectordatacube. Only supported for datasets. If a dataset has
+        a "geometry" dimension, it will be attempted to read it as a
+        vectordatacube in any case. Default is False.
     :param monitor: A progress monitor
     :return: A tuple consisting of a new dataset instance and its id
     """
@@ -482,7 +487,8 @@ def open_data(dataset_id: str,
             dataset = data_store.open_data(
                 data_id=dataset_id, opener_id=opener_id, **open_args
             )
-
+        if data_type == xcube_store.DATASET_TYPE.alias and ("geometry" in dataset.dims or read_as_vectordatacube):
+            dataset = dataset.xvec.decode_cf()
         dataset = select_subset(dataset, **subset_args)
         monitor.progress(subset_work)
 
@@ -541,6 +547,8 @@ def write_data(
     store = ECT_DATA_STORE_POOL.get_store(store_instance_id=store_id)
     assert_instance(store, xcube_store.MutableDataStore)
     data_type = _get_data_type(data)
+    if data_type == xcube_store.DATASET_TYPE.alias and len(data.xvec.geom_coords_indexed) > 0:
+            data = data.xvec.encode_cf()
     writer_id = None
     if format_id:
         writer_ids = store.get_data_writer_ids(data_type)
