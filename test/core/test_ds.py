@@ -8,7 +8,6 @@ import random
 import shutil
 import unittest
 import xarray as xr
-import xvec
 
 from shapely import Point
 from unittest import skipIf
@@ -422,7 +421,7 @@ class WriteTest(unittest.TestCase):
         self.assertIn(data_id, list_datasets(self.local_store_id))
 
     ## TODO enable when properly supported by xcube
-    def test_write_geodataframe(self):
+    # def test_write_geodataframe(self):
         # gdf = gpd.GeoDataFrame(
         #     {
         #         "placename": ["Place A", "Place B"],
