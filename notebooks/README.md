@@ -6,11 +6,11 @@ installed.
 For creating such an environment follow the instructions given in the 
 [README](https://github.com/esa-cci/esa-climate-toolbox/blob/main/README.md).
 
-Before using Jupyter Lab for the first time install the `jupyterlab` and 
-`jupyterlab-geojson` package. 
+Before using Jupyter Lab for the first time install the `jupyterlab`, 
+`jupyterlab-geojson`, and `ipywidgets` package. 
 
 ```bash
-(ect) conda install -c conda-forge jupyterlab jupyterlab-geojson
+(ect) conda install -c conda-forge jupyterlab jupyterlab-geojson ipywidgets
 ```
 
 ### Running Jupyter Lab
