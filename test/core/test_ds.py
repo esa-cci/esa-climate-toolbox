@@ -1,8 +1,16 @@
+import itertools
 import geopandas as gpd
+import numpy as np
 import os
+import pandas as pd
+import pyproj
+import random
 import shutil
 import unittest
+import xarray as xr
+import xvec
 
+from shapely import Point
 from unittest import skipIf
 
 from xcube.core.new import new_cube
@@ -19,20 +27,158 @@ from esa_climate_toolbox.core.ds import list_ecvs
 from esa_climate_toolbox.core.ds import list_ecv_datasets
 from esa_climate_toolbox.core.ds import list_ecv_datasets_of_titles
 from esa_climate_toolbox.core.ds import list_stores
+from esa_climate_toolbox.core.ds import open_data
 from esa_climate_toolbox.core.ds import remove_store
 from esa_climate_toolbox.core.ds import write_data
 from esa_climate_toolbox.core.types import ValidationError
 
 
-def new_geodataframe():
-    return gpd.GeoDataFrame(
-        {"placename": ["Place A", "Place B"],
-         "state": ["Active", "Disabled"],
-         "var_x": [10, 20],
-         "var_y": [0.5, 2.0]},
-        geometry=gpd.points_from_xy([8.0, 8.1], [50.0, 50.1]),
-        crs="EPSG:4326"
+def new_vector_data_cube(
+    title="Test Vector Data Cube",
+    geometries=None,
+    num_geometries=20,
+    geometry_name="geometry",
+    bbox=(-180.0, -90.0, 180.0, 90.0),
+    time_name="time",
+    time_dtype="datetime64[ns]",
+    time_units="seconds since 1970-01-01T00:00:00",
+    time_calendar="proleptic_gregorian",
+    time_periods=5,
+    time_freq="D",
+    time_start="2010-01-01T00:00:00",
+    use_cftime=False,
+    drop_bounds=False,
+    variables=None,
+    crs="WGS 84",
+    crs_name=None,
+    time_encoding_dtype="int64",
+):
+    if isinstance(crs, str):
+        crs = pyproj.CRS.from_string(crs)
+
+    if isinstance(crs, pyproj.CRS):
+        crs_name = crs_name or "crs"
+
+    if geometries:
+        num_geometries = len(geometries)
+    else:
+        if num_geometries < 0:
+            raise ValueError()
+        geometries = []
+        for _ in range(num_geometries):
+            x = random.uniform(bbox[0], bbox[2])
+            y = random.uniform(bbox[1], bbox[3])
+            geometries.append(Point(x, y))
+    np_array = np.asarray(geometries, dtype=object)
+
+    if time_periods < 0:
+        raise ValueError()
+
+    if use_cftime and time_dtype is not None:
+        raise ValueError('If "use_cftime" is True,' ' "time_dtype" must not be set.')
+
+    geometry_var = xr.DataArray(np_array, dims=geometry_name)
+
+    if use_cftime:
+        time_data_p1 = xr.cftime_range(
+            start=time_start,
+            periods=time_periods + 1,
+            freq=time_freq,
+            calendar=time_calendar,
+        ).values
+    else:
+        time_data_p1 = pd.date_range(
+            start=time_start, periods=time_periods + 1, freq=time_freq
+        ).values
+        time_data_p1 = time_data_p1.astype(dtype=time_dtype)
+
+    time_delta = time_data_p1[1] - time_data_p1[0]
+    time_data = time_data_p1[0:-1] + time_delta // 2
+    time_var = xr.DataArray(time_data, dims=time_name)
+    time_var.encoding["units"] = time_units
+    time_var.encoding["calendar"] = time_calendar
+    time_var.encoding["dtype"] = time_encoding_dtype
+
+    coords = {geometry_name: geometry_var, time_name: time_var}
+    if not drop_bounds:
+        time_bnds_name = f"{time_name}_bnds"
+
+        bnds_dim = "bnds"
+
+        time_bnds_data = np.zeros((time_periods, 2), dtype=time_data_p1.dtype)
+        time_bnds_data[:, 0] = time_data_p1[:-1]
+        time_bnds_data[:, 1] = time_data_p1[1:]
+        time_bnds_var = xr.DataArray(time_bnds_data, dims=(time_name, bnds_dim))
+        time_bnds_var.encoding["units"] = time_units
+        time_bnds_var.encoding["calendar"] = time_calendar
+        time_bnds_var.encoding["dtype"] = time_encoding_dtype
+
+        time_var.attrs["bounds"] = time_bnds_name
+
+        coords.update(
+            {
+                time_bnds_name: time_bnds_var,
+            }
+        )
+
+    attrs = dict(
+        Conventions="CF-1.7",
+        title=title,
+        time_coverage_start=str(time_data_p1[0]),
+        time_coverage_end=str(time_data_p1[-1]),
     )
+
+    if crs.to_epsg() == 4326:
+        attrs.update(
+            dict(
+                geospatial_lon_min=bbox[0],
+                geospatial_lon_max=bbox[2],
+                geospatial_lat_min=bbox[1],
+                geospatial_lat_max=bbox[3],
+                geospatial_units="degree",
+
+            )
+        )
+
+    data_vars = {}
+    if variables:
+        dims = (time_name, geometry_name)
+        shape = (time_periods, num_geometries)
+        size = time_periods * num_geometries
+        for var_name, data in variables.items():
+            if isinstance(data, xr.DataArray):
+                data_vars[var_name] = data
+            elif (
+                isinstance(data, int)
+                or isinstance(data, float)
+                or isinstance(data, bool)
+            ):
+                data_vars[var_name] = xr.DataArray(np.full(shape, data), dims=dims)
+            elif callable(data):
+                func = data
+                data = np.zeros(shape)
+                for index in itertools.product(*map(range, shape)):
+                    data[index] = func(*index)
+                data_vars[var_name] = xr.DataArray(data, dims=dims)
+            elif data is None:
+                data_vars[var_name] = xr.DataArray(
+                    np.random.uniform(0.0, 1.0, size).reshape(shape), dims=dims
+                )
+            else:
+                data_vars[var_name] = xr.DataArray(data, dims=dims)
+
+    if isinstance(crs, pyproj.CRS):
+        for v in data_vars.values():
+            v.attrs["grid_mapping"] = crs_name
+        data_vars[crs_name] = xr.DataArray(0, attrs=crs.to_cf())
+
+    ds = xr.Dataset(
+        # geometry_column=geometry_name, crs=crs,
+        data_vars=data_vars,
+        coords=coords, attrs=attrs
+    )
+    ds = ds.xvec.set_geom_indexes(geometry_name, crs=crs)
+    return ds
 
 
 class DsTest(unittest.TestCase):
@@ -276,20 +422,38 @@ class WriteTest(unittest.TestCase):
         self.assertIn(data_id, list_datasets(self.local_store_id))
 
     ## TODO enable when properly supported by xcube
-    # def test_write_geodataframe(self):
-    #     gdf = gpd.GeoDataFrame(
-    #         {
-    #             "placename": ["Place A", "Place B"],
-    #             "state": ["Active", "Disabled"],
-    #             "var_x": [10, 20],
-    #             "var_y": [0.5, 2.0]
-    #         },
-    #         geometry=gpd.points_from_xy([8.0, 8.1], [50.0, 50.1]),
-    #         crs="EPSG:4326"
-    #     )
-    #     data_id = write_data(
-    #         gdf, store_id=self.local_store_id
-    #     )
-    #     self.assertIsNotNone(data_id)
-    #     self.assertTrue(data_id.endswith('.geojson'))
-    #     self.assertIn(data_id, list_datasets(self.local_store_id))
+    def test_write_geodataframe(self):
+        # gdf = gpd.GeoDataFrame(
+        #     {
+        #         "placename": ["Place A", "Place B"],
+        #         "state": ["Active", "Disabled"],
+        #         "var_x": [10, 20],
+        #         "var_y": [0.5, 2.0]
+        #     },
+        #     geometry=gpd.points_from_xy([8.0, 8.1], [50.0, 50.1]),
+        #     crs="EPSG:4326"
+        # )
+        # data_id = write_data(
+        #     gdf, store_id=self.local_store_id
+        # )
+        # self.assertIsNotNone(data_id)
+        # self.assertTrue(data_id.endswith('.geojson'))
+        # self.assertIn(data_id, list_datasets(self.local_store_id))
+
+    def test_write_and_open_vectordatacube(self):
+        vdc = new_vector_data_cube(
+            variables=dict(
+                precipitation=0.5,
+                soilmoisture=1.0
+            )
+        )
+        data_id = write_data(
+            vdc, store_id=self.local_store_id
+        )
+        self.assertIsNotNone(data_id)
+        self.assertTrue(data_id.endswith('.zarr'))
+        self.assertIn(data_id, list_datasets(self.local_store_id))
+
+        vdc_2 = open_data(data_id, data_store_id=self.local_store_id)
+
+        self.assertIsNotNone(vdc_2)
