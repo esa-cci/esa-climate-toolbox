@@ -45,3 +45,4 @@ Jupyter Notebooks
    notebooks/10-ECT_Using_xcube_viewer
    notebooks/11-ECT_Reproject_Dataset
    notebooks/12-ECT_Filter_Operations
+   notebooks/14-ECT_Access_ESGF
