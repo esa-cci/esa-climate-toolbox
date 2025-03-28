@@ -53,6 +53,8 @@ from .op import op_return
 from .op import Operation
 from .op import OP_REGISTRY
 
+from .opchain import execute_operations
+
 # noinspection PyUnresolvedReferences
 from ..util.monitor import Monitor
 
