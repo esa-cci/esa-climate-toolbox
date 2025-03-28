@@ -46,3 +46,4 @@ Jupyter Notebooks
    notebooks/11-ECT_Reproject_Dataset
    notebooks/12-ECT_Filter_Operations
    notebooks/13-ECT_Gap_Filling
+   notebooks/14-ECT_Access_ESGF
