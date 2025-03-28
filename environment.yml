@@ -12,6 +12,7 @@ dependencies:
   - matplotlib-base
   - numcodecs
   - numpy
+  - numba > 0.35
   - pandas
   - pyproj
   - python-dateutil

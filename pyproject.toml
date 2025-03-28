@@ -35,6 +35,7 @@ dependencies = [
     "matplotlib",
     "nest-asyncio>=1.3",
     "numcodecs",
+    "numba >0.35",
     "numpy>=2",
     "pandas",
     "pyproj",
