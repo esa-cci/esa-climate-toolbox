@@ -1,9 +1,38 @@
 import numpy as np
 from numba import jit
+import xarray as xr
+
+from esa_climate_toolbox.core.op import op
+from esa_climate_toolbox.core.op import op_input
+from esa_climate_toolbox.core.op import op_return
+from esa_climate_toolbox.core.types import DatasetLike
+from esa_climate_toolbox.util.monitor import Monitor
+
 
 DEFAULT_KERNEL = np.array([[0.5, 0.7, 0.5],
                            [0.7, 1.0, 0.7],
                            [0.5, 0.7, 0.5]])
+
+
+@op(tags=['gapfill'], version='1.0')
+@op_input('ds', data_type=DatasetLike)
+@op_return(add_history=True)
+def gapfill(ds: DatasetLike, monitor: Monitor = Monitor.NONE):
+    ds = DatasetLike.convert(ds)
+    retset = ds
+    das = {}
+    with monitor.starting('Fill gaps', total_work=len(retset.data_vars)):
+        for data_var_name, data_var in retset.data_vars.items():
+            data_filled = data_var.data.map_blocks(fillgaps_lowpass_2d)
+            das[data_var_name] = xr.DataArray(
+                data_filled,
+                coords=data_var.coords,
+                dims=data_var.dims,
+                attrs=data_var.attrs
+            )
+            monitor.progress(1)
+    retset = retset.assign(das)
+    return retset
 
 
 def fillgaps_lowpass_2d(src, kernel=DEFAULT_KERNEL, threshold=1):

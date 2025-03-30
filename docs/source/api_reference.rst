@@ -153,6 +153,13 @@ Data Frame Operations
 
 .. autofunction:: esa_climate_toolbox.ops.to_dataset
 
+.. _gapfilling:
+
+Gap Filling
+-----------
+
+.. autofunction:: esa_climate_toolbox.ops.gapfill
+
 .. _plotting:
 
 Plotting
@@ -197,11 +204,11 @@ Subsetting
 Timeseries
 ----------
 
+.. autofunction:: esa_climate_toolbox.ops.fourier_analysis
+
 .. autofunction:: esa_climate_toolbox.ops.tseries_point
 
 .. autofunction:: esa_climate_toolbox.ops.tseries_mean
-
-.. autofunction:: esa_climate_toolbox.ops.fourier_analysis
 
 Misc
 ----

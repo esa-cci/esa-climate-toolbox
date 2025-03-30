@@ -73,6 +73,7 @@ from .data_frame import find_closest
 from .data_frame import query
 from .data_frame import to_dataframe
 from .data_frame import to_dataset
+from .gapfilling import gapfill
 from .normalize import adjust_spatial_attrs
 from .normalize import adjust_temporal_attrs
 from .normalize import normalize
@@ -92,9 +93,10 @@ from .select import select_var
 from .subset import subset_spatial
 from .subset import subset_temporal
 from .subset import subset_temporal_index
+from .timeseries import fourier_analysis
 from .timeseries import tseries_mean
 from .timeseries import tseries_point
-from.utility import merge
+from .utility import merge
 
 __all__ = [
     # aggregation
@@ -123,6 +125,8 @@ __all__ = [
     'query',
     'to_dataframe',
     'to_dataset',
+    # gapfill
+    'gapfill',
     # .normalize
     'normalize',
     'adjust_temporal_attrs',
@@ -146,6 +150,7 @@ __all__ = [
     'subset_temporal',
     'subset_temporal_index',
     # .timeseries
+    'fourier_analysis',
     'tseries_point',
     'tseries_mean',
     # .utility
