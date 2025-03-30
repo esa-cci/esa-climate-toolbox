@@ -30,20 +30,41 @@ Start Jupyter Lab:
 Jupyter Notebooks
 =============================
 
+Accessing Data
+--------------
+
 .. toctree::
    :maxdepth: 1
 
-   notebooks/1-ECT_Finding_Data
-   notebooks/2-ECT_General_Data_Access
-   notebooks/3-ECT_Data_Access_with_Subsets
-   notebooks/4-ECT_Access_Vector_Data
-   notebooks/5-ECT_Zarr_Access
-   notebooks/6-ECT_Kerchunk_Access
-   notebooks/7-ECT_Finding_Operations
-   notebooks/8-ECT_Using_Operations
-   notebooks/9-ECT_Access_Vector_Data_Cubes
-   notebooks/10-ECT_Using_xcube_viewer
-   notebooks/11-ECT_Reproject_Dataset
-   notebooks/12-ECT_Filter_Operations
-   notebooks/13-ECT_Gap_Filling
-   notebooks/14-ECT_Access_ESGF
+   notebooks/Accessing_Data/1-ECT_Finding_Data
+   notebooks/Accessing_Data/2-ECT_General_Data_Access
+   notebooks/Accessing_Data/3-ECT_Data_Access_with_Subsets
+   notebooks/Accessing_Data/4-ECT_Access_Vector_Data
+   notebooks/Accessing_Data/5-ECT_Zarr_Access
+   notebooks/Accessing_Data/6-ECT_Kerchunk_Access
+   notebooks/Accessing_Data/7-ECT_Access_Vector_Data_cubes
+   notebooks/Accessing_Data/8-ECT_Reading_WCS_data
+   notebooks/Accessing_Data/9-ECT_Reading_WMS_data
+   notebooks/Accessing_Data/10-ECT_Access_ESGF
+
+Using Operations
+----------------
+
+.. toctree::
+   :maxdepth: 1
+
+   notebooks/Using_Operations/1-ECT_Finding_Operations
+   notebooks/Using_Operations/2-ECT_Using_Operations
+   notebooks/Using_Operations/3-ECT_Reprojecting_Data
+   notebooks/Using_Operations/4-ECT_Filtering_Data
+   notebooks/Using_Operations/5-ECT_Gap_Filling
+
+Advanced Functionality
+----------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   notebooks/Advancing_Functionality/1-ECT_Using_xcube_viewer
+   notebooks/Advancing_Functionality/2-ECT_Failure-reporting
+   notebooks/Advancing_Functionality/3-ECT_Performance
