@@ -63,6 +63,7 @@ class ExecuteOpsTest(TestCase):
         )
         self.cube_1_id = write_data(self.cube_1, store_id=self._local_store_id)
         self.cube_2_id = write_data(self.cube_2, store_id=self._local_store_id)
+        os.makedirs("test_chain", exist_ok=True)
 
     def tearDown(self):
         self.registry = None
