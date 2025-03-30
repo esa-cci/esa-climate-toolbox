@@ -37,11 +37,12 @@ from esa_climate_toolbox.util.monitor import Monitor
 
 INPUT_TYPE = Union[str, DatasetLike, Mapping[str, Mapping[str, Any]]]
 OPERATION_TYPE = Union[str, Operation]
+OPERATIONS_TYPE = Union[OPERATION_TYPE, Mapping[OPERATION_TYPE, Mapping[str, Any]]]
 
 
 def execute_operations(
     operation_inputs: Union[INPUT_TYPE, List[INPUT_TYPE]],
-    operations: Union[OPERATION_TYPE, Mapping[OPERATION_TYPE, Mapping[str, Any]]],
+    operations: Union[OPERATIONS_TYPE, List[OPERATIONS_TYPE]],
     op_registry: OpRegistry = OP_REGISTRY,
     monitor: Monitor = Monitor.NONE,
     write_results: bool = False,
@@ -92,7 +93,7 @@ def execute_operations(
     op_input_data = []
     for op_input in operation_inputs:
         if isinstance(op_input, str):
-            op_input_data.append(open_data(dataset_id=op_input))
+            op_input_data.append(open_data(dataset_id=op_input)[0])
         elif isinstance(op_input, xr.Dataset) or isinstance(op_input, gpd.GeoDataFrame):
             op_input_data.append(op_input)
         elif isinstance(op_input, Mapping):
@@ -112,7 +113,7 @@ def execute_operations(
         elif isinstance(operation, Mapping):
             for op, op_params in operation.items():
                 if isinstance(op, str):
-                    actual_operations[op_registry.get_op(operation)] = op_params
+                    actual_operations[op_registry.get_op(op)] = op_params
                 elif isinstance(op, Operation):
                     actual_operations[operation] = op_params
                 else:
@@ -149,7 +150,7 @@ def execute_operations(
                 current_ds, data_id=output_file_name, store_id=output_store_id,
                 format_id=output_format, replace=replace_output, monitor=monitor
             )
-            chain_results.append(tuple[current_ds, data_id])
+            chain_results.append((current_ds, data_id))
         else:
             chain_results.append(current_ds)
     monitor.done()

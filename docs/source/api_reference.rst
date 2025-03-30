@@ -240,6 +240,11 @@ Operation Registration API
 
 .. autofunction:: esa_climate_toolbox.core.new_subprocess_op
 
+Operation Execution API
+=======================
+
+.. autofunction:: esa_climate_toolbox.core.execute_operations
+
 Managing Operations
 -------------------
 
