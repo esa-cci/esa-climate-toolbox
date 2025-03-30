@@ -65,6 +65,6 @@ Advanced Functionality
 .. toctree::
    :maxdepth: 1
 
-   notebooks/Advancing_Functionality/1-ECT_Using_xcube_viewer
-   notebooks/Advancing_Functionality/2-ECT_Failure-reporting
-   notebooks/Advancing_Functionality/3-ECT_Performance
+   notebooks/Advanced_Functionality/1-ECT_Using_xcube_viewer
+   notebooks/Advanced_Functionality/2-ECT_Failure-reporting
+   notebooks/Advanced_Functionality/3-ECT_Performance
