@@ -1,11 +1,25 @@
 ## Changes in 1.4 (in development)
-* 
+
+### Operations
+* Added function `execute_operations` which allows to run one or more 
+  input datasets on one or more operations, effectively allowing to
+  set up an operation chain.
 * Added operation for gapfilling
 * Added operation for performing fourier analysis on time series
+* Provided example for reprojection as notebook
+* Provided example for filtering as notebook
+
+### Data Access
+* Provided guideline for accessing OGC Web Services as notebooks
+* Provided guideline for accessing CMIP and Obs4MIPs data from ESGF
+* Support reading and writing vectordatacubes
+
+### Enhancements
 * Allow searching for operations with specific tags
 * Allow writing xarray dataarrays as png or geotiff images
 * Allow writing xarray datarrays as sequence of images
 * Allow writing xarray datasets as single geotiff image
+* Added reporting module to allow reporting errors (including demo notebook)
 
 ## Changes in 1.3.2
 * Maintenance release to handle changes from external package
