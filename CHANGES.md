@@ -1,4 +1,4 @@
-## Changes in 1.4 (in development)
+## Changes in 1.4
 
 ### Operations
 * Added function `execute_operations` which allows to run one or more 

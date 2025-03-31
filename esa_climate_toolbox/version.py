@@ -20,4 +20,4 @@
 # SOFTWARE.
 
 __title__ = 'esa-climate-toolbox'
-__version__ = '1.3.3.dev0'
+__version__ = '1.4'
