@@ -42,7 +42,7 @@ Accessing Data
    notebooks/Accessing_Data/4-ECT_Access_Vector_Data
    notebooks/Accessing_Data/5-ECT_Zarr_Access
    notebooks/Accessing_Data/6-ECT_Kerchunk_Access
-   notebooks/Accessing_Data/7-ECT_Access_Vector_Data_cubes
+   notebooks/Accessing_Data/7-ECT_Access_Vector_Data_Cubes
    notebooks/Accessing_Data/8-ECT_Reading_WCS_data
    notebooks/Accessing_Data/9-ECT_Reading_WMS_data
    notebooks/Accessing_Data/10-ECT_Access_ESGF
