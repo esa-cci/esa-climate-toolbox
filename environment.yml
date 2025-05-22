@@ -17,6 +17,7 @@ dependencies:
   - pyproj
   - python-dateutil
   - shapely
+  - simplekml
   - six
   - xarray
   - xcube >= 1.8.0

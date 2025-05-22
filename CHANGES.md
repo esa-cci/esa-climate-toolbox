@@ -1,5 +1,9 @@
 ## Changes in 1.4.1 (in development)
 
+### Data Access
+
+* Added support for reading from and writing to KML
+
 ## Changes in 1.4
 
 ### Operations
