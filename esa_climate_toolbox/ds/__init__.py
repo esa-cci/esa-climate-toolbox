@@ -29,35 +29,18 @@ def ect_init():
     from xcube.core.store import DataStoreConfig
     from xcube.core.store import get_data_store_params_schema
 
-    from esa_climate_toolbox.conf import get_data_stores_path
-    from esa_climate_toolbox.conf.defaults import STORES_CONF_FILE
     from esa_climate_toolbox.core.common import default_user_agent
     from esa_climate_toolbox.core.ds import ECT_DATA_STORE_POOL
 
     dir_path = os.path.dirname(os.path.abspath(__file__))
     default_stores_file = os.path.join(dir_path, 'data/stores.yml')
 
-    configured_store_configs = {}
-    if os.path.exists(STORES_CONF_FILE):
-        with open(STORES_CONF_FILE, 'r') as fp:
-            configured_store_configs = yaml.safe_load(fp)
     with open(default_stores_file, 'r') as fp:
-        default_store_configs = yaml.safe_load(fp)
-    store_configs = configured_store_configs | default_store_configs
+        store_configs = yaml.safe_load(fp)
 
     for store_name, store_config in store_configs.items():
         store_id = store_config.get('store_id')
         assert_given(store_id, name='store_id', exception_type=RuntimeError)
-
-        if store_id == 'file' \
-                and 'store_params' in store_config \
-                and store_config.get('store_params', {}).get('root') is None:
-            root = os.environ.get('ECT_LOCAL_DATA_STORE_PATH',
-                                  os.path.join(get_data_stores_path(),
-                                               store_name))
-            # Note: even if the root directory doesn't exist yet,
-            # the xcube "file" data store will create it for us.
-            store_config['store_params']['root'] = root
 
         store_params_schema = get_data_store_params_schema(store_id)
         if 'user_agent' in store_params_schema.properties:

@@ -19,27 +19,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from esa_climate_toolbox.conf import get_http_proxy
-
 __author__ = "Chris Bernat (Telespazio VEGA UK Ltd), " \
              "Hans Permana (Brockmann Consult GmbH), " \
              "Norman Fomferra (Brockmann Consult GmbH)"
-
-
-def initialize_proxy():
-    """
-    Initialize user defined proxy settings, read proxy setting from config file.
-    Populates value to 3rd-party libraries using proper environment variables.
-    """
-    http_proxy = get_http_proxy()
-    if not http_proxy:
-        return
-
-    from os import environ
-    if http_proxy.startswith('https:'):
-        environ['https_proxy'] = http_proxy
-    elif http_proxy.startswith('http:'):
-        environ['http_proxy'] = http_proxy
 
 
 def configure_user_agent():

@@ -31,7 +31,7 @@ esa-cci-kc:
 local:
   store_id: "file"
   store_params:
-    root: null
+    root: "."
   title: "File Data Sources"
   description: >
     This data store represents

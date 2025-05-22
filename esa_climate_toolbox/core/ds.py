@@ -25,6 +25,7 @@ from typing import Any
 from typing import Container
 from typing import Dict
 from typing import List
+from typing import Literal
 from typing import Mapping
 from typing import Optional
 from typing import Sequence
@@ -41,9 +42,9 @@ from xcube.util.progress import add_progress_observers
 from xcube.util.progress import ProgressObserver
 from xcube.util.progress import ProgressState
 
-from esa_climate_toolbox.conf.defaults import STORES_CONF_FILE
 from ..constants import ECT_STORE_ID
 from ..constants import ECT_ZARR_STORE_ID
+from ..constants import STORES_DEFAULT_CONF_FILE
 from .types import PolygonLike
 from .types import TimeRangeLike
 from .types import ValidationError
@@ -183,15 +184,59 @@ def _get_store_id_from_prefix(prefix: str) -> str:
     return store_id
 
 
-def _save_store_pool():
-    with open(STORES_CONF_FILE, 'w') as fp:
+def save_stores(stores_file: str = STORES_DEFAULT_CONF_FILE) -> None:
+    """
+    Save the currently configured stores to a file in yaml format.
+    This file can be read in with *load_stores*.
+
+    :param stores_file: The file to which to write the stores to in yaml format.
+        Default is *ect_stores.yml* in the working directory.
+        This will overwrite any existing file with this name.
+    """
+    with open(stores_file, 'w') as fp:
         yaml.safe_dump(ECT_DATA_STORE_POOL.to_dict(), fp)
+
+
+def load_stores(
+        stores_file: str = STORES_DEFAULT_CONF_FILE,
+        overwrite_mode: Literal["replace", "reject", "change"] = "replace"
+):
+    """
+    Read in a set of stores from a file in yaml format.
+    This works with files that have previously been written with *save_stores*.
+
+    :param stores_file: The file from which to read the stores to in yaml format.
+        Default is *ect_stores.yml* in the working directory.
+    :param overwrite_mode: Determine how to deal with the case that in the saved store
+        configurations there are ids which can also be found in the currently loaded
+        store configuration assembly. Three operations are possible:
+         - "replace": The store configuration from the current configuration is replaced by the newly loaded one.
+         - "reject": The newly loaded store is not added.
+         - "change": The newly loaded store is added with a new id.
+    """
+    with (open(stores_file, 'r') as fp):
+        stores_dict = yaml.safe_load(fp)
+        loaded_pool = xcube_store.DataStorePool().from_dict(stores_dict)
+        for store_instance_id in loaded_pool.store_instance_ids:
+            if overwrite_mode == "replace" or store_instance_id not in ECT_DATA_STORE_POOL.store_instance_ids:
+                ECT_DATA_STORE_POOL.add_store_config(store_instance_id, loaded_pool.get_store_config(store_instance_id))
+            elif overwrite_mode == "change":
+                i = 1
+                changed_store_instance_id = f"{store_instance_id}_{i}"
+                while changed_store_instance_id in ECT_DATA_STORE_POOL.store_instance_ids or \
+                    changed_store_instance_id in loaded_pool.store_instance_ids:
+                    i += 1
+                    changed_store_instance_id = f"{store_instance_id}_{i}"
+                ECT_DATA_STORE_POOL.add_store_config(
+                    changed_store_instance_id,
+                    loaded_pool.get_store_config(store_instance_id)
+                )
 
 
 def add_local_store(root: str, store_id: str = None, max_depth: int = 1,
                     read_only: bool = False, includes: str = None,
                     excludes: str = None, title: str = None,
-                    description: str = None, persist: bool = True) -> str:
+                    description: str = None) -> str:
     """
     Registers a new data store in the ESA Climate Toolbox to access locally
     stored data.
@@ -209,8 +254,6 @@ def add_local_store(root: str, store_id: str = None, max_depth: int = 1,
         served by the store (e.g., aerosol*.zarr)
     :param title: An optional title for the data store
     :param description: An optional description of the data store
-    :param persist: Whether the data store shall be registered permanently,
-        otherwise it will only be for this session. Default is True.
 
     :return: The id of the newly created store.
     """
@@ -234,15 +277,13 @@ def add_local_store(root: str, store_id: str = None, max_depth: int = 1,
         title=title, description=description
     )
     ECT_DATA_STORE_POOL.add_store_config(store_id, store_config)
-    if persist:
-        _save_store_pool()
     return store_id
 
 
 def add_store(
         store_type: str, store_params: Mapping[str, Any] = None,
         store_id: str = None, title: str = None, description: str = None,
-        user_data: Any = None, persist: bool = True
+        user_data: Any = None
 ) -> str:
     """
     Registers a new data store in the ESA Climate Toolbox. This function allows
@@ -256,8 +297,6 @@ def add_store(
     :param title: An optional title for the data store
     :param description: An optional description of the data store
     :param user_data: Any additional user data
-    :param persist: Whether the data store shall be registered permanently,
-        otherwise it will only be for this session. Default is True.
 
     :return: The id of the newly created store.
     """
@@ -274,8 +313,6 @@ def add_store(
         description=description, user_data=user_data
     )
     ECT_DATA_STORE_POOL.add_store_config(store_id, store_config)
-    if persist:
-        _save_store_pool()
     return store_id
 
 
@@ -318,7 +355,7 @@ def list_datasets(
     return datasets
 
 
-def remove_store(store_id: str, persist: bool = True):
+def remove_store(store_id: str):
     """
     Removes a store from the internal store registry. No actual data will be
     deleted.
@@ -336,8 +373,6 @@ def remove_store(store_id: str, persist: bool = True):
     if store_id not in ECT_DATA_STORE_POOL.store_instance_ids:
         raise ValueError(f'No store named "{store_id}" found.')
     ECT_DATA_STORE_POOL.remove_store_config(store_id)
-    if persist:
-        _save_store_pool()
 
 
 def get_output_store_id() -> Optional[str]:
