@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "esa_climate_toolbox"
-version = "1.4.1dev0"
+version = "1.4.1"
 authors = [
   { name="ESA CCI Toolbox Development Team" },
 ]
@@ -41,6 +41,7 @@ dependencies = [
     "pyproj",
     "python-dateutil",
     "shapely",
+    "simplekml",
     "six",
     "xarray",
     "xcube-core>=1.4.0",
@@ -56,6 +57,8 @@ dev = [
 [project.entry-points."esa_climate_toolbox_plugins"]
     esa-climate-esa_climate_toolbox_ops = "esa_climate_toolbox.ops:ect_init"
     esa-climate-esa_climate_toolbox_ds = "esa_climate_toolbox.ds:ect_init"
+[project.entry-points."xcube_plugins"]
+    esa-climate-toolbox = "esa_climate_toolbox.plugin:init_plugin"
 
 [project.urls]
 "Homepage" = "https://github.com/esa-cci/esa-climate-toolbox"
