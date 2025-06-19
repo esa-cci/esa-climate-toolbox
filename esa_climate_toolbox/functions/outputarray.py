@@ -19,9 +19,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 import os
+import pandas as pd
 import xarray as xr
 
 from xcube.core.gridmapping import GridMapping
@@ -50,7 +51,7 @@ def output_array_as_image(array: xr.DataArray, filepath: str = None, out_format:
     else:
         filepath = f"{array.name}.{out_format}"
     if out_format == "png":
-        plt.imsave(filepath, array)
+        plt.imsave(filepath, np.nan_to_num(array.values), cmap='bone')
     elif out_format == "gtiff":
         array.rio.to_raster(filepath, driver="GTiff")
 
