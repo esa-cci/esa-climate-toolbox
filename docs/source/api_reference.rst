@@ -58,11 +58,11 @@ Functions
 Output Images
 -------------
 
-.. autofunction:: esa_climate_toolbox.functions.output_array.output_animation
+.. autofunction:: esa_climate_toolbox.functions.outputarray.output_animation
 
-.. autofunction:: esa_climate_toolbox.functions.output_array.output_array_as_image
+.. autofunction:: esa_climate_toolbox.functions.outputarray.output_array_as_image
 
-.. autofunction:: esa_climate_toolbox.functions.output_array.output_dataset_as_geotiff
+.. autofunction:: esa_climate_toolbox.functions.outputarray.output_dataset_as_geotiff
 
 .. _regions:
 
