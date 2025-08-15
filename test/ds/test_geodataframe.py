@@ -1,41 +1,41 @@
-from abc import ABC
-from abc import abstractmethod
+import os
+import warnings
+from abc import ABC, abstractmethod
+from typing import Any, Callable, Optional
+from unittest import TestCase, skipIf
+
 import fsspec
 import geopandas as gpd
-import os
 import pandas as pd
 import pytest
 import xcube
-
 from packaging.version import Version
-from typing import Any
-from typing import Callable
-from typing import Optional
-from unittest import skipIf
-from unittest import TestCase
-
+from xcube.core.store import (
+    DataDescriptor,
+    DataStoreError,
+    GeoDataFrameDescriptor,
+    MutableDataStore,
+    new_fs_data_store,
+)
 from xcube.core.store.fs.store import FsDataStore
-from xcube.core.store import DataDescriptor
-from xcube.core.store import DataStoreError
-from xcube.core.store import GeoDataFrameDescriptor
-from xcube.core.store import MutableDataStore
-from xcube.core.store import new_fs_data_store
 from xcube.util.temp import new_temp_dir
-
 
 ROOT_DIR = "esa_climate_toolbox"
 DATA_PATH = "testing/data"
 
+
 def new_geodataframe():
     time_data = pd.date_range(start="2010-01-01T00:00:00", periods=2, freq="D").values
     return gpd.GeoDataFrame(
-        {"place_name": ["Place A", "Place B"],
-         "is_active": [True, False],
-         "timestamp": time_data,
-         "salinity [‰]": [10, 20],
-         "var_y": [0.5, 2.0]},
+        {
+            "place_name": ["Place A", "Place B"],
+            "is_active": [True, False],
+            "timestamp": time_data,
+            "salinity [‰]": [10, 20],
+            "var_y": [0.5, 2.0],
+        },
         geometry=gpd.points_from_xy([8.0, 8.1], [50.0, 50.1]),
-        crs="EPSG:4326"
+        crs="EPSG:4326",
     )
 
 
@@ -72,7 +72,7 @@ class FsDataStoresTestMixin(ABC):
             expected_dtype_aliases={"geodataframe"},
             expected_return_type=gpd.GeoDataFrame,
             expected_descriptor_type=GeoDataFrameDescriptor,
-            assert_data_ok=self._assert_geodataframe_ok
+            assert_data_ok=self._assert_geodataframe_ok,
         )
 
     def _assert_geodataframe_ok(self, gdf: gpd.GeoDataFrame):
@@ -200,7 +200,9 @@ class FsDataStoresTestMixin(ABC):
         self.assertNotIn(data_id, data_store.list_data_ids())
 
 
-@skipIf(Version(xcube.__version__) < Version("1.12.0"), "higher xcube version is required")
+@skipIf(
+    Version(xcube.__version__) < Version("1.12.0"), "higher xcube version is required"
+)
 class FileFsDataStoresTest(FsDataStoresTestMixin, TestCase):
     def create_data_store(self) -> FsDataStore:
         root = os.path.join(new_temp_dir(prefix="xcube"), ROOT_DIR)
@@ -208,7 +210,9 @@ class FileFsDataStoresTest(FsDataStoresTestMixin, TestCase):
         return new_fs_data_store("file", root=root, max_depth=3)
 
 
-@skipIf(Version(xcube.__version__) < Version("1.12.0"), "higher xcube version is required")
+@skipIf(
+    Version(xcube.__version__) < Version("1.12.0"), "higher xcube version is required"
+)
 class MemoryFsDataStoresTest(FsDataStoresTestMixin, TestCase):
     def create_data_store(self) -> FsDataStore:
         root = ROOT_DIR
