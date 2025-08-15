@@ -55,10 +55,10 @@ dev = [
 ]
 
 [project.entry-points."esa_climate_toolbox_plugins"]
-    esa-climate-esa_climate_toolbox_ops = "esa_climate_toolbox.ops:ect_init"
-    esa-climate-esa_climate_toolbox_ds = "esa_climate_toolbox.ds:ect_init"
+esa-climate-esa_climate_toolbox_ops = "esa_climate_toolbox.ops:ect_init"
+esa-climate-esa_climate_toolbox_ds = "esa_climate_toolbox.ds:ect_init"
 [project.entry-points."xcube_plugins"]
-    esa-climate-toolbox = "esa_climate_toolbox.plugin:init_plugin"
+esa-climate-toolbox = "esa_climate_toolbox.plugin:init_plugin"
 
 [project.urls]
 "Homepage" = "https://github.com/esa-cci/esa-climate-toolbox"
