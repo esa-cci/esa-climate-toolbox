@@ -37,12 +37,6 @@ _FS_STORAGE_ITEMS = (
     ("s3", "AWS S3 compatible object storage"),
 )
 
-_FS_DATA_ACCESSOR_ITEMS = (
-    ("geodataframe", "kml", "gpd.GeoDataFrame in KML format")
-)
-
-_FS_DATA_OPENER_ITEMS = _FS_DATA_ACCESSOR_ITEMS
-_FS_DATA_WRITER_ITEMS = _FS_DATA_ACCESSOR_ITEMS
 
 def init_plugin(ext_registry: extension.ExtensionRegistry):
     factory = "xcube.core.store.fs.registry:get_fs_data_accessor_class"
@@ -50,7 +44,7 @@ def init_plugin(ext_registry: extension.ExtensionRegistry):
     register_fs_data_accessor_class(GeoDataFrameKmlFsDataAccessor)
 
     def _add_fs_data_accessor_ext(
-            point: str, ext_type: str, protocol: str, data_type: str, format_id: str
+            point: str, ext_type: str, protocol: str, data_type: str, format_id: str, description: str, file_extensions: list[str],
     ):
         factory_args = (protocol, data_type, format_id)
         loader = extension.import_component(factory, call_args=factory_args)
@@ -59,16 +53,15 @@ def init_plugin(ext_registry: extension.ExtensionRegistry):
             loader=loader,
             name=f"{data_type}:{format_id}:{protocol}",
             description=f"Data {ext_type} for"
-                        f" a {data_accessor_description}"
+                        f" a {description}"
                         f" in {storage_description}",
+            extensions=file_extensions,
         )
 
     for protocol, storage_description in _FS_STORAGE_ITEMS:
-        for data_type, format_id, data_accessor_description in _FS_DATA_OPENER_ITEMS:
-            _add_fs_data_accessor_ext(
-                EXTENSION_POINT_DATA_OPENERS, "opener", protocol, data_type, format_id
-            )
-        for data_type, format_id, data_accessor_description in _FS_DATA_WRITER_ITEMS:
-            _add_fs_data_accessor_ext(
-                EXTENSION_POINT_DATA_WRITERS, "writer", protocol, data_type, format_id
-            )
+        _add_fs_data_accessor_ext(
+            EXTENSION_POINT_DATA_OPENERS, "opener", protocol, "geodataframe", "kml", "gpd.GeoDataFrame in KML format", [".kml"]
+        )
+        _add_fs_data_accessor_ext(
+            EXTENSION_POINT_DATA_WRITERS, "writer", protocol, "geodataframe", "kml", "gpd.GeoDataFrame in KML format", [".kml"]
+        )
