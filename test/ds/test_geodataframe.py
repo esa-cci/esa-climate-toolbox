@@ -5,10 +5,13 @@ import geopandas as gpd
 import os
 import pandas as pd
 import pytest
-import shutil
+import xcube
+
+from packaging.version import Version
 from typing import Any
 from typing import Callable
 from typing import Optional
+from unittest import skipIf
 from unittest import TestCase
 
 from xcube.core.store.fs.store import FsDataStore
@@ -36,13 +39,6 @@ def new_geodataframe():
     )
 
 
-# class NewCubeDataTestMixin(TestCase):
-#
-#     @classmethod
-#     def tearDownClass(cls) -> None:
-#         shutil.rmtree(cls.path)
-
-
 # noinspection PyUnresolvedReferences,PyPep8Naming
 class FsDataStoresTestMixin(ABC):
     @abstractmethod
@@ -62,10 +58,8 @@ class FsDataStoresTestMixin(ABC):
         dir_path = root
         for subdir_name in DATA_PATH.split("/"):
             dir_path += "/" + subdir_name
-            # print(f'{fs.protocol}: making {dir_path}')
             fs.mkdir(dir_path)
             file_path = dir_path + "/README.md"
-            # print(f'{fs.protocol}: writing {file_path}')
             with fs.open(file_path, "w") as fp:
                 fp.write("\n")
 
@@ -205,6 +199,8 @@ class FsDataStoresTestMixin(ABC):
         self.assertNotIn(data_id, set(data_store.get_data_ids()))
         self.assertNotIn(data_id, data_store.list_data_ids())
 
+
+@skipIf(Version(xcube.__version__) < Version("1.12.0"), "higher xcube version is required")
 class FileFsDataStoresTest(FsDataStoresTestMixin, TestCase):
     def create_data_store(self) -> FsDataStore:
         root = os.path.join(new_temp_dir(prefix="xcube"), ROOT_DIR)
@@ -212,6 +208,7 @@ class FileFsDataStoresTest(FsDataStoresTestMixin, TestCase):
         return new_fs_data_store("file", root=root, max_depth=3)
 
 
+@skipIf(Version(xcube.__version__) < Version("1.12.0"), "higher xcube version is required")
 class MemoryFsDataStoresTest(FsDataStoresTestMixin, TestCase):
     def create_data_store(self) -> FsDataStore:
         root = ROOT_DIR
