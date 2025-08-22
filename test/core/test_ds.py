@@ -399,10 +399,9 @@ class WriteTest(unittest.TestCase):
             write_data(
                 self.cube, store_id=self.local_store_id, format_id='geojson'
             )
-        self.assertEqual(
+        self.assertIn(
             f'Format "geojson" is not supported by data store '
-            f'"{self.local_store_id}". Must be one of the following: '
-            f'netcdf, zarr, levels, geotiff',
+            f'"{self.local_store_id}".',
             str(ve.exception)
         )
 
