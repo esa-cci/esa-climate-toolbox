@@ -245,10 +245,11 @@ def query(df: DataFrameLike.TYPE, query_expr: str) -> pd.DataFrame:
             target_crs = source_crs
         reprojection_func = _get_reprojection_func(source_crs, target_crs)
 
-        def _almost_equals(geometry: GeometryLike):
-            return _data_frame_geometry_op(data_frame.geometry.geom_almost_equals,
+        def _equals_exact(geometry: GeometryLike):
+            return _data_frame_geometry_op(data_frame.geometry.geom_equals_exact,
                                            geometry,
-                                           reprojection_func)
+                                           reprojection_func,
+                                           tolerance=1e-6)
 
         def _contains(geometry: GeometryLike):
             return _data_frame_geometry_op(data_frame.geometry.contains,
@@ -280,7 +281,7 @@ def query(df: DataFrameLike.TYPE, query_expr: str) -> pd.DataFrame:
                                            geometry,
                                            reprojection_func)
 
-        local_dict['almost_equals'] = _almost_equals
+        local_dict['almost_equals'] = _equals_exact
         local_dict['contains'] = _contains
         local_dict['crosses'] = _crosses
         local_dict['disjoint'] = _disjoint
@@ -298,14 +299,15 @@ def query(df: DataFrameLike.TYPE, query_expr: str) -> pd.DataFrame:
 
 def _data_frame_geometry_op(instance_method,
                             geometry: GeometryLike,
-                            reprojection_func: ReprojectionFunc) -> bool:
+                            reprojection_func: ReprojectionFunc,
+                            **method_params) -> bool:
     geometry = GeometryLike.convert(geometry)
     if geometry is None:
         return False
     geometry = _transform_coordinates(geometry, reprojection_func)
     if geometry is None:
         return False
-    return instance_method(geometry)
+    return instance_method(geometry, **method_params)
 
 
 @op(tags=['filter'], version='1.0')

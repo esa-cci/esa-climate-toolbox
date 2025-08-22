@@ -8,7 +8,7 @@ dependencies:
   - cartopy
   - cftime
   - dask
-  - geopandas
+  - geopandas >= 0.14
   - matplotlib-base
   - numcodecs
   - numpy
