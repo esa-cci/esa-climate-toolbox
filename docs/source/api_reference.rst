@@ -96,6 +96,13 @@ Aggregation
 
 .. autofunction:: esa_climate_toolbox.ops.temporal_aggregation
 
+.. _alignment:
+
+Alignment
+---------
+
+.. autofunction:: esa_climate_toolbox.ops.temporal_alignment
+
 .. _animate:
 
 Animation
@@ -127,6 +134,15 @@ Coregistration
 --------------
 
 .. autofunction:: esa_climate_toolbox.ops.coregister
+
+.. _correlation:
+
+Correlation
+-----------
+
+.. autofunction:: esa_climate_toolbox.ops.pairwise_var_correlation
+
+.. autofunction:: esa_climate_toolbox.ops.pixelwise_group_correlation
 
 .. _data_frame_operations:
 
@@ -222,6 +238,12 @@ Misc
 .. autofunction:: esa_climate_toolbox.ops.adjust_spatial_attrs
 
 .. autofunction:: esa_climate_toolbox.ops.adjust_temporal_attrs
+
+.. autofunction:: esa_climate_toolbox.ops.normalise_vars
+
+.. autofunction:: esa_climate_toolbox.ops.standardise_vars
+
+
 
 
 

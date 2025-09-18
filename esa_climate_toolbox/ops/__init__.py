@@ -57,6 +57,7 @@ from .aggregate import climatology
 from .aggregate import reduce
 from .aggregate import statistics
 from .aggregate import temporal_aggregation
+from .alignment import temporal_alignment
 from .animate import animate_map
 from .anomaly import anomaly_external
 from .anomaly import anomaly_internal
@@ -106,6 +107,8 @@ __all__ = [
     'temporal_aggregation',
     # animation
     'animate_map',
+    # alignment
+    'temporal_alignment',
     # anomaly
     'anomaly_external',
     'anomaly_internal',
@@ -114,6 +117,9 @@ __all__ = [
     'diff',
     # .coregistration
     'coregister',
+    # .correlation
+    'pairwise_var_correlation',
+    'pixelwise_group_correlation',
     # data frame
     'add_dataset_values_to_geodataframe',
     'aggregate_statistics',
@@ -154,5 +160,7 @@ __all__ = [
     'tseries_point',
     'tseries_mean',
     # .utility
-    'merge'
+    'merge',
+    'normalise_vars',
+    'standardise_vars'
 ]

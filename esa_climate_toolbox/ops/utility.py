@@ -33,7 +33,8 @@ import xarray as xr
 
 from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
-from esa_climate_toolbox.core.types import DatasetLike
+from esa_climate_toolbox.core.op import op_return
+from esa_climate_toolbox.core.types import DatasetLike, VarNamesLike
 from esa_climate_toolbox.core.types import ValidationError
 
 
@@ -103,3 +104,50 @@ def merge(ds_1: DatasetLike.TYPE,
         return datasets[0]
     else:
         return xr.merge(datasets, compat=compat, join=join)
+
+
+@op(tags=["utility", "normalise"])
+@op_input("ds", data_type=DatasetLike)
+@op_input("var_names", data_type=VarNamesLike)
+@op_input("min", data_type=float, default_value=0.0)
+@op_input("max", data_type=float, default_value=1.0)
+@op_return(add_history=True)
+def normalise_vars(
+        ds: DatasetLike.TYPE,
+        var_names: VarNamesLike.TYPE = None,
+        min: float = 0.0,
+        max: float = 0.0) -> xr.Dataset:
+    """
+    Normalises variables of a dataset to a data range.
+
+    :param ds: The dataset containing the variables to be normalised.
+    :param var_names: The names of the variables to be normalised.
+        If none are given, all variables will be normalised.
+        Default is none.
+    :param min: The lower border of the target value range. Default is 0.
+    :param max: The upper border of the target value range. Default is 1.
+
+    :return: A new dataset with normalised variables.
+    """
+    pass
+
+
+@op(tags=["utility", "standardise"])
+@op_input("ds", data_type=DatasetLike)
+@op_input("var_names", data_type=VarNamesLike)
+@op_return(add_history=True)
+def standardise_vars(
+        ds: DatasetLike.TYPE,
+        var_names: VarNamesLike.TYPE = None) -> xr.Dataset:
+    """
+    Standardises variables of a dataset to a scale where
+    0 is the variable's mean and 1 is its standard deviation.
+
+    :param ds: The dataset containing the variables to be standardised.
+    :param var_names: The names of the variables to be standardised.
+        If none are given, all variables will be standardised.
+        Default is none.
+
+    :return: A new dataset with standardised variables.
+    """
+    pass
