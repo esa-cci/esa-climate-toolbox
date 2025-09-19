@@ -64,6 +64,8 @@ from .anomaly import anomaly_internal
 from .arithmetics import arithmetics
 from .arithmetics import diff
 from .coregistration import coregister
+from .correlation import pairwise_var_correlation
+from .correlation import pixelwise_group_correlation
 from .data_frame import add_dataset_values_to_geodataframe
 from .data_frame import aggregate_statistics
 from .data_frame import as_geodataframe
@@ -98,6 +100,8 @@ from .timeseries import fourier_analysis
 from .timeseries import tseries_mean
 from .timeseries import tseries_point
 from .utility import merge
+from .utility import normalise_vars
+from .utility import standardise_vars
 
 __all__ = [
     # aggregation
