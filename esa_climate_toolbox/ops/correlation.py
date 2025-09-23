@@ -35,7 +35,7 @@ from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
 from esa_climate_toolbox.core.op import op_return
 from esa_climate_toolbox.util.monitor import Monitor
-from esa_climate_toolbox.core.types import DatasetLike, ValidationError, VarNamesLike
+from esa_climate_toolbox.core.types import DatasetLike, ValidationError, VarNamesLike, DimNamesLike, DimName
 
 
 @op(tags=['correlation', "multivariate"], version='1.0')
@@ -43,12 +43,14 @@ from esa_climate_toolbox.core.types import DatasetLike, ValidationError, VarName
 @op_input('ds_1_var_names', data_type=VarNamesLike)
 @op_input('ds_2', data_type=DatasetLike)
 @op_input('ds_2_var_names', data_type=VarNamesLike)
+@op_input('dim', data_type=DimName)
 @op_return(add_history=True)
 def pairwise_var_correlation(
         ds_1: DatasetLike.TYPE,
         ds_2: DatasetLike.TYPE,
         ds_1_var_names: VarNamesLike.TYPE=None,
         ds_2_var_names: VarNamesLike.TYPE=None,
+        dim: str = "time"
 ) -> xr.Dataset:
     """
     Computes correlations between each pair of variables of two datasets.
@@ -66,19 +68,23 @@ def pairwise_var_correlation(
         that shall be considered.
         If none are given, all variables will be standardised.
         Default is none.
+    :param dim: Dimension over which to normalise.
+        Default is "time"
 
     :return: A new dataset with n*m data arrays, where n is the number of
         variables from the first dataset and m is the number of variables from
         the second dataset. Each data array's name will indicate the combination
         of variables.
     """
-    # out = {}
-    # for a in varsA:
-    #     for b in varsB:
-    #         name = f"{a}__{b}"
-    #         out[name] = xr.corr(dsA[a], dsB[b], dim=dim)
-    # return xr.Dataset(out)
-    pass
+    ds_1_var_names = ds_1_var_names or list(ds_1.data_vars.keys())
+    ds_2_var_names = ds_2_var_names or list(ds_2.data_vars.keys())
+
+    correlations = dict()
+    for ds_1_var_name in ds_1_var_names:
+        for ds_2_var_name in ds_2_var_names:
+            name = f"corr_{ds_1_var_name}_{ds_2_var_name}"
+            correlations[name] = xr.corr(ds_1[ds_1_var_name], ds_2[ds_2_var_name], dim=dim)
+    return xr.Dataset(correlations)
 
 @op(tags=['correlation', 'multivariate'], version='1.0')
 @op_input('ds_1', data_type=DatasetLike)
