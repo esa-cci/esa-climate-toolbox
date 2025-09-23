@@ -34,7 +34,7 @@ import xarray as xr
 from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
 from esa_climate_toolbox.core.op import op_return
-from esa_climate_toolbox.core.types import DatasetLike, VarNamesLike
+from esa_climate_toolbox.core.types import DatasetLike, VarNamesLike, DimName
 from esa_climate_toolbox.core.types import ValidationError
 
 
@@ -111,12 +111,19 @@ def merge(ds_1: DatasetLike.TYPE,
 @op_input("var_names", data_type=VarNamesLike)
 @op_input("min", data_type=float, default_value=0.0)
 @op_input("max", data_type=float, default_value=1.0)
+@op_input("dim", data_type=DimName)
+@op_input("suffix", data_type=str)
+@op_input("drop_original", data_type=bool, default_value=False)
 @op_return(add_history=True)
 def normalise_vars(
         ds: DatasetLike.TYPE,
         var_names: VarNamesLike.TYPE = None,
         min: float = 0.0,
-        max: float = 0.0) -> xr.Dataset:
+        max: float = 0.0,
+        dim: str = "time",
+        suffix=None,
+        drop_original=False
+) -> xr.Dataset:
     """
     Normalises variables of a dataset to a data range.
 
@@ -126,19 +133,44 @@ def normalise_vars(
         Default is none.
     :param min: The lower border of the target value range. Default is 0.
     :param max: The upper border of the target value range. Default is 1.
+    :param dim: Dimension over which to normalise.
+        Default is "time"
+    :param suffix: Suffix to be appended to the standardised var.
+        If no suffix is specified, the original var name will be used
+        and the existing variables will not be included in the output.
+        Default is None
+    :param drop_original: If true and a suffix is given, existing variables
+        will be removed.
+        Default is True
 
     :return: A new dataset with normalised variables.
     """
-    pass
+    if min >= max:
+        raise ValueError("Parameter 'min' must not be larger than parameter 'max'.")
+    var_names = var_names or list(ds.data_vars.keys())
+    for var_name in var_names:
+        new_var = (ds[var_name] - ds[var_name].min(dim=dim)) * (max - min) / (ds[var_name] - ds[var_name].max(dim=dim))
+        new_var_name = f"{var_name}_{suffix}" if suffix is not None else var_name
+        ds = ds.assign({new_var_name: new_var})
+    if drop_original and suffix is not None:
+        ds = ds.drop_vars(var_names)
+    return ds
 
 
 @op(tags=["utility", "standardise"])
 @op_input("ds", data_type=DatasetLike)
 @op_input("var_names", data_type=VarNamesLike)
+@op_input("dim", data_type=DimName)
+@op_input("suffix", data_type=str)
+@op_input("drop_original", data_type=bool, default_value=False)
 @op_return(add_history=True)
 def standardise_vars(
         ds: DatasetLike.TYPE,
-        var_names: VarNamesLike.TYPE = None) -> xr.Dataset:
+        var_names: VarNamesLike.TYPE = None,
+        dim="time",
+        suffix=None,
+        drop_original=False
+) -> xr.Dataset:
     """
     Standardises variables of a dataset to a scale where
     0 is the variable's mean and 1 is its standard deviation.
@@ -147,7 +179,24 @@ def standardise_vars(
     :param var_names: The names of the variables to be standardised.
         If none are given, all variables will be standardised.
         Default is none.
+    :param dim: Dimension over which to build the mean and the
+        standard deviation.
+        Default is "time"
+    :param suffix: Suffix to be appended to the standardised var.
+        If no suffix is specified, the original var name will be used
+        and the existing variables will not be included in the output.
+        Default is None
+    :param drop_original: If true and a suffix is given, existing variables
+        will be removed.
+        Default is True
 
     :return: A new dataset with standardised variables.
     """
-    pass
+    var_names = var_names or list(ds.data_vars.keys())
+    for var_name in var_names:
+        new_var = ds[var_name] - (ds[var_name].mean(dim=mean_dim) / ds[var_name].std(dim=mean_dim))
+        new_var_name = f"{var_name}_{suffix}" if suffix is not None else var_name
+        ds = ds.assign({new_var_name: new_var})
+    if drop_original and suffix is not None:
+        ds = ds.drop_vars(var_names)
+    return ds
