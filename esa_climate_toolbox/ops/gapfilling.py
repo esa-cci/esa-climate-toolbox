@@ -18,6 +18,15 @@ DEFAULT_KERNEL = np.array([[0.5, 0.7, 0.5],
 @op_input('ds', data_type=DatasetLike)
 @op_return(add_history=True)
 def gapfill(ds: DatasetLike, monitor: Monitor = Monitor.NONE):
+    """
+    Removes non-finite values within the variables of a data set by applying a
+    low-pass filter.
+
+    :param ds: The dataset whose gaps are to be filled.
+    :param monitor: A progress monitor.
+
+    :return: A new dataset without gaps in its data.
+    """
     ds = DatasetLike.convert(ds)
     retset = ds
     das = {}
