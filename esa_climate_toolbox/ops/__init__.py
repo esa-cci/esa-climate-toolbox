@@ -57,7 +57,6 @@ from .aggregate import climatology
 from .aggregate import reduce
 from .aggregate import statistics
 from .aggregate import temporal_aggregation
-from .alignment import temporal_alignment
 from .animate import animate_map
 from .anomaly import anomaly_external
 from .anomaly import anomaly_internal
@@ -111,8 +110,6 @@ __all__ = [
     'temporal_aggregation',
     # animation
     'animate_map',
-    # alignment
-    'temporal_alignment',
     # anomaly
     'anomaly_external',
     'anomaly_internal',
