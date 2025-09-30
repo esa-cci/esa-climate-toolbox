@@ -136,8 +136,7 @@ def pixelwise_group_correlation(
     Computes for each pixel the correlation between groups of variables
     of two datasets. This method uses internally a canonical correlation
     analysis (CCA). The datasets are expected to have the same spatial and
-    temporal grids. Consider applying 'temporal_alignment' and 'coregister'
-    before using this operation.
+    temporal grids. Consider applying 'coregister' before using this operation.
 
     :param ds_1: The first dataset.
     :param ds_2: The second dataset.
