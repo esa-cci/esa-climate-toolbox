@@ -2,8 +2,15 @@
 
 ### Operations
 
+* Added operation `normalise_vars` to normalise variables of a dataset
+* Added operation `standardise_vars` to standardise variables of a dataset
+* Added operation `pairwise_var_correlation` to compute correlation between 
+  single variables of two datasets
+* Added operation `pixelwise_group_correlation` to compute correlation between
+  variable_ensembles from two datasets
 
-
+All new operations are documented in the documentation's API reference.
+  
 ### Data Access
 
 * Added support for reading from and writing to KML
