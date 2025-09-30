@@ -109,8 +109,8 @@ def merge(ds_1: DatasetLike.TYPE,
 @op(tags=["utility", "normalise"])
 @op_input("ds", data_type=DatasetLike)
 @op_input("var_names", data_type=VarNamesLike)
-@op_input("min", data_type=float, default_value=0.0)
-@op_input("max", data_type=float, default_value=1.0)
+@op_input("min_value", data_type=float, default_value=0.0)
+@op_input("max_value", data_type=float, default_value=1.0)
 @op_input("dim", data_type=DimName)
 @op_input("suffix", data_type=str)
 @op_input("drop_original", data_type=bool, default_value=False)
@@ -118,8 +118,8 @@ def merge(ds_1: DatasetLike.TYPE,
 def normalise_vars(
         ds: DatasetLike.TYPE,
         var_names: VarNamesLike.TYPE = None,
-        min: float = 0.0,
-        max: float = 0.0,
+        min_value: float = 0.0,
+        max_value: float = 0.0,
         dim: str = "time",
         suffix=None,
         drop_original=False
@@ -131,8 +131,8 @@ def normalise_vars(
     :param var_names: The names of the variables to be normalised.
         If none are given, all variables will be normalised.
         Default is none.
-    :param min: The lower border of the target value range. Default is 0.
-    :param max: The upper border of the target value range. Default is 1.
+    :param min_value: The lower border of the target value range. Default is 0.0
+    :param max_value: The upper border of the target value range. Default is 1.0
     :param dim: Dimension over which to normalise.
         Default is "time"
     :param suffix: Suffix to be appended to the standardised var.
@@ -149,7 +149,8 @@ def normalise_vars(
         raise ValueError("Parameter 'min' must not be larger than parameter 'max'.")
     var_names = var_names or list(ds.data_vars.keys())
     for var_name in var_names:
-        new_var = (ds[var_name] - ds[var_name].min(dim=dim)) * (max - min) / (ds[var_name] - ds[var_name].max(dim=dim))
+        new_var = ((ds[var_name] - ds[var_name].min(dim=dim)) *
+                   (max_value - min_value) / (ds[var_name] - ds[var_name].max(dim=dim)))
         new_var_name = f"{var_name}_{suffix}" if suffix is not None else var_name
         ds = ds.assign({new_var_name: new_var})
     if drop_original and suffix is not None:
@@ -194,7 +195,7 @@ def standardise_vars(
     """
     var_names = var_names or list(ds.data_vars.keys())
     for var_name in var_names:
-        new_var = ds[var_name] - (ds[var_name].mean(dim=mean_dim) / ds[var_name].std(dim=mean_dim))
+        new_var = ds[var_name] - (ds[var_name].mean(dim=dim) / ds[var_name].std(dim=dim))
         new_var_name = f"{var_name}_{suffix}" if suffix is not None else var_name
         ds = ds.assign({new_var_name: new_var})
     if drop_original and suffix is not None:
