@@ -1,4 +1,4 @@
-## Changes in 1.5 (in development)
+## Changes in 1.5
 
 ### Operations
 
