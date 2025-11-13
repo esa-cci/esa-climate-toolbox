@@ -6,6 +6,7 @@
   causes that when computing the mean (or, depending on the operation another statistical
   measure) it is considered that cells cover less area the further away they are from the 
   equator. See issue #38.
+* Fixed newly added operations `normalise_vars` and `standardise_vars`
 
 ## Changes in 1.5
 

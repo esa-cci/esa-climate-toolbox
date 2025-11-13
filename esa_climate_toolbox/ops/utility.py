@@ -106,7 +106,7 @@ def merge(ds_1: DatasetLike.TYPE,
         return xr.merge(datasets, compat=compat, join=join)
 
 
-@op(tags=["utility", "normalise"])
+@op(tags=["utility", "normalise"], version="1.0")
 @op_input("ds", data_type=DatasetLike)
 @op_input("var_names", data_type=VarNamesLike)
 @op_input("min_value", data_type=float, default_value=0.0)
@@ -119,7 +119,7 @@ def normalise_vars(
         ds: DatasetLike.TYPE,
         var_names: VarNamesLike.TYPE = None,
         min_value: float = 0.0,
-        max_value: float = 0.0,
+        max_value: float = 1.0,
         dim: str = "time",
         suffix=None,
         drop_original=False
@@ -145,12 +145,12 @@ def normalise_vars(
 
     :return: A new dataset with normalised variables.
     """
-    if min >= max:
+    if min_value >= max_value:
         raise ValueError("Parameter 'min' must not be larger than parameter 'max'.")
     var_names = var_names or list(ds.data_vars.keys())
     for var_name in var_names:
-        new_var = ((ds[var_name] - ds[var_name].min(dim=dim)) *
-                   (max_value - min_value) / (ds[var_name] - ds[var_name].max(dim=dim)))
+        new_var = ((ds[var_name] - ds[var_name].min()) *
+                   (max_value - min_value) / (ds[var_name].max(dim=dim) - ds[var_name].min(dim=dim)))
         new_var_name = f"{var_name}_{suffix}" if suffix is not None else var_name
         ds = ds.assign({new_var_name: new_var})
     if drop_original and suffix is not None:
@@ -158,7 +158,7 @@ def normalise_vars(
     return ds
 
 
-@op(tags=["utility", "standardise"])
+@op(tags=["utility", "standardise"], version="1.0")
 @op_input("ds", data_type=DatasetLike)
 @op_input("var_names", data_type=VarNamesLike)
 @op_input("dim", data_type=DimName)
@@ -195,7 +195,7 @@ def standardise_vars(
     """
     var_names = var_names or list(ds.data_vars.keys())
     for var_name in var_names:
-        new_var = ds[var_name] - (ds[var_name].mean(dim=dim) / ds[var_name].std(dim=dim))
+        new_var = (ds[var_name] - ds[var_name].mean(dim=dim)) / ds[var_name].std(dim=dim)
         new_var_name = f"{var_name}_{suffix}" if suffix is not None else var_name
         ds = ds.assign({new_var_name: new_var})
     if drop_original and suffix is not None:
