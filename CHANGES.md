@@ -1,5 +1,12 @@
 ## Changes in 1.5.1 (in development)
 
+### Operations
+* Updated operations `reduce`, `statistics`, `anomaly_internal`, and `tseries_mean`
+  to version 1.1 each by adding a parameter `apply_spatial_weighting`. This parameter
+  causes that when computing the mean (or, depending on the operation another statistical
+  measure) it is considered that cells cover less area the further away they are from the 
+  equator. See issue #38.
+
 ## Changes in 1.5
 
 ### Operations

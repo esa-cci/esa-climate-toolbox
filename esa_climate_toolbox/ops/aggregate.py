@@ -357,16 +357,18 @@ def temporal_aggregation(ds: DatasetLike.TYPE,
     return adjust_temporal_attrs(dataset)
 
 
-@op(tags=['aggregate'], version='1.0')
+@op(tags=['aggregate'], version='1.1')
 @op_input('ds', data_type=DatasetLike)
 @op_input('var', value_set_source='ds', data_type=VarNamesLike)
 @op_input('dim', value_set_source='ds', data_type=DimNamesLike)
 @op_input('method', value_set=['mean', 'min', 'max', 'sum', 'median'])
+@op_input('apply_spatial_weighting', default_value=True)
 @op_return(add_history=True)
 def reduce(ds: DatasetLike.TYPE,
            var: VarNamesLike.TYPE = None,
            dim: DimNamesLike.TYPE = None,
            method: str = 'mean',
+           apply_spatial_weighting: bool = True,
            monitor: Monitor = Monitor.NONE) -> xr.Dataset:
     """
     Reduce the given variables of the given dataset along the given dimensions.
@@ -379,10 +381,17 @@ def reduce(ds: DatasetLike.TYPE,
     :param var: Variables in the dataset to reduce
     :param dim: Dataset dimensions along which to reduce
     :param method: reduction method
+    :param apply_spatial_weighting: Whether to apply spatial weighting to cancel
+        the effects of grid cells closer to the equator cover more area than
+        grid cells closer to the poles. Only applicable for datasets with a
+        latitude column named 'lat'. Has no effect for methods 'median', 'min',
+        and 'max'. Default is True.
     :param monitor: A progress monitor
     """
-    ufuncs = {'min': np.nanmin, 'max': np.nanmax, 'mean': np.nanmean,
-              'median': np.nanmedian, 'sum': np.nansum}
+    ufuncs = {'min': da.nanmin, 'max': da.nanmax, 'mean': da.nanmean,
+              'median': da.nanmedian, 'sum': da.nansum}
+
+    weightable_funcs = ["mean", "sum"]
 
     ds = DatasetLike.convert(ds)
 
@@ -397,26 +406,41 @@ def reduce(ds: DatasetLike.TYPE,
 
     retset = ds.copy()
 
+    if apply_spatial_weighting:
+        if not 'lat' in retset.coords:
+            raise ValueError(
+                "To apply spatial weighting, the dataset must have a 'lat' coordinate."
+                "Consider to either set parameter 'apply_spatial_weighting' to False"
+                "or run the 'normalize' operation on the dataset first."
+            )
+        weights = da.cos(da.deg2rad(retset.lat))
+
     for var_name in var_names:
         intersection = [value for value in dim if value in retset[var_name].dims]
         with monitor.starting("Reduce dataset", total_work=100):
             monitor.progress(5)
             with monitor.child(95).observing("Reduce"):
-                retset[var_name] = retset[var_name].reduce(ufuncs[method],
-                                                           dim=intersection,
-                                                           keep_attrs=True)
+                if method in weightable_funcs and apply_spatial_weighting and "lat" in intersection:
+                    m = getattr(retset[var_name].weighted(weights), method)
+                    retset[var_name] = m(dim="lat", keep_attrs=True)
+                    intersection.remove("lat")
+                retset[var_name] = retset[var_name].reduce(
+                    ufuncs[method], dim=intersection, keep_attrs=True
+                )
 
     return retset
 
 
-@op(tags=['aggregate', 'statistics'], version='1.0')
+@op(tags=['aggregate', 'statistics'], version='1.1')
 @op_input('ds', data_type=DatasetLike)
 @op_input('var', value_set_source='ds', data_type=VarNamesLike)
 @op_input('dim', value_set_source='ds', data_type=DimNamesLike)
 @op_input('methods', any_of=["count", "mean", "median", "sum", "std", "min", "max"])
+@op_input('apply_spatial_weighting', default_value=True)
 @op_return(add_history=True)
 def statistics(ds: DatasetLike.TYPE,
                var: VarNamesLike.TYPE = None,
+               apply_spatial_weighting: bool = True,
                dim: DimNamesLike.TYPE = None,
                methods: Union[str, List[str]] = 'mean',
                monitor: Monitor = Monitor.NONE) -> xr.Dataset:
@@ -431,18 +455,23 @@ def statistics(ds: DatasetLike.TYPE,
     :param dim: Dataset dimensions along which to aggregate
     :param methods: One or more methods to create statistics from. Must be one or more
         of the following: 'count', 'mean', 'median', 'sum', 'std', 'min', 'max'
+    :param apply_spatial_weighting: Whether to apply spatial weighting to cancel
+        the effects of grid cells closer to the equator cover more area than
+        grid cells closer to the poles. Only applicable for datasets with a
+        latitude column named 'lat'. Has no effect for methods 'count', 'median',
+        'min', and 'max'. Default is True.
     :param monitor: A progress monitor
     """
     if isinstance(methods, str):
         methods = [methods]
-    ufuncs = {'min': np.nanmin, 'max': np.nanmax, 'mean': np.nanmean,
-              'median': np.nanmedian, 'sum': np.nansum, "count": np.count_nonzero,
-              "std": np.std}
+    ufuncs = {'min': da.nanmin, 'max': da.nanmax, 'mean': da.nanmean,
+              'median': np.nanmedian, 'sum': da.nansum, "count": da.count_nonzero,
+              "std": da.std}
+    weightable_funcs = ["mean", "sum", "std"]
     funcs = dict()
     for k, v in ufuncs.items():
         if k in methods:
             funcs[k] = v
-    # funcs = {k, v for k, v in ufuncs.items() if k in methods}
 
     ds = DatasetLike.convert(ds)
 
@@ -457,14 +486,27 @@ def statistics(ds: DatasetLike.TYPE,
 
     retset = ds.copy()
 
+    if apply_spatial_weighting:
+        if not 'lat' in retset.coords:
+            raise ValueError(
+                "To apply spatial weighting, the dataset must have a 'lat' coordinate."
+                "Consider to either set parameter 'apply_spatial_weighting' to False"
+                "or run the 'normalize' operation on the dataset first."
+            )
+        weights = da.cos(da.deg2rad(retset.lat))
+
     with monitor.starting("Aggregating statistics", total_work=100):
         work = int(100 / (len(var_names) + len(funcs)))
         for var_name in var_names:
-            intersection = [value for value in dim if value in retset[var_name].dims]
             for func_name, func in funcs.items():
+                intersection = [value for value in dim if value in retset[var_name].dims]
                 with monitor.child(work).observing("Reduce"):
-                    retset[f"{var_name}_{func_name}"] = retset[var_name].reduce(
+                    retvar = retset[var_name]
+                    if func_name in weightable_funcs and apply_spatial_weighting and "lat" in intersection:
+                        m = getattr(retset[var_name].weighted(weights), func_name)
+                        retvar = m(dim="lat", keep_attrs=True)
+                        intersection.remove("lat")
+                    retset[f"{var_name}_{func_name}"] = retvar.reduce(
                         func, dim=intersection, keep_attrs=True
                     )
-
     return retset

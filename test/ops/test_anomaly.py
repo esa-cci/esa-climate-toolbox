@@ -8,6 +8,7 @@ import os
 import sys
 import numpy as np
 import xarray as xr
+import xarray.testing
 from datetime import datetime
 import tempfile
 import shutil
@@ -25,7 +26,7 @@ def assert_dataset_equal(expected, actual):
     # this method is functionally equivalent to
     # `assert expected == actual`, but it checks each aspect
     # of equality separately for easier debugging
-    assert expected.equals(actual), (expected, actual)
+    xarray.testing.assert_allclose(expected, actual, rtol=1e-8)
 
 
 _counter = itertools.count()

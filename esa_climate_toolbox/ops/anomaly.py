@@ -28,6 +28,7 @@ Anomaly calculation operations
 Functions
 =========
 """
+import dask.array as da
 import xarray as xr
 
 from esa_climate_toolbox.core.op import op
@@ -161,13 +162,15 @@ def _group_anomaly(group: xr.Dataset,
     return ret
 
 
-@op(tags=['anomaly'], version='1.0')
+@op(tags=['anomaly'], version='1.1')
 @op_input('time_range', data_type=TimeRangeLike)
 @op_input('region', data_type=PolygonLike)
+@op_input('apply_spatial_weighting', default_value=True)
 @op_return(add_history=True)
 def anomaly_internal(ds: xr.Dataset,
                      time_range: TimeRangeLike.TYPE = None,
                      region: PolygonLike.TYPE = None,
+                     apply_spatial_weighting: bool = True,
                      monitor: Monitor = Monitor.NONE) -> xr.Dataset:
     """
     Calculate anomaly using as reference data the mean of an optional region
@@ -179,6 +182,10 @@ def anomaly_internal(ds: xr.Dataset,
     :param ds: The dataset to calculate anomalies from
     :param time_range: Time range to use for reference data
     :param region: Spatial region to use for reference data
+        :param apply_spatial_weighting: Whether to apply spatial weighting to cancel
+        the effects of grid cells closer to the equator cover more area than
+        grid cells closer to the poles. Only applicable for datasets with a
+        latitude column named 'lat'. Default is True.
     :param monitor: a progress monitor.
     :return: The anomaly dataset
     """
@@ -189,6 +196,15 @@ def anomaly_internal(ds: xr.Dataset,
     if region:
         region = PolygonLike.convert(region)
         ref = subset_spatial(ref, region)
+    if apply_spatial_weighting:
+        if not 'lat' in ref.coords:
+            raise ValueError(
+                "To apply spatial weighting, the dataset must have a 'lat' coordinate."
+                "Consider to either set parameter 'apply_spatial_weighting' to False"
+                "or run the 'normalize' operation on the dataset first."
+            )
+        weights = da.cos(da.deg2rad(ref.lat))
+        ref = ref.weighted(weights)
     with monitor.observing("Calculating anomaly"):
         ref = ref.mean(keep_attrs=True, skipna=True)
         anomaly_diff = ds - ref

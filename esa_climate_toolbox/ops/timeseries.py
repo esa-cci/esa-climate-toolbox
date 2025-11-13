@@ -38,7 +38,7 @@ from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
 from esa_climate_toolbox.core.op import op_return
 from esa_climate_toolbox.ops.select import select_var
-from esa_climate_toolbox.core.types import PointLike
+from esa_climate_toolbox.core.types import PointLike, Literal
 from esa_climate_toolbox.core.types import VarNamesLike
 from esa_climate_toolbox.util.monitor import Monitor
 
@@ -96,12 +96,16 @@ def tseries_point(ds: xr.Dataset,
     return retset
 
 
-@op(tags=['timeseries', 'temporal'], version='1.0')
+@op(tags=['timeseries', 'temporal'], version='1.1')
 @op_input('ds')
 @op_input('var', value_set_source='ds', data_type=VarNamesLike)
+@op_input('apply_spatial_weighting', default_value=True)
+@op_input('mean_suffix')
+@op_input('std_suffix')
 @op_return(add_history=True)
 def tseries_mean(ds: xr.Dataset,
                  var: VarNamesLike.TYPE = None,
+                 apply_spatial_weighting: bool = True,
                  mean_suffix: str = '_mean',
                  std_suffix: str = '_std',
                  monitor: Monitor = Monitor.NONE) -> xr.Dataset:
@@ -118,6 +122,10 @@ def tseries_mean(ds: xr.Dataset,
 
     :param ds: The dataset from which to perform timeseries extraction.
     :param var: Variables for which to perform timeseries extraction
+    :param apply_spatial_weighting: Whether to apply spatial weighting to cancel
+        the effects of grid cells closer to the equator cover more area than
+        grid cells closer to the poles. Only applicable for datasets with a
+        latitude column named 'lat'. Default is True.
     :param mean_suffix: Mean suffix to use for resulting datasets
     :param std_suffix: Std suffix to use for resulting datasets
     :param monitor: a progress monitor.
@@ -131,16 +139,27 @@ def tseries_mean(ds: xr.Dataset,
 
     with monitor.starting("Calculate mean and standard deviation",
                           total_work=len(names)):
+        if apply_spatial_weighting:
+            if not 'lat' in retset.coords:
+                raise ValueError(
+                    "To apply spatial weighting, the dataset must have a 'lat' coordinate."
+                    "Consider to either set parameter 'apply_spatial_weighting' to False"
+                    "or run the 'normalize' operation on the dataset first."
+                )
+            weights = da.cos(da.deg2rad(retset.lat))
         for name in names:
             dims = list(ds[name].dims)
             dims.remove('time')
             mean_name = name + mean_suffix
             with monitor.child(1).observing("Calculate mean"):
-                retset[mean_name] = retset[name].mean(dim=dims, keep_attrs=True)
+                retvar = retset[name]
+                if apply_spatial_weighting:
+                    retvar = retvar.weighted(weights)
+                retset[mean_name] = retvar.mean(dim=dims, keep_attrs=True)
             retset[mean_name].attrs['ESA_Climate_Toolbox_Description'] = \
                 'Mean aggregated over {} at each point in time.'.format(dims)
             std_name = name + std_suffix
-            retset[std_name] = ds[name].std(dim=dims)
+            retset[std_name] = retvar.std(dim=dims)
             retset[std_name].attrs['ESA_Climate_Toolbox_Description'] = \
                 'Accompanying std values for variable \'{}\''.format(name)
     retset = retset.drop_vars(names)

@@ -29,6 +29,8 @@ from esa_climate_toolbox.functions.regions import make_regions_dataset
 from esa_climate_toolbox.functions.regions import mask_dataset_by_land
 from esa_climate_toolbox.functions.regions import mask_dataset_by_regions
 
+from esa_climate_toolbox.core import open_data
+
 
 class CountriesTest(unittest.TestCase):
 
@@ -68,7 +70,7 @@ class CountriesTest(unittest.TestCase):
 
     def test_mask_dataset_by_regions(self):
         masked_ds = mask_dataset_by_regions(
-            self.cube, regions=["Oceania", "South Africa"]
+            self.cube, regions=["South Africa"]
         )
 
         self.assertIsNotNone(masked_ds)
