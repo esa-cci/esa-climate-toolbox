@@ -401,23 +401,27 @@ class TestReduce(TestCase):
 
 class TestStatistics(TestCase):
 
+    @staticmethod
+    def _sst_func(t, y, x):
+        return t * 2.0 + x * 0.1
+
+    @staticmethod
+    def _chl_func(t, y, x):
+        return y * 1.0 + x * 0.1
+
+    @staticmethod
+    def _aot_func(t, y, x):
+        return y * 0.1 + x * 1.0
+
     def test_statistics_mean(self):
-        def sst_func(t, y, x):
-            return t * 2.0 + x * 0.1
-
-        def chl_func(t, y, x):
-            return y * 1.0 + x * 0.1
-
-        def aot_func(t, y, x):
-            return y * 0.1 + x * 1.0
-
         cube = new_cube(
-            width=16, height=8, variables=dict(sst=sst_func, chl=chl_func, aot=aot_func)
+            width=16, height=8, variables=dict(sst=self._sst_func, chl=self._chl_func, aot=self._aot_func)
         )
 
         res = statistics(
             cube, var=["chl", "aot"],
-            methods=["count", "mean", "median", "sum", "std", "min", "max"]
+            methods=["count", "mean", "median", "sum", "std", "min", "max"],
+            apply_spatial_weighting=False
         )
 
         self.assertIsNotNone(res)
@@ -445,6 +449,46 @@ class TestStatistics(TestCase):
         self.assertAlmostEqual(5024, res["aot_sum"].values, 6)
         self.assertIn("aot_std", res.data_vars)
         self.assertAlmostEqual(4.615463, res["aot_std"].values, 6)
+        self.assertIn("aot_min", res.data_vars)
+        self.assertAlmostEqual(0, res["aot_min"].values, 6)
+        self.assertIn("aot_max", res.data_vars)
+        self.assertAlmostEqual(15.7, res["aot_max"].values, 6)
+
+    def test_statistics_mean_apply_spatial_weighting(self):
+        cube = new_cube(
+            width=16, height=8, variables=dict(sst=self._sst_func, chl=self._chl_func, aot=self._aot_func)
+        )
+
+        res = statistics(
+            cube, var=["chl", "aot"],
+            methods=["count", "mean", "median", "sum", "std", "min", "max"]
+        )
+
+        self.assertIsNotNone(res)
+        self.assertIn("chl_count", res.data_vars)
+        self.assertEqual(635, res["chl_count"].values)
+        self.assertIn("chl_mean", res.data_vars)
+        self.assertAlmostEqual(5.56079961, res["chl_mean"].values, 6)
+        self.assertIn("chl_median", res.data_vars)
+        self.assertAlmostEqual(4.25, res["chl_median"].values, 6)
+        self.assertIn("chl_sum", res.data_vars)
+        self.assertAlmostEqual(248.05866912, res["chl_sum"].values, 6)
+        self.assertIn("chl_std", res.data_vars)
+        self.assertAlmostEqual(0, res["chl_std"].values, 6)
+        self.assertIn("chl_min", res.data_vars)
+        self.assertAlmostEqual(0, res["chl_min"].values, 6)
+        self.assertIn("chl_max", res.data_vars)
+        self.assertAlmostEqual(8.5, res["chl_max"].values, 8)
+        self.assertIn("aot_count", res.data_vars)
+        self.assertEqual(635, res["aot_count"].values, 6)
+        self.assertIn("aot_mean", res.data_vars)
+        self.assertAlmostEqual(7.98107996, res["aot_mean"].values, 6)
+        self.assertIn("aot_median", res.data_vars)
+        self.assertAlmostEqual(7.85, res["aot_median"].values, 6)
+        self.assertIn("aot_sum", res.data_vars)
+        self.assertAlmostEqual(356.02363189, res["aot_sum"].values, 6)
+        self.assertIn("aot_std", res.data_vars)
+        self.assertAlmostEqual(0, res["aot_std"].values, 6)
         self.assertIn("aot_min", res.data_vars)
         self.assertAlmostEqual(0, res["aot_min"].values, 6)
         self.assertIn("aot_max", res.data_vars)
