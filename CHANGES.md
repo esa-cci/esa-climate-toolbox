@@ -1,4 +1,4 @@
-## Changes in 1.5.1 (in development)
+## Changes in 1.5.1
 
 ### Operations
 * Updated operations `reduce`, `statistics`, `anomaly_internal`, and `tseries_mean`
