@@ -256,7 +256,7 @@ class DsTest(unittest.TestCase):
         datasets = list_datasets(store_id=ECT_KC_STORE_ID)
         self.assertTrue(len(datasets) > 1)
         self.assertTrue(
-            'ESACCI-LC-L4-PFT-Map-300m-P1Y-1992-2020-v2.0.8-kr1.1'
+            'ESACCI-LC-L4-LCCS-Map-300m-P1Y-1992-2015-v2.0.7b-kr1.1'
             in datasets
         )
 
