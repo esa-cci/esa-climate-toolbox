@@ -1,3 +1,5 @@
+## Changes in 1.5.2 (in development)
+
 ## Changes in 1.5.1
 
 ### Operations
