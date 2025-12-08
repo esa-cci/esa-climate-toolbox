@@ -83,6 +83,9 @@ the popular Python packages `xarray`_, `pandas`_, and `geopandas`_:
   `xarray.Dataset` objects.
   Dataset variables are represented by `NumPy`_-compatible `xarray.DataArray`
   objects.
+  Some datasets offer access to regions or tiles through literal identifiers.
+  These are provided in the form of `xarray.DataTrees`, which are a hierarchical
+  structure of individual `xarray.Datasets`.
 * Vector datasets (from ESRI Shapefiles, GeoJSON files) are represented by
   `geopandas.GeoDataFrame` objects.
   Dataset variables are represented by pandas-compatible `geopandas.GeoSeries`

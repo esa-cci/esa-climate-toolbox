@@ -46,6 +46,7 @@ Accessing Data
    notebooks/Accessing_Data/8-ECT_Reading_WCS_data
    notebooks/Accessing_Data/9-ECT_Reading_WMS_data
    notebooks/Accessing_Data/10-ECT_Access_ESGF
+   notebooks/Accessing_Data/11-ECT_Access_Data_Trees
 
 Using Operations
 ----------------
