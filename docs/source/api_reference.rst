@@ -96,6 +96,13 @@ Aggregation
 
 .. autofunction:: esa_climate_toolbox.ops.temporal_aggregation
 
+.. _alignment:
+
+Alignment
+---------
+
+.. autofunction:: esa_climate_toolbox.ops.temporal_alignment
+
 .. _animate:
 
 Animation
