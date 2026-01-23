@@ -497,7 +497,7 @@ class TestTemporalAlignment(TestCase):
         replica_ds = get_test_dataset(
             time_periods=5, time_freq="5D", time_start="2015-06-01T00:00:00", var_name="r")
 
-        ds = temporal_alignment(primary_ds, replica_ds)
+        ds = temporal_alignment(primary_ds, replica_ds, method="nearest")
 
         self.assertIsNotNone(ds)
         assert_array_equal(ds.time.values, primary_ds.time.values)
@@ -521,7 +521,7 @@ class TestTemporalAlignment(TestCase):
         replica_ds = get_test_dataset(
             time_periods=5, time_freq="5D", time_start="2015-06-11T00:00:00", var_name="r")
 
-        ds = temporal_alignment(primary_ds, replica_ds)
+        ds = temporal_alignment(primary_ds, replica_ds, method="nearest")
 
         self.assertIsNotNone(ds)
         assert_array_equal(ds.time.values, primary_ds.time.values)
@@ -569,7 +569,7 @@ class TestTemporalAlignment(TestCase):
         replica_ds = get_test_dataset(
             time_periods=5, time_freq="QS", time_start="2015-07-01T00:00:00", var_name="r")
 
-        ds = temporal_alignment(primary_ds, replica_ds)
+        ds = temporal_alignment(primary_ds, replica_ds, method="nearest")
 
         self.assertIsNotNone(ds)
         assert_array_equal(ds.time.values, primary_ds.time.values)
@@ -593,7 +593,7 @@ class TestTemporalAlignment(TestCase):
         replica_ds = get_test_dataset(
             time_periods=5, time_freq="QS", time_start="2015-07-01T00:00:00", var_name="r")
 
-        ds = temporal_alignment(primary_ds, replica_ds)
+        ds = temporal_alignment(primary_ds, replica_ds, method="nearest")
 
         self.assertIsNotNone(ds)
         assert_array_equal(ds.time.values, primary_ds.time.values)
@@ -641,7 +641,7 @@ class TestTemporalAlignment(TestCase):
         replica_ds = get_test_dataset(
             time_periods=5, time_freq="2D", time_start="2015-07-22T00:00:00", var_name="r")
 
-        ds = temporal_alignment(primary_ds, replica_ds)
+        ds = temporal_alignment(primary_ds, replica_ds, method="nearest")
 
         self.assertIsNotNone(ds)
         assert_array_equal(ds.time.values, primary_ds.time.values)
@@ -665,7 +665,7 @@ class TestTemporalAlignment(TestCase):
         replica_ds = get_test_dataset(
             time_periods=5, time_freq="2D", time_start="2015-07-22T00:00:00", var_name="r")
 
-        ds = temporal_alignment(primary_ds, replica_ds)
+        ds = temporal_alignment(primary_ds, replica_ds, method="nearest")
 
         self.assertIsNotNone(ds)
         assert_array_equal(ds.time.values, primary_ds.time.values)

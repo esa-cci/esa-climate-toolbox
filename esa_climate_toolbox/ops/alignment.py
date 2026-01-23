@@ -28,10 +28,10 @@ Provides methods for aligning datasets temporally.
 Components
 ==========
 """
+import warnings
 
 import bisect
 import pandas as pd
-from enum import Enum
 import numpy as np
 from typing import Optional, Tuple
 import xarray as xr
@@ -44,29 +44,9 @@ from esa_climate_toolbox.core.op import op_return
 from esa_climate_toolbox.core.types import ValidationError
 
 
-# DOWNSAMPLING_METHODS = ['count', 'first', 'last', 'min', 'max', 'sum', 'prod',
-#                         'mean', 'median', 'std', 'var', 'percentile']
-# UPSAMPLING_METHODS = ['asfreq', 'ffill', 'bfill', 'pad', 'nearest',
-#                       'interpolate']
-# ALL_METHODS = DOWNSAMPLING_METHODS + UPSAMPLING_METHODS
-# SPLINE_INTERPOLATION_KINDS = ['zero', 'slinear', 'quadratic', 'cubic']
-# OTHER_INTERPOLATION_KINDS = ['linear', 'nearest', 'previous', 'next']
-# INTERPOLATION_KINDS = SPLINE_INTERPOLATION_KINDS + OTHER_INTERPOLATION_KINDS
-RESAMPLING_METHODS = [
-    "all", "any", "argmax", "argmin", "count", "first", "last", "max", "min", "nearest",
-    "mean", "median", "std", "sum", "var"
-]
-
-
-class Offset(Enum):
-    PREVIOUS = 'previous'
-    NONE = 'none'
-    NEXT = 'next'
-
-class SampleType(Enum):
-    DOWN = "down"
-    UP = "up"
-    EITHER = "either"
+DOWNSAMPLING_METHODS = ['count', 'first', 'last', 'max', 'min', 'mean', 'median', 'std', 'sum', 'var']
+INTERPOLATION_KINDS = ["linear", "nearest", "zero", "slinear", "quadratic", "cubic"]
+RESAMPLING_METHODS = DOWNSAMPLING_METHODS + INTERPOLATION_KINDS
 
 def _determine_frequency(ds):
     index = ds.time.to_index()
@@ -154,7 +134,7 @@ def _find_time_bounds(ds: xr.Dataset, freq: str = None) -> Tuple[xr.Dataset, Opt
 def temporal_alignment(
         ds_primary: xr.Dataset,
         ds_replica: xr.Dataset,
-        method: str = None
+        method: str = "mean"
 ) -> xr.Dataset:
     """
     Temporally aligns a dataset (ds_replica) with another dataset (ds_primary),
@@ -164,9 +144,10 @@ def temporal_alignment(
     :param ds_replica: The dataset whose time coordinate shall be changed to
         match the one of the primary dataset.
     :param method: The method by which the values from the replica dataset shall
-        be resampled. Must be one of the following: "all", "any", "argmax",
-        "argmin", "count", "first", "last", "max", "min", "nearest", "mean",
-        "median", "std", "sum", "var".
+        be resampled. Must be one of the following: "count", "first", "last", "max",
+        "min", "mean", "median", "std", "sum", "var" in case of sampling down to a
+        coarser temporal resolution and "linear", "nearest", "zero", "slinear",
+        "quadratic", or "cubic" when sampling up to a finer temporal resolution.
 
     :return: A dataset where the data variables of the replica coordinate have been
         resampled to match the time coordinate of the primary dataset.
@@ -184,17 +165,29 @@ def temporal_alignment(
             "Running the normalize operation may help."
         )
     # check whether primary has a regular time
-    # retrieve resampling parameters from primary dataset
     primary_freq = _determine_frequency(ds_primary)
     replica_freq = _determine_frequency(ds_replica)
-    upsampling = ds_primary.time[1] - ds_primary.time[0] > ds_replica.time[1] - ds_replica.time[0]
-    if upsampling:
+    downsampling = ds_primary.time[1] - ds_primary.time[0] > ds_replica.time[1] - ds_replica.time[0]
+    interp_kind = None
+    if downsampling:
         offset_for_adjusting = _half_offset(primary_freq)
-        method= "mean"
+        if method not in DOWNSAMPLING_METHODS:
+            warnings.warn(f"Selected method for resampling was '{method}', "
+                          f"but apparently the data must be sampled down to a "
+                          f"coarser resolution. "
+                          f"The use of one of the following is recommended: "
+                          f"{', '.join(DOWNSAMPLING_METHODS)}.")
     else:
         offset_for_adjusting = _half_offset(replica_freq)
-        method = "interpolate"
-
+        if method not in INTERPOLATION_KINDS:
+            warnings.warn(f"Selected method for resampling was '{method}', "
+                          f"but apparently the data must be sampled up to a "
+                          f"finer resolution. "
+                          f"The use of one of the following is recommended: "
+                          f"{', '.join(INTERPOLATION_KINDS)}.")
+        else:
+            interp_kind = method
+            method = "interpolate"
     if primary_freq is None:
         raise ValidationError(
             'The time coordinate of the primary dataset is not equidistant, '
@@ -259,14 +252,14 @@ def temporal_alignment(
         ds_replica,
         frequency=primary_freq,
         method=method,
-        interp_kind="nearest",
+        interp_kind=interp_kind,
         tolerance=primary_freq,
         offset=resampling_offset
     )
     non_dropped_time_length = len(ds.time)
     ds = ds.dropna(dim="time")
 
-    if upsampling or len(ds.time) is not non_dropped_time_length:
+    if downsampling or len(ds.time) is not non_dropped_time_length:
         ds = ds.assign(time=ds.time.values + pd.Timedelta(_half_offset(primary_freq)))
 
     ds = ds.reindex(time=ds_primary.time, method="nearest", tolerance=offset_for_adjusting)
