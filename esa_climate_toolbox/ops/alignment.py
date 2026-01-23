@@ -23,34 +23,25 @@
 Description
 ===========
 
-Provides various resampling methods including up- and downsampling for temporal resampling.
+Provides methods for aligning datasets temporally.
 
 Components
 ==========
 """
 
-import cftime
+import bisect
 import pandas as pd
-from datetime import timedelta
-import dask
-import dask.array as da
 from enum import Enum
 import numpy as np
-from typing import Any, Dict, Optional, Sequence, Tuple, Union
+from typing import Optional, Tuple
 import xarray as xr
-from xarray.coding.cftime_offsets import Day
-from xarray.coding.cftime_offsets import Hour
-from xarray.coding.cftime_offsets import MonthBegin
-from xarray.coding.cftime_offsets import QuarterBegin
-from xarray.coding.cftime_offsets import YearBegin
 
 from xcube.core.resampling import resample_in_time
 
 from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
 from esa_climate_toolbox.core.op import op_return
-from esa_climate_toolbox.util.monitor import Monitor
-from esa_climate_toolbox.core.types import DatasetLike, ValidationError
+from esa_climate_toolbox.core.types import ValidationError
 
 
 # DOWNSAMPLING_METHODS = ['count', 'first', 'last', 'min', 'max', 'sum', 'prod',
@@ -80,64 +71,50 @@ class SampleType(Enum):
 def _determine_frequency(ds):
     index = ds.time.to_index()
     freq = pd.infer_freq(index)
-    if freq is None:
-        # test_periods = ["Y", "Q", "M"]
-        test_periods = ["M", "Y"]
-        for test_period in test_periods:
-            period_index = index.to_period(test_period)
-            diffs = np.diff(period_index)
-            # first_diff = diffs[1] - diffs[0]
-            freq = test_period
-            for diff in diffs:
-                if diff != diffs[0]:
-                    freq = None
-                    break
-            if freq is not None:
+    if freq is not None:
+        return freq
+    period_candidates = ["Y", "Q", "M"]
+    for period_candidate in period_candidates:
+        period_index = index.to_period(period_candidate)
+        diffs = np.diff(period_index)
+        num_units = diffs[0].freqstr.replace(diffs[0].name, "")
+        if num_units == "0":
+            continue
+        for diff in diffs:
+            if diff != diffs[0]:
+                diffs = None
                 break
-            # if np.all(diffs == first_diff):
-            #     freq = f"{first_diff}{test_period}"
-            #     break
-    return freq
+        if diffs is not None:
+            break
+    if diffs is None:
+        return None
+    num_units = diff.freqstr.replace(diff.name, "")
+    num_units = 1 if num_units == "" else int(num_units)
+    return f"{num_units}{period_candidate}S"
 
-def _offset_in_days(freq: str) -> str:
-    offset_to_days = {
-        "D": 1,
-        "W": 7,
-        "M": 30,
-        "Q": 91,
-        "Y": 365
-    }
-    return f"{offset_to_days.get(freq)}D"
+def _half_offset(freq: str):
+    return _offset(freq, half=True)
 
-def _half_offset_in_days(freq: str) -> str:
-    _half_offset_to_days = {
-        "D": "12H",
-        "W": "2D",
-        "M": "2D",
-        "Q": "5D",
-        "Y": "5D"
+def _offset(freq: str, half: bool=False):
+    sub_freq = freq[:-1] if freq.endswith("S") else freq
+    sub_freq = sub_freq.split("-")[0]
+    _base_offsets = {
+        "h": (60, "min"),
+        "H": (60, "min"),
+        "D": (24, "H"),
+        "W": (168, "H"),
+        "M": (30, "D"),
+        "Q": (90, "D"),
+        "Y": (364, "D")
     }
-    return _half_offset_to_days.get(freq)
-
-def _determine_required_sampling_type(primary_freq: str, replica_freq: str):
-    factors = {
-        "D": 1,
-        "W": 7,
-        "M": 30,
-        "Q": 91,
-        "Y": 365
-    }
-    primary_factor = primary_freq[:-1]
-    primary_multiplier = primary_freq[-1]
-    primary_harm = int(primary_factor) * factors.get(primary_multiplier)
-    replica_factor = replica_freq[:-1]
-    replica_multiplier = replica_freq[-1]
-    replica_harm = int(replica_factor) * factors.get(replica_multiplier)
-    if replica_harm < primary_harm:
-        return SampleType.UP
-    if replica_harm > primary_harm:
-        return SampleType.DOWN
-    return SampleType.EITHER
+    if len(sub_freq) == 1:
+        num_units = 1
+    else:
+        num_units = int(sub_freq[:-1])
+    offsets, offset_units = _base_offsets.get(sub_freq[-1])
+    num_offset_units = num_units * offsets
+    num_offset_units = int(num_offset_units / 2) if half else num_offset_units
+    return f"{num_offset_units}{offset_units}"
 
 
 def _find_time_bounds(ds: xr.Dataset, freq: str = None) -> Tuple[xr.Dataset, Optional[str]]:
@@ -150,13 +127,23 @@ def _find_time_bounds(ds: xr.Dataset, freq: str = None) -> Tuple[xr.Dataset, Opt
         freq = _determine_frequency(ds)
         if freq is None:
             return ds, None
-    index = ds.time.to_index()
-    period = index.to_period(freq)
-    time_bounds = xr.DataArray(
-        name=default_time_bounds_name,
-        data=np.array([period.start_time.values, period.end_time.values]).transpose(),
-        dims=("time", "bnds")
-    )
+    if "MS" in freq or "QS" in freq or "YS" in freq:
+        index = ds.time.to_index()
+        period = index.to_period(freq[:-1])
+        time_bounds = xr.DataArray(
+            name=default_time_bounds_name,
+            data=np.array([period.start_time.values, period.end_time.values]).transpose(),
+            dims=("time", "bnds")
+        )
+    else:
+        time_delta = ds.time[1] - ds.time[0]
+        start_times = ds.time - time_delta // 2
+        end_times = ds.time + time_delta // 2
+        time_bounds = xr.DataArray(
+            name=default_time_bounds_name,
+            data=np.array([start_times, end_times]).transpose(),
+            dims=("time", "bnds")
+        )
     ds = ds.assign({default_time_bounds_name: time_bounds})
     return ds, default_time_bounds_name
 
@@ -199,54 +186,94 @@ def temporal_alignment(
     # check whether primary has a regular time
     # retrieve resampling parameters from primary dataset
     primary_freq = _determine_frequency(ds_primary)
+    replica_freq = _determine_frequency(ds_replica)
+    upsampling = ds_primary.time[1] - ds_primary.time[0] > ds_replica.time[1] - ds_replica.time[0]
+    if upsampling:
+        offset_for_adjusting = _half_offset(primary_freq)
+        method= "mean"
+    else:
+        offset_for_adjusting = _half_offset(replica_freq)
+        method = "interpolate"
+
     if primary_freq is None:
         raise ValidationError(
             'The time coordinate of the primary dataset is not equidistant, '
             'can not perform temporal alignment.'
         )
-    # ds_primary, prim_time_bounds = _find_time_bounds(ds_primary, primary_freq)
 
-    # expected_resampled_date_range =
+    ds_primary, prim_time_bounds = _find_time_bounds(ds_primary, primary_freq)
+    if prim_time_bounds is None:
+        raise ValidationError(
+            'Could not determine bounds of primary dataset, '
+            'cannot perform temporal alignment.'
+        )
+    ds_replica, repl_time_bounds = _find_time_bounds(ds_replica)
 
-    offset_in_days = _offset_in_days(primary_freq)
-    adjusted_start_time = ds_primary.time.values[0] - pd.Timedelta(offset_in_days)
-    expected_resampled_date_range = pd.date_range(
-        start=adjusted_start_time, periods=len(ds_primary.time.values) + 1, freq=primary_freq
-        # start=adjusted_start_time, periods=len(ds_primary.time.values) , freq=primary_freq
-    )
-    # estimated_time_deviations = ds_primary.time.values - expected_resampled_date_range
-    estimated_time_deviations = ds_primary.time.values - expected_resampled_date_range[:-1]
-    # cut dataset
-    if cut:
-        replica_freq = _determine_frequency(ds_replica)
-        if replica_freq is not None:
-            times = pd.to_datetime(ds_replica.time.values)
-            periods = times.to_period(replica_freq)
-            starts = periods.start_time
-            ends = periods.end_time
-            mask = (starts <= expected_resampled_date_range[-1]) & (ends >= expected_resampled_date_range[0])
-            ds_replica = ds_replica.sel(time=mask)
-        # ds_replica = ds_replica.sel(time=slice(ds_primary.time[0], ds_primary.time[-1]))
-        else:
-            ds_replica = ds_replica.sel(time=slice(expected_resampled_date_range[0], expected_resampled_date_range[-1]))
-    if (len(ds_replica.time) == 0):
+    bounds_start = ds_primary[prim_time_bounds].values[0][0]
+    bounds_end = ds_primary[prim_time_bounds].values[-1][1]
+
+    repl_start_bounds = repl_end_bounds = ds_replica["time"]
+    if repl_time_bounds is not None:
+        repl_start_bounds = ds_replica[repl_time_bounds][:, 0]
+        repl_end_bounds = ds_replica[repl_time_bounds][:, 1]
+
+    start_cut_index = bisect.bisect_right(repl_end_bounds, bounds_start)
+    end_cut_index = bisect.bisect_left(repl_start_bounds, bounds_end)
+
+    ds_replica = ds_replica.isel(time=slice(start_cut_index, end_cut_index))
+
+    if len(ds_replica.time) == 0:
         raise ValidationError("Could not determine an overlap between primary and replica dataset. "
                               "Temporal alignment was not possible.")
+
+    if len(ds_replica.time) == 1:
+        method= "mean"
+
+    if primary_freq.endswith("S") or "W-" in primary_freq:
+        offset_in_days = _offset(primary_freq)
+        adjusted_start_time = ds_primary.time.values[0] - pd.Timedelta(offset_in_days)
+    elif primary_freq.endswith("h"):
+        if repl_time_bounds is None:
+            adjusted_start_time = ds_replica.time.values[0]
+        else:
+            adjusted_start_time = ds_replica[repl_time_bounds][:, 0].values[0]
+    else:
+        # pad ds_replica in front so start time corresponds to start time of ds_primary
+        estimated_offset = max(
+            0,
+            bisect.bisect_left(ds_primary[prim_time_bounds][:,0], ds_replica.time.values[0]) - 1
+        )
+        adjusted_start_time = ds_primary[prim_time_bounds][:,0].values[estimated_offset]
+
+    expected_resampled_date_range = pd.date_range(
+        start=adjusted_start_time, end=bounds_end, freq=primary_freq
+    )
+    resampling_offset = ds_replica.time.values[0] - expected_resampled_date_range[0]
+
+    if repl_time_bounds is not None:
+        # we need to remove replica time bounds because they cannot be resampled in time
+        ds_replica = ds_replica.drop_vars(repl_time_bounds)
+
     # resample using xcube
-    # ds = resample_in_time(ds_replica, frequency=primary_freq, method=method, cube_asserted=False)
-    # ds = resample_in_time(ds_replica, frequency=primary_freq, method=method, tolerance=_half_offset_in_days(replica_freq))
-    ds = resample_in_time(ds_replica, frequency=primary_freq, method="mean")
-    ds = ds.assign(time=ds.time.values + estimated_time_deviations[0:len(ds.time)])
-    ds = ds.reindex(time=ds_primary.time, method="nearest", tolerance=_half_offset_in_days(primary_freq))
+    ds = resample_in_time(
+        ds_replica,
+        frequency=primary_freq,
+        method=method,
+        interp_kind="nearest",
+        tolerance=primary_freq,
+        offset=resampling_offset
+    )
+    non_dropped_time_length = len(ds.time)
+    ds = ds.dropna(dim="time")
+
+    if upsampling or len(ds.time) is not non_dropped_time_length:
+        ds = ds.assign(time=ds.time.values + pd.Timedelta(_half_offset(primary_freq)))
+
+    ds = ds.reindex(time=ds_primary.time, method="nearest", tolerance=offset_for_adjusting)
     var_renamings = {var_name: "_".join(var_name.split("_")[0]) for var_name in ds.data_vars.keys()}
     ds = ds.rename(var_renamings)
     time_bounds_names = ["time_bnds", "time_bounds"]
     for time_bounds_name in time_bounds_names:
         if time_bounds_name in ds_primary.coords or time_bounds_name in ds_primary.data_vars:
-    # if prim_time_bounds is not None:
             ds = ds.assign({time_bounds_name: ds_primary[time_bounds_name]})
-        # ds = ds.assign({prim_time_bounds: ds_primary[prim_time_bounds]})
-    # for var_name, var in ds.data_vars.keys():
-        # ds.rename()
-    # ds = ds.reindex(time=ds_primary.time, method="nearest", tolerance="12H")
     return ds
