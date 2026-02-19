@@ -1,5 +1,17 @@
 ## Changes in 1.5.2 (in development)
 
+### Enhancements
+* Added module `colormaps.py` for improved support of categorical colormaps. 
+  There are predefined maps for 
+  * `land_cover_cci` (this one was already available before)
+  * `land_cover_fire_cci` (for land cover data in FIRE datasets)
+  * `highres_land_cover_cci` (for the high resolution land cover data)
+  The module offers the following functions:
+  * `register_categorical_color_map`: Registers a new categorical color map
+  * `deregister_color_map`: Unregisters a color map
+  * `get_color_map`: Allows to retrieve a categorical color map
+  * `ensure_cmaps_loaded`: Ensures the default color maps are added to the matplotlib library
+
 ## Changes in 1.5.1
 
 ### Operations

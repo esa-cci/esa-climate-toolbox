@@ -1,0 +1,228 @@
+land_cover_cci:
+  - value: 0
+    label: "No Data"
+    color: "#000000"
+  - value: 10
+    label: "Cropland, rainfed"
+    color: "#FFFF64"
+  - value: 11
+    label: "Cropland, rainfed, herbaceous cover"
+    color: "#FFFF64"
+  - value: 12
+    label: "Cropland, rainfed, tree or shrub cover"
+    color: "#FFFF00"
+  - value: 20
+    label: "Cropland, irrigated or post-flooding"
+    color: "#AAF0F0"
+  - value: 30
+    label: "Mosaic cropland (>50%) / natural vegetation (tree, shrub, herbaceous cover)(<50%)"
+    color: "#DCF064"
+  - value: 40
+    label: "Mosaic natural vegetation (tree, shrub, herbaceous cover) (>50%) / cropland(<50%)"
+    color: "#C8C864"
+  - value: 50
+    label: "Tree cover, broadleaved, evergreen, closed to open (>15%)"
+    color: "#006400"
+  - value: 60
+    label: "Tree cover, broadleaved, deciduous, closed to open (>15%)"
+    color: "#00A000"
+  - value: 61
+    label: "Tree cover, broadleaved, deciduous, closed (>40%)"
+    color: "#00A000"
+  - value: 62
+    label: "Tree cover, broadleaved, deciduous, open (15-40%)"
+    color: "#AAC800"
+  - value: 70
+    label: "Tree cover, needleleaved, evergreen, closed to open (>15%)"
+    color: "#003C00"
+  - value: 71
+    label: "Tree cover, needleleaved, evergreen, closed (>40%)"
+    color: "#003C00"
+  - value: 72
+    label: "Tree cover, needleleaved, evergreen, open (15-40%)"
+    color: "#005000"
+  - value: 80
+    label: "Tree cover, needleleaved, deciduous, closed to open (>15%)"
+    color: "#285000"
+  - value: 81
+    label: "Tree cover, needleleaved, deciduous, closed (>40%)"
+    color: "#285000"
+  - value: 82
+    label: "Tree cover, needleleaved, deciduous, open (15-40%)"
+    color: "#286400"
+  - value: 90
+    label: "Tree cover, mixed leaf type (broadleaved and needleleaved)"
+    color: "#788200"
+  - value: 100
+    label: "Mosaic tree and shrub (>50%) / herbaceous cover (<50%)"
+    color: "#8CA000"
+  - value: 110
+    label: "Mosaic herbaceous cover (>50%) / tree and shrub (<50%)"
+    color: "#BE9600"
+  - value: 120
+    label: "Shrubland"
+    color: "#966400"
+  - value: 121
+    label: "Evergreen shrubland"
+    color: "#784B00"
+  - value: 122
+    label: "Deciduous shrubland"
+    color: "#966400"
+  - value: 130
+    label: "Grassland"
+    color: "#FFB432"
+  - value: 140
+    label: "Lichens and mosses"
+    color: "#FFDCD2"
+  - value: 150
+    label: "Sparse vegetation (tree, shrub, herbaceous cover) (<15%)"
+    color: "#FFEBaf"
+  - value: 151
+    label: "Sparse tree (<15%)"
+    color: "#FFCD78"
+  - value: 152
+    label: "Sparse shrub (<15%)"
+    color: "#FFD278"
+  - value: 153
+    label: "Sparse herbaceous cover (<15%)"
+    color: "#FFEBaf"
+  - value: 160
+    label: "Tree cover, flooded, fresh or brackish water"
+    color: "#0078BE"
+  - value: 170
+    label: "Tree cover, flooded, saline water"
+    color: "#009678"
+  - value: 180
+    label: "Shrub or herbaceous cover, flooded, fresh/saline/brackish water"
+    color: "#00DC82"
+  - value: 190
+    label: "Urban areas"
+    color: "#C31400"
+  - value: 200
+    label: "Bare areas"
+    color: "#FFF5D7"
+  - value: 201
+    label: "Consolidated bare areas"
+    color: "#DCDCDC"
+  - value: 202
+    label: "Unconsolidated bare areas"
+    color: "#FFF5D7"
+  - value: 210
+    label: "Water bodies"
+    color: "#0046C8"
+  - value: 220
+    label: "Permanent snow and ice"
+    color: "#FFFFFF"
+highres_land_cover_cci:
+  - value: 0
+    label: "No data"
+    color: "#000000"
+  - value: 10
+    label: "Tree Cover Evergreen Broadleaf"
+    color: "#006400"
+  - value: 20
+    label: "Tree Cover Evergreen Needleleaf"
+    color: "#003C00"
+  - value: 30
+    label: "Tree Cover Deciduous Broadleaf"
+    color: "#00A000"
+  - value: 40
+    label: "Tree Cover Deciduous Needleleaf"
+    color: "#285000"
+  - value: 50
+    label: "Shrub Cover Evergreen"
+    color: "#966400"
+  - value: 60
+    label: "Shrub Cover Deciduous"
+    color: "#AA7300"
+  - value: 70
+    label: "Grasslands"
+    color: "#FFB432"
+  - value: 80
+    label: "Croplands"
+    color: "#FFFF64"
+  - value: 90
+    label: "Woody Vegetation Aquatic or Regularly Flooded"
+    color: "#1BCBAE"
+  - value: 100
+    label: "Grassland Vegetation Aquatic or Regularly Flooded"
+    color: "#00DC82"
+  - value: 110
+    label: "Lichens and Mosses"
+    color: "#FFDCD2"
+  - value: 120
+    label: "Bare Areas"
+    color: "#FFF5D7"
+  - value: 130
+    label: "Built-up"
+    color: "#C31400"
+  - value: 140
+    label: "Open Water"
+    color: "#0046C8"
+  - value: 141
+    label: "Open Water (Seasonal)"
+    color: "#5B95FF"
+  - value: 142
+    label: "Open Water (Permanent)"
+    color: "#0046C8"
+  - value: 150
+    label: "Permanent Snow and/or Ice"
+    color: "#FFFFFF"
+land_cover_fire_cci:
+  - value: 0
+    label: "Unburnt"
+    color: "#000000"
+  - value: 10
+    label: "Cropland, rainfed"
+    color: "#FFFF64"
+  - value: 20
+    label: "Cropland, irrigated or post-flooding"
+    color: "#AAF0F0"
+  - value: 30
+    label: "Mosaic cropland (>50%) / natural vegetation (tree, shrub, herbaceous cover)(<50%)"
+    color: "#DCF064"
+  - value: 40
+    label: "Mosaic natural vegetation (tree, shrub, herbaceous cover) (>50%) / cropland(<50%)"
+    color: "#C8C864"
+  - value: 50
+    label: "Tree cover, broadleaved, evergreen, closed to open (>15%)"
+    color: "#006400"
+  - value: 60
+    label: "Tree cover, broadleaved, deciduous, closed to open (>15%)"
+    color: "#00A000"
+  - value: 70
+    label: "Tree cover, needleleaved, evergreen, closed to open (>15%)"
+    color: "#003C00"
+  - value: 80
+    label: "Tree cover, needleleaved, deciduous, closed to open (>15%)"
+    color: "#285000"
+  - value: 90
+    label: "Tree cover, mixed leaf type (broadleaved and needleleaved)"
+    color: "#788200"
+  - value: 100
+    label: "Mosaic tree and shrub (>50%) / herbaceous cover (<50%)"
+    color: "#8CA000"
+  - value: 110
+    label: "Mosaic herbaceous cover (>50%) / tree and shrub (<50%)"
+    color: "#BE9600"
+  - value: 120
+    label: "Shrubland"
+    color: "#966400"
+  - value: 130
+    label: "Grassland"
+    color: "#FFB432"
+  - value: 140
+    label: "Lichens and mosses"
+    color: "#FFDCD2"
+  - value: 150
+    label: "Sparse vegetation (tree, shrub, herbaceous cover) (<15%)"
+    color: "#FFEBaf"
+  - value: 160
+    label: "Tree cover, flooded, fresh or brackish water"
+    color: "#0078BE"
+  - value: 170
+    label: "Tree cover, flooded, saline water"
+    color: "#009678"
+  - value: 180
+    label: "Shrub or herbaceous cover, flooded, fresh/saline/brackish water"
+    color: "#00DC82"
