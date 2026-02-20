@@ -1,5 +1,9 @@
 ## Changes in 1.5.2 (in development)
 
+### Operations
+* Added operation `temporal_alignment` to resample one dataset to the temporal extent of another
+  dataset to facilitate combining the datasets,
+
 ### Enhancements
 * Added module `colormaps.py` for improved support of categorical colormaps. 
   There are predefined maps for 
