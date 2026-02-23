@@ -63,7 +63,13 @@ def subset_spatial(ds: xr.Dataset,
     Do a spatial subset of the dataset
 
     :param ds: Dataset to subset
-    :param region: Spatial region to subset
+    :param region: Spatial region to subset. May be given as one of the following:
+        1. a ``shapely.geometry.shapely.geometry.Polygon`` object
+        2. a string "min_lon, min_lat, max_lon, max_lat"
+        3. a WKT string "POLYGON ((RING))" or
+            "POLYGON ((OUTER-RING), (INNER-RING), ...)"
+        4. a list of coordinates [(lon, lat), (lon, lat), (lon, lat)]
+        5. a list or tuple [min_lon, min_lat, max_lon, max_lat]
     :param mask: Should values falling in the bounding box of the polygon but not the
         polygon itself be masked with NaN.
     :param monitor: A monitor to report the progress of the process
