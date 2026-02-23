@@ -27,6 +27,7 @@ from matplotlib.colors import ListedColormap
 import numpy as np
 import os
 import random
+import string
 import yaml
 from typing import Dict
 from typing import List
@@ -85,7 +86,8 @@ class CategoricalColorMap:
         self._cmap = ListedColormap(
             self.colors, name=self.name, N=num_entries
         )
-        matplotlib.colormaps.register(cmap=self._cmap)
+        if not self.name in matplotlib.colormaps:
+            matplotlib.colormaps.register(cmap=self._cmap)
 
     @property
     def cmap(self):
@@ -109,65 +111,82 @@ class CategoricalColorMap:
         return (color_bounds[:-1] + color_bounds[1:]) / 2
 
 
-def _random_color():
-    hue = random.random()
-    saturation = random.uniform(0.7, 1.0)
-    value = random.uniform(0.7, 1.0)
+class ColorMapRegistry:
 
-    r, g, b = colorsys.hsv_to_rgb(hue, saturation, value)
-    return "#{:02X}{:02X}{:02X}".format(
-        int(r * 255),
-        int(g * 255),
-        int(b * 255)
-    )
+    def __init__(self):
+        self._cmaps = dict()
 
+    @staticmethod
+    def _random_color():
+        hue = random.random()
+        saturation = random.uniform(0.7, 1.0)
+        value = random.uniform(0.7, 1.0)
+        r, g, b = colorsys.hsv_to_rgb(hue, saturation, value)
+        return "#{:02X}{:02X}{:02X}".format(
+            int(r * 255),
+            int(g * 255),
+            int(b * 255)
+        )
 
-def register_categorical_color_map(
-        cm_name: str, cm_values: List, cm_colors: List [str] = None, cm_labels: List[str] = None
-):
-    cm_entries = []
-    for i, cm_value in enumerate(cm_values):
-        cm_entry = dict()
-        cm_entry["value"] = cm_value
-        if cm_colors:
-            cm_entry["color"] = cm_colors[i]
-        if cm_labels:
-            cm_entry["label"] = cm_labels[i]
-        cm_entries.append(cm_entry)
-    _register_categorical_color_map(cm_name, cm_entries)
+    @staticmethod
+    def random_cmap_name():
+        characters = string.ascii_lowercase + string.digits
+        character_part = ''.join(random.choices(characters, k=6))
+        return f"cmap_{character_part}"
 
+    def register_categorical_color_map(
+            self, cm_values: List, cm_name: str = None, cm_colors: List [str] = None, cm_labels: List[str] = None
+    ) -> str:
+        if cm_name is None:
+            cm_name = self.random_cmap_name()
+            while self.has_color_map(cm_name):
+                cm_name = self.random_cmap_name()
+        cm_entries = []
+        for i, cm_value in enumerate(cm_values):
+            cm_entry = dict()
+            cm_entry["value"] = cm_value
+            if cm_colors:
+                cm_entry["color"] = cm_colors[i]
+            if cm_labels:
+                cm_entry["label"] = cm_labels[i]
+            cm_entries.append(cm_entry)
+        self._register_categorical_color_map(cm_name, cm_entries)
+        return cm_name
 
-def deregister_color_map(cm_name: str):
-    _COLOR_MAPS.pop(cm_name)
+    def deregister_color_map(self, cm_name: str):
+        self._cmaps.pop(cm_name)
 
+    def has_color_map(self, cm_name: str):
+        return cm_name in self._cmaps
 
-def get_color_map(cm_name: str):
-    return _COLOR_MAPS[cm_name]
+    def get_color_map(self, cm_name: str):
+        return self._cmaps[cm_name]
 
+    def _register_categorical_color_map(self, cm_name: str, cm_entries: List[Dict]):
+        values = []
+        labels = []
+        colors = []
+        for cm_entry in cm_entries:
+            values.append(cm_entry.get("value"))
+            labels.append(cm_entry.get("label", ""))
+            if "color" in cm_entry:
+                colors.append(cm_entry.get("color"))
+            else:
+                colors.append(self._random_color())
+        ccm = CategoricalColorMap(cm_name, values, colors, labels)
+        self._cmaps[cm_name] = ccm
 
-def _register_categorical_color_map(cm_name: str, cm_entries: List[Dict]):
-    values = []
-    labels = []
-    colors = []
-    for cm_entry in cm_entries:
-        values.append(cm_entry.get("value"))
-        labels.append(cm_entry.get("label", ""))
-        if "color" in cm_entry:
-            colors.append(cm_entry.get("color"))
-        else:
-            colors.append(_random_color())
-    ccm = CategoricalColorMap(cm_name, values, colors, labels)
-    _COLOR_MAPS[cm_name] = ccm
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
 categorical_colormaps_file = os.path.join(dir_path, 'data/categorical_colormaps.yml')
 with open(categorical_colormaps_file, "r") as cm:
     color_maps_dict = yaml.safe_load(cm)
 
-_COLOR_MAPS = dict()
+COLOR_MAP_REGISTRY = ColorMapRegistry()
 
 def ensure_cmaps_loaded():
     for cm_name, cm_entries in color_maps_dict.items():
-        _register_categorical_color_map(cm_name, cm_entries)
+        if not COLOR_MAP_REGISTRY.has_color_map(cm_name):
+            COLOR_MAP_REGISTRY._register_categorical_color_map(cm_name, cm_entries)
 
 ensure_cmaps_loaded()

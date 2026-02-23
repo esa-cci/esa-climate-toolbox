@@ -4,9 +4,7 @@ import unittest
 
 from esa_climate_toolbox.core.types import ValidationError
 from esa_climate_toolbox.util.colormaps import CategoricalColorMap
-from esa_climate_toolbox.util.colormaps import deregister_color_map
-from esa_climate_toolbox.util.colormaps import get_color_map
-from esa_climate_toolbox.util.colormaps import register_categorical_color_map
+from esa_climate_toolbox.util.colormaps import COLOR_MAP_REGISTRY
 
 class CategoricalColorMapTest(unittest.TestCase):
 
@@ -43,10 +41,10 @@ class CategoricalColorMapTest(unittest.TestCase):
         nt.assert_array_equal(np.array([2.25, 8.75, 14.0]), ccm.tick_values)
 
 
-class CategoricalColorMapRegistrationTest(unittest.TestCase):
+class ColorMapRegistryTest(unittest.TestCase):
 
     def test_get_categorical_map(self):
-        lc_map = get_color_map("land_cover_fire_cci")
+        lc_map = COLOR_MAP_REGISTRY.get_color_map("land_cover_fire_cci")
         self.assertEqual("land_cover_fire_cci", lc_map.name)
         self.assertEqual(
             ['Unburnt', 'Cropland, rainfed', 'Cropland, irrigated or post-flooding',
@@ -81,11 +79,13 @@ class CategoricalColorMapRegistrationTest(unittest.TestCase):
 
     def test_register_and_get_categorical_map(self):
         with self.assertRaises(KeyError):
-            get_color_map("test_ccm_2")
+            COLOR_MAP_REGISTRY.get_color_map("test_ccm_2")
 
-        register_categorical_color_map("test_ccm_2", [0, 10, 15], ["red", "green", "blue"], ["First", "Second", "Third"])
+        COLOR_MAP_REGISTRY.register_categorical_color_map(
+            [0, 10, 15], "test_ccm_2", ["red", "green", "blue"], ["First", "Second", "Third"]
+        )
 
-        cc_map = get_color_map("test_ccm_2")
+        cc_map = COLOR_MAP_REGISTRY.get_color_map("test_ccm_2")
 
         self.assertEqual("test_ccm_2", cc_map.name)
         self.assertEqual(["First", "Second", "Third"], cc_map.labels)
@@ -93,7 +93,7 @@ class CategoricalColorMapRegistrationTest(unittest.TestCase):
         nt.assert_array_equal(np.array([0, 10, 15]), cc_map.values)
         nt.assert_array_equal(np.array([2.25, 8.75, 14.0]), cc_map.tick_values)
 
-        deregister_color_map("test_ccm_2")
+        COLOR_MAP_REGISTRY.deregister_color_map("test_ccm_2")
 
         with self.assertRaises(KeyError):
-            get_color_map("test_ccm_2")
+            COLOR_MAP_REGISTRY.get_color_map("test_ccm_2")
