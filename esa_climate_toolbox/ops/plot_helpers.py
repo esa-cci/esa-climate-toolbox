@@ -105,10 +105,17 @@ def get_var_data(var, indexers: dict, remaining_dims=None):
                     raise ValidationError(f'Dimension \'{dim}\' is also specified as indexers. Please ensure that a '
                                           f'dimension is used exclusively either as indexers or as the selected '
                                           f'dimension.')
-        for dim in indexers:
+        point_indexers = dict()
+        slice_indexers = dict()
+        for dim, indexer in indexers.items():
             if dim not in var.dims:
                 raise ValidationError(f'The specified dataset does not have a dimension called \'{dim}\'.')
-        var = var.sel(method='nearest', **indexers)
+            if isinstance(indexer, slice):
+                slice_indexers[dim] = indexer
+            else:
+                point_indexers[dim] = indexer
+        var = var.sel(method='nearest', **point_indexers)
+        var = var.sel(**slice_indexers)
 
     if remaining_dims:
         isel_indexers = {dim_name: 0 for dim_name in var.dims if dim_name not in remaining_dims}
