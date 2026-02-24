@@ -2,4 +2,4 @@ include esa_climate_toolbox/ds/data/excluded_data_sources
 include esa_climate_toolbox/ds/data/dataset_states.json
 include esa_climate_toolbox/ds/data/stores.yml
 include esa_climate_toolbox/ds/data/kc_refs.json
-include esa_climate_toolbox/util/data/categorical_colormaps.yml
+include esa_climate_toolbox/util/data/categorical_colorschemes.yml
