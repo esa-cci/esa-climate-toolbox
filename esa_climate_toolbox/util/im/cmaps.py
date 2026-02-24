@@ -33,13 +33,12 @@ import matplotlib.colors
 import numpy as np
 from PIL import Image
 
-from .cmap_lc import LAND_COVER_CCI_CMAP
-from .cmap_lc import register_lc_color_map
-
+from .cschemes import ensure_cschemes_loaded
+from .cschemes import COLOR_SCHEME_REGISTRY
 
 _LOG = logging.getLogger('ect')
 
-CMapTemplateEntry = Tuple[str, str, Sequence[str]]
+CMapTemplateEntry = Tuple[str, str, List[str]]
 CMapEntry = Tuple[str, str, Sequence[Tuple[str, str]]]
 
 # Have colormaps separated into categories:
@@ -49,43 +48,43 @@ _CMAP_TEMPLATES: Sequence[CMapTemplateEntry] = (
     ('Perceptually Uniform Sequential',
      'For many applications, a perceptually uniform colormap is the best choice - '
      'one in which equal steps in data are perceived as equal steps in the color space',
-     ('viridis', 'inferno', 'plasma', 'magma')),
+     ['viridis', 'inferno', 'plasma', 'magma']),
     ('Sequential 1',
      'These colormaps are approximately monochromatic colormaps varying smoothly '
      'between two color tones - usually from low saturation (e.g. white) to high '
      'saturation (e.g. a bright blue). Sequential colormaps are ideal for '
      'representing most scientific data since they show a clear progression from '
      'low-to-high values.',
-     ('Blues', 'BuGn', 'BuPu',
+     ['Blues', 'BuGn', 'BuPu',
       'GnBu', 'Greens', 'Greys', 'Oranges', 'OrRd',
       'PuBu', 'PuBuGn', 'PuRd', 'Purples', 'RdPu',
-      'Reds', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd')),
+      'Reds', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd']),
     ('Sequential 2',
      'Many of the values from the Sequential 2 plots are monotonically increasing.',
-     ('afmhot', 'autumn', 'bone', 'cool',
+     ['afmhot', 'autumn', 'bone', 'cool',
       'copper', 'gist_heat', 'gray', 'hot',
-      'pink', 'spring', 'summer', 'winter')),
+      'pink', 'spring', 'summer', 'winter']),
     ('Diverging',
      'These colormaps have a median value (usually light in color) and vary '
      'smoothly to two different color tones at high and low values. Diverging '
      'colormaps are ideal when your data has a median value that is significant '
      '(e.g.  0, such that positive and negative values are represented by '
      'different colors of the colormap).',
-     ('BrBG', 'bwr', 'coolwarm', 'PiYG', 'PRGn', 'PuOr',
+     ['BrBG', 'bwr', 'coolwarm', 'PiYG', 'PRGn', 'PuOr',
       'RdBu', 'RdGy', 'RdYlBu', 'RdYlGn', 'Spectral',
-      'seismic')),
+      'seismic']),
     ('Qualitative',
      'These colormaps vary rapidly in color. Qualitative colormaps are useful for '
      'choosing a set of discrete colors.',
-     ('Accent', 'Dark2', 'Paired', 'Pastel1',
-      'Pastel2', 'Set1', 'Set2', 'Set3')),
+     ['Accent', 'Dark2', 'Paired', 'Pastel1',
+      'Pastel2', 'Set1', 'Set2', 'Set3']),
     ('Miscellaneous',
      'Colormaps that don\'t fit into the categories above.',
-     (LAND_COVER_CCI_CMAP, 'gist_earth', 'terrain', 'ocean', 'gist_stern',
-      'brg', 'CMRmap', 'cubehelix',
+     ['gist_earth', 'terrain',
+      'ocean', 'gist_stern', 'brg', 'CMRmap', 'cubehelix',
       'gnuplot', 'gnuplot2', 'gist_ncar',
       'nipy_spectral', 'jet', 'rainbow',
-      'gist_rainbow', 'hsv', 'flag', 'prism'))
+      'gist_rainbow', 'hsv', 'flag', 'prism'])
 )
 
 _CMAPS: Optional[Sequence[CMapEntry]] = None
@@ -117,7 +116,11 @@ def ensure_cmaps_loaded():
     if _CMAPS is None:
         _LOCK.acquire()
         if _CMAPS is None:
-            register_lc_color_map()
+            ensure_cschemes_loaded()
+            colorscheme_names = COLOR_SCHEME_REGISTRY.get_color_scheme_names()
+            for colorscheme_name in colorscheme_names:
+                cmap_name = COLOR_SCHEME_REGISTRY.get_color_scheme(colorscheme_name).color_map_name
+                _CMAP_TEMPLATES[-1][-1].append(cmap_name)
             new_cmaps: List[CMapEntry] = []
             for cmap_category, cmap_description, cmap_names in _CMAP_TEMPLATES:
                 cbar_list = []

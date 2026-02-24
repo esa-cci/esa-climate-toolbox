@@ -3,8 +3,8 @@ import numpy.testing as nt
 import unittest
 
 from esa_climate_toolbox.core.types import ValidationError
-from esa_climate_toolbox.util.cschemes import CategoricalColorScheme
-from esa_climate_toolbox.util.cschemes import COLOR_SCHEME_REGISTRY
+from esa_climate_toolbox.util.im.cschemes import CategoricalColorScheme
+from esa_climate_toolbox.util.im.cschemes import COLOR_SCHEME_REGISTRY
 
 class CategoricalColorSchemeTest(unittest.TestCase):
 

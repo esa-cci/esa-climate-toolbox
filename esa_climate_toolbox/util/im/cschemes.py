@@ -206,8 +206,11 @@ class ColorSchemeRegistry:
     def has_color_scheme(self, cs_name: str):
         return cs_name in self._colorschemes
 
-    def get_color_scheme(self, cs_name: str):
+    def get_color_scheme(self, cs_name: str) -> ColorScheme:
         return self._colorschemes[cs_name]
+
+    def get_color_scheme_names(self):
+        return list(self._colorschemes.keys())
 
     def _register_categorical_color_scheme(
             self, color_scheme_name: str, color_map_name: str, cm_entries: List[Dict]
@@ -227,7 +230,7 @@ class ColorSchemeRegistry:
 
 COLOR_SCHEME_REGISTRY = ColorSchemeRegistry()
 
-def ensure_cmaps_loaded():
+def ensure_cschemes_loaded():
     dir_path = os.path.dirname(os.path.abspath(__file__))
     categorical_colorschemes_file = os.path.join(dir_path, 'data/categorical_colorschemes.yml')
     with open(categorical_colorschemes_file, "r") as cs:
@@ -238,4 +241,4 @@ def ensure_cmaps_loaded():
             cs_entries = cs_values["entries"]
             COLOR_SCHEME_REGISTRY._register_categorical_color_scheme(cs_name, cm_name, cs_entries)
 
-ensure_cmaps_loaded()
+ensure_cschemes_loaded()
