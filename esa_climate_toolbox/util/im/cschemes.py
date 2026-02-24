@@ -186,7 +186,7 @@ class ColorSchemeRegistry:
                 color_scheme_name = self.random_cscheme_name()
         if color_map_name is None:
             color_map_name = self.random_cmap_name()
-            while color_map_name in matplotlib.colors:
+            while color_map_name in matplotlib.colormaps:
                 color_map_name = self.random_cmap_name()
         cm_entries = []
         for i, cm_value in enumerate(cm_values):
