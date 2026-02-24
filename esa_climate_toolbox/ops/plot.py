@@ -63,6 +63,9 @@ import xarray as xr
 import cartopy.crs as ccrs
 import numpy as np
 import json
+from typing import List
+
+from xcube.core.gridmapping import GridMapping
 
 from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
@@ -74,11 +77,13 @@ from esa_climate_toolbox.core.types import ValidationError
 from esa_climate_toolbox.core.types import VarName
 from esa_climate_toolbox.core.types import VarNamesLike
 
+from esa_climate_toolbox.util.im.cschemes import ensure_cschemes_loaded
+from esa_climate_toolbox.util.im.cschemes import COLOR_SCHEME_REGISTRY
+
 from esa_climate_toolbox.ops.plot_helpers import get_var_data
 from esa_climate_toolbox.ops.plot_helpers import get_vars_data
 from esa_climate_toolbox.ops.plot_helpers import in_notebook
 from esa_climate_toolbox.ops.plot_helpers import handle_plot_polygon
-from esa_climate_toolbox.util.monitor import Monitor
 
 # see https://matplotlib.org/tutorials/intermediate/tight_layout_guide.html
 matplotlib.rcParams.update({'figure.autolayout': True})
@@ -107,6 +112,7 @@ PLOT_FILE_FILTER = dict(name='Plot Outputs', extensions=PLOT_FILE_EXTENSIONS)
           )
 @op_input('central_lon', units='degrees', value_range=[-180, 180])
 @op_input('title')
+@op_input('contour_plot', default_value=False)
 @op_input('properties', data_type=DictLike)
 @op_input('file', file_open_mode='w', file_filters=[PLOT_FILE_FILTER])
 def plot_map(ds: xr.Dataset,
@@ -139,7 +145,13 @@ def plot_map(ds: xr.Dataset,
     :param indexers: Optional indexers into data array of *var*. The *indexers* is a
         dictionary or a comma-separated string of key-value pairs that maps the
         variable's dimension names to constant labels. e.g. "layer=4".
-    :param region: Region to plot
+    :param region: Region to plot. May be given as one of the following:
+        1. a ``shapely.geometry.shapely.geometry.Polygon`` object
+        2. a string "min_lon, min_lat, max_lon, max_lat"
+        3. a WKT string "POLYGON ((RING))" or
+            "POLYGON ((OUTER-RING), (INNER-RING), ...)"
+        4. a list of coordinates [(lon, lat), (lon, lat), (lon, lat)]
+        5. a list or tuple [min_lon, min_lat, max_lon, max_lat]
     :param projection: name of a global projection,
         see http://scitools.org.uk/cartopy/docs/v0.15/crs/projections.html
     :param central_lon: central longitude of the projection in degrees
@@ -236,14 +248,14 @@ def plot_map(ds: xr.Dataset,
                 'or enabling contour_plot.'
             )
 
-    return figure if not in_notebook() else ax
+    return figure if not in_notebook() else None
 
 
 @op(tags=['plot'], res_pattern='plot_{index}')
 @op_input('var', value_set_source='ds', data_type=VarName)
 @op_input('indexers', data_type=DictLike)
 @op_input('title')
-@op_input('filled')
+@op_input('filled', default_value=True)
 @op_input('properties', data_type=DictLike)
 @op_input('file', file_open_mode='w', file_filters=[PLOT_FILE_FILTER])
 def plot_contour(ds: xr.Dataset,
@@ -345,6 +357,121 @@ def plot(ds: DatasetLike.TYPE,
 
     var_data = get_var_data(var, indexers)
     var_data.plot(ax=ax, **properties)
+
+    if title:
+        ax.set_title(title)
+
+    figure.tight_layout()
+
+    if file:
+        figure.savefig(file)
+
+    return figure if not in_notebook() else None
+
+ensure_cschemes_loaded()
+
+@op(tags=['plot'], res_pattern='plot_{index}')
+@op_input('var', value_set_source='ds', data_type=VarName)
+@op_input('indexers', data_type=DictLike)
+@op_input('title')
+@op_input('color_scheme_name', value_set=[COLOR_SCHEME_REGISTRY.get_color_scheme_names()])
+@op_input('color_map_name', nullable=True)
+@op_input('color_scheme_values', nullable=True)
+@op_input('color_scheme_colors', nullable=True)
+@op_input('color_scheme_labels', nullable=True)
+@op_input('show_labels', default_value=True)
+@op_input('properties', data_type=DictLike)
+@op_input('file', file_open_mode='w', file_filters=[PLOT_FILE_FILTER])
+def plot_categorical(ds: xr.Dataset,
+                     var: VarName.TYPE,
+                     indexers: DictLike.TYPE = None,
+                     title: str = None,
+                     color_scheme_name: str = None,
+                     color_map_name: str = None,
+                     color_scheme_values: List[int|float] = None,
+                     color_scheme_colors: List[str] = None,
+                     color_scheme_labels: List[str] = None,
+                     show_labels: bool = True,
+                     properties: DictLike.TYPE = None,
+                     file: str = None) -> Figure:
+    """
+    Create a plot of a variable given by dataset *ds* and variable name *var*
+    with a color scheme specific for categorical data.
+
+    :param ds: the dataset containing the variable to plot
+    :param var: the variable's name
+    :param indexers: Optional indexers into data array of *var*. The *indexers* is a
+        dictionary or a comma-separated string of key-value pairs that maps the
+        variable's dimension names to constant labels. e.g. "layer=4".
+    :param title: an optional title
+    :param color_scheme_name: Name of a predefined categorical map for land cover.
+        Must be either 'land_cover_cci', 'land_cover_fire_cci',
+         or 'highres_land_cover_cci'.
+        Must be provided if parameter 'color_classes' is not set.
+    :param color_map_name: Name under which a new color map shall be considered.
+        Only considered when color_scheme_name is not set.
+    :param color_scheme_values: List of values within the variable that shall have
+        a color assigned to them.
+        Must be provided if parameter 'color_scheme_name' is not set.
+    :param color_scheme_colors: List of colors within the variable that shall have
+        a color assigned to them. Only considered if color_scheme_values is set.
+        If not given, colors will be assigned at random.
+    :param color_scheme_labels: List of colors within the variable that shall have
+        a color assigned to them. Only considered if color_scheme_values is set.
+    :param show_labels: Whether the labels should be included in the axis
+    :param properties: optional plot properties for Python matplotlib,
+           e.g. "bins=512, range=(-1.5, +1.5), label='Sea Surface Temperature'"
+           For full reference refer to
+           https://matplotlib.org/api/lines_api.html and
+           https://matplotlib.org/devdocs/api/_as_gen/matplotlib.patches.Patch.html#matplotlib.patches.Patch
+    :param file: path to a file in which to save the plot
+    :return: a matplotlib figure object or None if in IPython mode
+    """
+    var_name = VarName.convert(var)
+    if not var_name:
+        raise ValidationError("Missing name for 'var'")
+    var = ds[var_name]
+
+    if not color_scheme_name and not color_scheme_values:
+        raise ValidationError(
+            "Either parameter 'color_scheme_name' or 'color_scheme_values' must be set."
+        )
+
+    indexers = DictLike.convert(indexers) or {}
+    properties = DictLike.convert(properties) or {}
+
+
+    figsize = properties.pop("figsize") if "figsize" in properties else (8, 4)
+    figure = plt.figure(figsize=figsize)
+
+    ax = figure.add_subplot(111)
+
+    dim_names = GridMapping.from_dataset(ds).xy_dim_names
+    remaining_dims = []
+    if dim_names[0] not in indexers:
+        remaining_dims.append(dim_names[0])
+    if dim_names[1] not in indexers:
+        remaining_dims.append(dim_names[1])
+
+    var_data = get_var_data(var, indexers, remaining_dims=remaining_dims)
+
+    if color_scheme_values:
+        if color_scheme_name and COLOR_SCHEME_REGISTRY.has_color_scheme(color_scheme_name):
+            raise ValidationError(
+                f"Color scheme '{color_scheme_name}' already exists. Please either deregister "
+                f"the color scheme or choose another name."
+            )
+        color_scheme_name = COLOR_SCHEME_REGISTRY.register_categorical_color_scheme(
+            color_scheme_values, color_scheme_name, color_map_name, color_scheme_colors, color_scheme_labels
+        )
+
+    color_map = COLOR_SCHEME_REGISTRY.get_color_scheme(color_scheme_name)
+    if not show_labels:
+        _ = var_data.plot(ax=ax, cmap=color_map.cmap, norm=color_map.norm, **properties)
+    else:
+        da_plot = var_data.plot(ax=ax, cmap=color_map.cmap, norm=color_map.norm, add_colorbar=False, **properties)
+        cbar = plt.colorbar(da_plot, ticks=color_map.tick_values)
+        cbar.ax.set_yticklabels(color_map.labels)
 
     if title:
         ax.set_title(title)

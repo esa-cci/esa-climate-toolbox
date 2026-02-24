@@ -15,9 +15,12 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
+from xcube.core.new import new_cube
+
 from esa_climate_toolbox.core.op import OP_REGISTRY
 from esa_climate_toolbox.core.types import ValidationError
 from esa_climate_toolbox.ops.plot import plot
+from esa_climate_toolbox.ops.plot import plot_categorical
 from esa_climate_toolbox.ops.plot import plot_line
 from esa_climate_toolbox.ops.plot import plot_map
 from esa_climate_toolbox.ops.plot import plot_scatter
@@ -174,6 +177,38 @@ class TestPlot(TestCase):
 
         with create_tmp_file('remove_me', 'jpg') as tmp_file:
             reg_op(ds=dataset, var='first', file=tmp_file)
+            self.assertTrue(os.path.isfile(tmp_file))
+
+
+# @unittest.skipIf(condition=os.environ.get('ECT_DISABLE_PLOT_TESTS', None),
+#                  reason="skipped if ECT_DISABLE_PLOT_TESTS=1")
+class TestPlotCategorical(TestCase):
+    """
+    Test plot_categorical() function
+    """
+
+    def test_plot_categorical(self):
+        # Test plot
+        dataset = new_cube(variables={"first": np.arange(324000).reshape(5, 180, 360) % 11})
+
+        with create_tmp_file('remove_me', 'jpg') as tmp_file:
+            plot_categorical(
+                dataset, 'first', indexers={"time": dataset.time[0].values}, color_scheme_values=[1, 3, 5, 7, 9],
+                file=tmp_file
+            )
+            self.assertTrue(os.path.isfile(tmp_file))
+
+    def test_registered(self):
+        """
+        Test nominal execution of the function as a registered operation.
+        """
+        reg_op = OP_REGISTRY.get_op(object_to_qualified_name(plot_categorical))
+        # Test plot
+        dataset = new_cube(variables={"first": np.arange(324000).reshape(5, 180, 360) % 11})
+
+
+        with create_tmp_file('remove_me', 'jpg') as tmp_file:
+            reg_op(ds=dataset, var='first', color_scheme_values=[1, 3, 5, 7, 9], file=tmp_file)
             self.assertTrue(os.path.isfile(tmp_file))
 
 
