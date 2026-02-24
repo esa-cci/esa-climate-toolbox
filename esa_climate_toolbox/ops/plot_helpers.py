@@ -31,7 +31,7 @@ Components
 """
 from esa_climate_toolbox.core.types import PolygonLike, ValidationError
 from esa_climate_toolbox.core.opimpl import get_extents
-from esa_climate_toolbox.util.colormaps import ensure_cmaps_loaded
+from esa_climate_toolbox.util.cschemes import ensure_cmaps_loaded
 
 
 def handle_plot_polygon(region: PolygonLike.TYPE = None):
