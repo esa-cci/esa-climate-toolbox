@@ -2,19 +2,19 @@
 
 ### Operations
 * Added operation `temporal_alignment` to resample one dataset to the temporal extent of another
-  dataset to facilitate combining the datasets,
+  dataset to facilitate combining the datasets
+* Added operation `plot_categorical` to plot categorical data.
 
 ### Enhancements
-* Added module `colormaps.py` for improved support of categorical colormaps. 
-  There are predefined maps for 
-  * `land_cover_cci` (this one was already available before)
+* Added module `colorschemes.py` for managing combinations of color maps, value ranges and labels.
+  There are predefined schemes for 
+  * `land_cover_cci`
   * `land_cover_fire_cci` (for land cover data in FIRE datasets)
   * `highres_land_cover_cci` (for the high resolution land cover data)
-  The module offers the following functions:
-  * `register_categorical_color_map`: Registers a new categorical color map
-  * `deregister_color_map`: Unregisters a color map
-  * `get_color_map`: Allows to retrieve a categorical color map
-  * `ensure_cmaps_loaded`: Ensures the default color maps are added to the matplotlib library
+  The module introduces a new abstract class `ColorScheme` and one implementing class 
+  `CategoricalColorScheme`. Also, there is a class `ColorSchemeRegistry` and a global
+  variable `COLOR_SCHEME_REGISTRY` to obtain all registered color schemes. Users may also
+  register their own color schemes.
 
 ## Changes in 1.5.1
 
