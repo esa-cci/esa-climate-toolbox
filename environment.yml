@@ -13,7 +13,7 @@ dependencies:
   - numcodecs
   - numpy
   - numba > 0.35
-  - pandas
+  - pandas <3
   - pyproj
   - python-dateutil
   - shapely
