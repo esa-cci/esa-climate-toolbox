@@ -23,8 +23,11 @@ __author__ = "Norman Fomferra (Brockmann Consult GmbH)"
 
 import inspect
 import re
+import types
 from collections import OrderedDict
-from typing import Tuple, Dict, List, Any, Optional
+from collections.abc import Callable
+from typing import get_origin, get_args
+from typing import Tuple, Dict, List, Any, Optional, Union
 
 from .misc import object_to_qualified_name, qualified_name_to_object
 from ..core.types import Like
@@ -611,35 +614,21 @@ def is_instance_of(value, data_type) -> bool:
     if inspect.isclass(data_type) and issubclass(data_type, Like):
         data_type = data_type.TYPE
 
-    typing_name = repr(data_type)
-    if not typing_name.startswith(_TYPING_PREFIX):
-        return isinstance(value, data_type)
-
-    typing_name = typing_name[len(_TYPING_PREFIX):]
-    bracket_pos = typing_name.find('[', 1)
-    if bracket_pos != -1:
-        typing_name = typing_name[0:bracket_pos]
-
-    if typing_name == 'Any':
+    if data_type is Any:
         return True
 
-    if typing_name == 'Union':
-        union_args = data_type.__args__ \
-            if hasattr(data_type, '__args__') \
-            else None
-        if union_args is not None:
-            for union_arg in union_args:
-                if is_instance_of(value, union_arg):
-                    return True
-        return False
+    origin = get_origin(data_type)
+    if origin in (Union, types.UnionType):
+        return any(is_instance_of(value, union_arg) for union_arg in get_args(data_type))
 
-    if typing_name == 'Callable':
+    if origin is Callable or data_type is Callable:
         # Don't go into details of return value and parameters types
         return callable(value)
 
-    typing_origin = data_type.__origin__ \
-        if hasattr(data_type, '__origin__') \
-        else None
-    if typing_origin is not None:
-        return is_instance_of(value, typing_origin)
-    return False
+    if origin is not None:
+        return is_instance_of(value, origin)
+
+    if not isinstance(data_type, type):
+        return False
+
+    return isinstance(value, data_type)
