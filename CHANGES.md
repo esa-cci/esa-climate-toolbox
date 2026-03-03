@@ -15,6 +15,9 @@
   `CategoricalColorScheme`. Also, there is a class `ColorSchemeRegistry` and a global
   variable `COLOR_SCHEME_REGISTRY` to obtain all registered color schemes. Users may also
   register their own color schemes.
+* The `indexers` parameter of operations `plot`, `plot_map`, `plot_contour`, `plot_line`,
+  `plot_categorical`, `plot_scatter`, and `plot_hist` allows to pass slices.
+* Ensure Compatibility with Python 3.14
 
 ## Changes in 1.5.1
 
