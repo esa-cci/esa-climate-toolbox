@@ -183,6 +183,8 @@ Plotting
 
 .. autofunction:: esa_climate_toolbox.ops.plot
 
+.. autofunction:: esa_climate_toolbox.ops.plot_categorical
+
 .. autofunction:: esa_climate_toolbox.ops.plot_contour
 
 .. autofunction:: esa_climate_toolbox.ops.plot_hist

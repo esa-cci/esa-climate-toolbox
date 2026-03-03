@@ -82,6 +82,7 @@ from .normalize import adjust_temporal_attrs
 from .normalize import normalize
 from .outliers import detect_outliers
 from .plot import plot
+from .plot import plot_categorical
 from .plot import plot_contour
 from .plot import plot_hist
 from .plot import plot_line
@@ -145,6 +146,7 @@ __all__ = [
     'detect_outliers',
     # .plot
     'plot',
+    'plot_categorical',
     'plot_contour',
     'plot_hist',
     'plot_line',
