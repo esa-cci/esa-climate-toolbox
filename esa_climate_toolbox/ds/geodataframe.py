@@ -36,7 +36,8 @@ class GeoDataFrameKmlFsDataAccessor(GeoDataFrameFsDataAccessor):
             "extrude": 0,
             "visibility": -1,
         }
-        for col in gdf.columns:
+        gdf_columns = gdf.columns
+        for col in gdf_columns:
             if ((col in kml_nan_columns and pd.isna(gdf[col]).all()) or
                 (col in kml_number_columns.keys() and
                  len(gdf[col].unique()) == 1 and
@@ -82,17 +83,21 @@ class GeoDataFrameKmlFsDataAccessor(GeoDataFrameFsDataAccessor):
                 continue
             schema = simplekml.SchemaData("kmlschema")
             for col in data.columns:
-                if col != "geometry":
-                    schema.newsimpledata(col, str(row[col]))
-                    if col not in append_cols:
-                        dtype_str = str(data[col].dtype)
-                        if dtype_str == "object" or dtype_str == "bool":
-                            dtype_str = "string"
-                        elif dtype_str.startswith("int"):
-                            dtype_str = "int"
-                        elif dtype_str.startswith("float"):
-                            dtype_str = "float"
-                        append_cols[col] = dtype_str
+                if col == "geometry":
+                    continue
+                if col == "timestamp":
+                    entry.timestamp.when = pd.Timestamp(str(row[col])).isoformat()
+                    continue
+                schema.newsimpledata(col, str(row[col]))
+                if col not in append_cols:
+                    dtype_str = str(data[col].dtype)
+                    if dtype_str == "object" or dtype_str == "bool":
+                        dtype_str = "string"
+                    elif dtype_str.startswith("int"):
+                        dtype_str = "int"
+                    elif dtype_str.startswith("float"):
+                        dtype_str = "float"
+                    append_cols[col] = dtype_str
             entry.extendeddata.schemadata = schema
 
         for col, typ in append_cols.items():
