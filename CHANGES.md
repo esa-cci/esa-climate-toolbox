@@ -1,4 +1,4 @@
-## Changes in 1.5.2 (in development)
+## Changes in 1.6
 
 ### Operations
 * Added operation `temporal_alignment` to resample one dataset to the temporal extent of another
