@@ -1,5 +1,9 @@
 ## Changes in 1.6.1 (in development)
 
+### Enhancements
+  * Added colour scheme `CategoricalContinuousColorScheme` for data where one part stands for 
+  categorical values (flags) and one part continuous data.
+
 ## Changes in 1.6
 
 ### Operations

@@ -3,3 +3,4 @@ include esa_climate_toolbox/ds/data/dataset_states.json
 include esa_climate_toolbox/ds/data/stores.yml
 include esa_climate_toolbox/ds/data/kc_refs.json
 include esa_climate_toolbox/util/im/data/categorical_colorschemes.yml
+include esa_climate_toolbox/util/im/data/categorical_continuous_colorschemes.yml

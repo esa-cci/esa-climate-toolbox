@@ -1,0 +1,13 @@
+fire_jd_cci:
+  cmap_name_base: fire_jd_cci
+  cmap_cont_name: "Reds"
+  entries:
+    - value: -2
+      label: "Non-burnable"
+      color: "#1e90ff"
+    - value: -1
+      label: "Not observed"
+      color: "#91a3b0"
+    - value: 0
+      label: "Unburnt"
+      color: "#000000"
