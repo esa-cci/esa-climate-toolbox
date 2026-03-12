@@ -180,8 +180,8 @@ class TestPlot(TestCase):
             self.assertTrue(os.path.isfile(tmp_file))
 
 
-# @unittest.skipIf(condition=os.environ.get('ECT_DISABLE_PLOT_TESTS', None),
-#                  reason="skipped if ECT_DISABLE_PLOT_TESTS=1")
+@unittest.skipIf(condition=os.environ.get('ECT_DISABLE_PLOT_TESTS', None),
+                 reason="skipped if ECT_DISABLE_PLOT_TESTS=1")
 class TestPlotCategorical(TestCase):
     """
     Test plot_categorical() function
