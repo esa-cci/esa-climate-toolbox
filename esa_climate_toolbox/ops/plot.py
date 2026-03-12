@@ -59,11 +59,12 @@ import matplotlib.colors
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
-import xarray as xr
 import cartopy.crs as ccrs
-import numpy as np
 import json
-from typing import List
+import numpy as np
+import pandas as pd
+from typing import List, Union
+import xarray as xr
 
 from xcube.core.gridmapping import GridMapping
 
@@ -482,6 +483,183 @@ def plot_categorical(ds: xr.Dataset,
         figure.savefig(file)
 
     return figure if not in_notebook() else None
+
+
+@op(tags=['plot'], res_pattern='plot_{index}')
+@op_input('var', value_set_source='ds', data_type=VarName)
+@op_input('indexers', data_type=DictLike)
+@op_input('title')
+@op_input('color_scheme_name', value_set=COLOR_SCHEME_REGISTRY.get_color_scheme_names())
+@op_input('color_map_name', nullable=True)
+@op_input('color_scheme_values', nullable=True)
+@op_input('color_scheme_colors', nullable=True)
+@op_input('color_scheme_labels', nullable=True)
+@op_input('show_labels', default_value=True)
+@op_input('properties', data_type=DictLike)
+@op_input('file', file_open_mode='w', file_filters=[PLOT_FILE_FILTER])
+def plot_fire_jd(ds: xr.Dataset,
+                 month: Union[int, str],
+                 var: str="JD",
+                 indexers: DictLike.TYPE = None,
+                 title: str = None,
+                 show_labels: bool = True,
+                 properties: DictLike.TYPE = None,
+                 file: str = None) -> Figure:
+    """
+    Create a plot of a variable given by dataset *ds* and variable name *var*
+    with a color scheme specific for categorical data.
+
+    :param ds: the dataset containing the variable to plot
+    :param var: the variable's name
+    :param indexers: Optional indexers into data array of *var*. The *indexers* is a
+        dictionary or a comma-separated string of key-value pairs that maps the
+        variable's dimension names to constant labels. e.g. "layer=4".
+    :param title: an optional title
+    :param color_scheme_name: Name of a predefined categorical map for land cover.
+        Must be either 'land_cover_cci', 'land_cover_fire_cci',
+         or 'highres_land_cover_cci'.
+        Must be provided if parameter 'color_classes' is not set.
+    :param color_map_name: Name under which a new color map shall be considered.
+        Only considered when color_scheme_name is not set.
+    :param color_scheme_values: List of values within the variable that shall have
+        a color assigned to them.
+        Must be provided if parameter 'color_scheme_name' is not set.
+    :param color_scheme_colors: List of colors within the variable that shall have
+        a color assigned to them. Only considered if color_scheme_values is set.
+        If not given, colors will be assigned at random.
+    :param color_scheme_labels: List of colors within the variable that shall have
+        a color assigned to them. Only considered if color_scheme_values is set.
+    :param show_labels: Whether the labels should be included in the axis
+    :param properties: optional plot properties for Python matplotlib,
+           e.g. "bins=512, range=(-1.5, +1.5), label='Sea Surface Temperature'"
+           For full reference refer to
+           https://matplotlib.org/api/lines_api.html and
+           https://matplotlib.org/devdocs/api/_as_gen/matplotlib.patches.Patch.html#matplotlib.patches.Patch
+    :param file: path to a file in which to save the plot
+    :return: a matplotlib figure object or None if in IPython mode
+    """
+
+    if isinstance(month, str):
+        month = pd.to_datetime(month, format="%B").month
+
+    base_category_colors = [
+        "#1e90ff",  # dodger blue
+        "#91a3b0",  # cadet grey
+        "#000000",  # black
+    ]
+    base_category_labels = [
+        "Non-burnable",
+        "Not observed",
+        "Unburnt"
+    ]
+    base_category_values = [-2, -1, 0]
+
+    cont_cmap = plt.colormaps["Reds"]
+    cont_colors = cont_cmap(np.linspace(0.2, 1, num=31))
+    colors = base_category_colors + cont_colors.tolist()
+
+    labels = [""] * 31
+    for i in range(5, 31, 5):
+        labels[i] = i
+    labels = base_category_labels + labels
+
+    timestep = ds.time[month-1].values
+    timestamp = pd.Timestamp(timestep)
+
+    days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    vmin = 1 + sum(days_per_month[:month - 1])
+    vmax = sum(days_per_month[:month])
+    month_values = base_category_values + list(range(vmin, vmax))
+
+    month_colors = colors[:3 + days_per_month[month - 1]]
+    month_labels = labels[:3 + days_per_month[month - 1]]
+
+    if indexers is None:
+        indexers = {}
+    indexers["time"] = timestep
+
+    if title is None:
+        month_name = timestamp.month_name()
+        year = timestamp.year
+        title = f"First day in {month_name} {year} in which a fire was detected"
+
+    return plot_categorical(
+        ds,
+        var=var,
+        indexers=indexers,
+        title=title,
+        color_scheme_values=month_values,
+        color_scheme_colors=month_colors,
+        color_scheme_labels=month_labels,
+        show_labels=show_labels,
+        properties=properties,
+        file=file
+    )
+
+
+@op(tags=['plot'], res_pattern='plot_{index}')
+@op_input('var', value_set_source='ds', data_type=VarName)
+@op_input('indexers', data_type=DictLike)
+@op_input('title')
+@op_input('color_scheme_name', value_set=COLOR_SCHEME_REGISTRY.get_color_scheme_names())
+@op_input('color_map_name', nullable=True)
+@op_input('color_scheme_values', nullable=True)
+@op_input('color_scheme_colors', nullable=True)
+@op_input('color_scheme_labels', nullable=True)
+@op_input('show_labels', default_value=True)
+@op_input('properties', data_type=DictLike)
+@op_input('file', file_open_mode='w', file_filters=[PLOT_FILE_FILTER])
+def plot_lc(ds: xr.Dataset,
+            var: str="",
+            indexers: DictLike.TYPE = None,
+            title: str = "Land Cover Class",
+            show_labels: bool = True,
+            properties: DictLike.TYPE = None,
+            file: str = None) -> Figure:
+    """
+    Create a plot of a variable given by dataset *ds* and variable name *var*
+    with a color scheme specific for categorical data.
+
+    :param ds: the dataset containing the variable to plot
+    :param var: the variable's name
+    :param indexers: Optional indexers into data array of *var*. The *indexers* is a
+        dictionary or a comma-separated string of key-value pairs that maps the
+        variable's dimension names to constant labels. e.g. "layer=4".
+    :param title: an optional title
+    :param color_scheme_name: Name of a predefined categorical map for land cover.
+        Must be either 'land_cover_cci', 'land_cover_fire_cci',
+         or 'highres_land_cover_cci'.
+        Must be provided if parameter 'color_classes' is not set.
+    :param color_map_name: Name under which a new color map shall be considered.
+        Only considered when color_scheme_name is not set.
+    :param color_scheme_values: List of values within the variable that shall have
+        a color assigned to them.
+        Must be provided if parameter 'color_scheme_name' is not set.
+    :param color_scheme_colors: List of colors within the variable that shall have
+        a color assigned to them. Only considered if color_scheme_values is set.
+        If not given, colors will be assigned at random.
+    :param color_scheme_labels: List of colors within the variable that shall have
+        a color assigned to them. Only considered if color_scheme_values is set.
+    :param show_labels: Whether the labels should be included in the axis
+    :param properties: optional plot properties for Python matplotlib,
+           e.g. "bins=512, range=(-1.5, +1.5), label='Sea Surface Temperature'"
+           For full reference refer to
+           https://matplotlib.org/api/lines_api.html and
+           https://matplotlib.org/devdocs/api/_as_gen/matplotlib.patches.Patch.html#matplotlib.patches.Patch
+    :param file: path to a file in which to save the plot
+    :return: a matplotlib figure object or None if in IPython mode
+    """
+    return plot_categorical(
+        ds,
+        var="lccs_class",
+        indexers=indexers,
+        title=title,
+        color_scheme_name="land_cover_cci",
+        show_labels=show_labels,
+        properties=properties,
+        file=file
+    )
 
 
 @op(tags=['plot'], res_pattern='plot_{index}')
