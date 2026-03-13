@@ -185,6 +185,10 @@ Plotting
 
 .. autofunction:: esa_climate_toolbox.ops.plot_categorical
 
+.. autofunction:: esa_climate_toolbox.ops.plot_categorical_continuous
+
+.. autofunction:: esa_climate_toolbox.ops.plot_fire_jd
+
 .. autofunction:: esa_climate_toolbox.ops.plot_contour
 
 .. autofunction:: esa_climate_toolbox.ops.plot_hist

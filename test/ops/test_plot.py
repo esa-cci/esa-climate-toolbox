@@ -15,12 +15,14 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
+from esa_climate_toolbox.ops import plot_categorical_continuous
 from xcube.core.new import new_cube
 
 from esa_climate_toolbox.core.op import OP_REGISTRY
 from esa_climate_toolbox.core.types import ValidationError
 from esa_climate_toolbox.ops.plot import plot
 from esa_climate_toolbox.ops.plot import plot_categorical
+from esa_climate_toolbox.ops.plot import plot_fire_jd
 from esa_climate_toolbox.ops.plot import plot_line
 from esa_climate_toolbox.ops.plot import plot_map
 from esa_climate_toolbox.ops.plot import plot_scatter
@@ -210,6 +212,106 @@ class TestPlotCategorical(TestCase):
         with create_tmp_file('remove_me', 'jpg') as tmp_file:
             reg_op(ds=dataset, var='first', color_scheme_values=[1, 3, 5, 7, 9], file=tmp_file)
             self.assertTrue(os.path.isfile(tmp_file))
+
+
+# @unittest.skipIf(condition=os.environ.get('ECT_DISABLE_PLOT_TESTS', None),
+#                  reason="skipped if ECT_DISABLE_PLOT_TESTS=1")
+class TestPlotCategoricalContinuous(TestCase):
+    """
+    Test plot_categorical_continuous() function
+    """
+
+    def test_plot_categorical_continuous(self):
+        # Test plot
+        dataset = new_cube(variables={"first": np.arange(324000).reshape(5, 180, 360) % 11})
+
+        with create_tmp_file('remove_me', 'jpg') as tmp_file:
+            plot_categorical_continuous(
+                dataset, 'first', indexers={"time": dataset.time[2].values}, cat_range_values=[1, 2, 3],
+                cat_range_colors=["yellow", "green", "blue"], cat_range_labels=["label_1", "label_2", "label_2"],
+                continuous_color_map_name="Reds", continuous_values=[4, 5, 6, 7, 8, 9, 10], range_extent=14,
+                label_shift=4, labels_space=2, file=tmp_file
+            )
+            self.assertTrue(os.path.isfile(tmp_file))
+
+    def test_registered(self):
+        """
+        Test nominal execution of the function as a registered operation.
+        """
+        reg_op = OP_REGISTRY.get_op(object_to_qualified_name(plot_categorical_continuous))
+        # Test plot
+        dataset = new_cube(variables={"first": np.arange(324000).reshape(5, 180, 360) % 11})
+
+        with create_tmp_file('remove_me', 'jpg') as tmp_file:
+            reg_op(dataset, 'first', indexers={"time": dataset.time[2].values}, cat_range_values=[1, 2, 3],
+                   cat_range_colors=["yellow", "green", "blue"], cat_range_labels=["label_1", "label_2", "label_2"],
+                   continuous_color_map_name="Reds", continuous_values=[4, 5, 6, 7, 8, 9, 10], range_extent=14,
+                   label_shift=4, labels_space=2, file=tmp_file)
+            self.assertTrue(os.path.isfile(tmp_file))
+
+
+# @unittest.skipIf(condition=os.environ.get('ECT_DISABLE_PLOT_TESTS', None),
+#                  reason="skipped if ECT_DISABLE_PLOT_TESTS=1")
+class TestPlotFireJD(TestCase):
+    """
+    Test plot_fire_jd() function
+    """
+
+    @staticmethod
+    def _create_test_ds():
+        time = pd.date_range('2001-01-01', periods=12, freq='MS')
+        lat = np.linspace(-89.5, 89.5, 2)
+        lon = np.linspace(-179.5, 179.5, 3)
+
+        jd_data = np.zeros((12, 2, 3), dtype=np.int16)
+        for month in range(1, 13):
+            month_start = pd.Timestamp(year=2001, month=month, day=1).dayofyear
+            jd_data[month - 1, :, :] = month_start
+        jd_data[0, 0, 0] = -2
+        jd_data[0, 0, 1] = -1
+
+        return xr.Dataset({
+            'JD': (['time', 'lat', 'lon'], jd_data),
+            'lat': lat,
+            'lon': lon,
+            'time': time
+        })
+
+
+    def test_plot_fire_jd(self):
+        dataset = self._create_test_ds()
+
+        with create_tmp_file('remove_me', 'png') as tmp_file:
+            plot_fire_jd(dataset, month='January', file=tmp_file)
+            self.assertTrue(os.path.isfile(tmp_file))
+
+        with create_tmp_file('remove_me', 'png') as tmp_file:
+            plot_fire_jd(dataset, month=2, file=tmp_file)
+            self.assertTrue(os.path.isfile(tmp_file))
+
+    def test_registered(self):
+        """
+        Test nominal execution of the function as a registered operation.
+        """
+        reg_op = OP_REGISTRY.get_op(object_to_qualified_name(plot_fire_jd))
+
+        dataset = self._create_test_ds()
+
+        with create_tmp_file('remove_me', 'jpg') as tmp_file:
+            reg_op(ds=dataset, month="October", file=tmp_file)
+            self.assertTrue(os.path.isfile(tmp_file))
+
+    def test_plot_fire_jd_exceptions(self):
+        dataset = xr.Dataset({'JD': (['time', 'lat', 'lon'], np.zeros((12, 2, 2))),
+                              'time': pd.date_range('2001-01-01', periods=12, freq='MS'),
+                              'lat': np.linspace(-1, 1, 2),
+                              'lon': np.linspace(-1, 1, 2)})
+
+        with self.assertRaises(ValueError):
+            plot_fire_jd(dataset, month=13)
+
+        with self.assertRaises(ValueError):
+            plot_fire_jd(dataset, month='NotAMonth')
 
 
 @unittest.skipIf(condition=os.environ.get('ECT_DISABLE_PLOT_TESTS', None),

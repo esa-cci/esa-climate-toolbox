@@ -183,6 +183,10 @@ class CategoricalContinuousColorScheme(CategoricalColorScheme):
             color_scheme_name, f"{cmap_name_base}_base", cat_values, cat_colors, cat_labels
         )
 
+    @property
+    def base_values(self):
+        return self._base_values
+
     def set_continuous_values(
             self, cont_values: List[Number], range_extent: int = None, label_shift: int = 0, labels_space: int = 5
     ):
@@ -197,7 +201,7 @@ class CategoricalContinuousColorScheme(CategoricalColorScheme):
             value by subtracting the passed shift.
             Useful for, e.g., displaying days of year to days of months.
         :param labels_space: Indicates how often a value in the continuous part of the
-            range shall be labeled. Default is 5.
+            range shall be labeled in the legend. Default is 5.
         """
         self._values = np.array(self._base_values + cont_values)
 

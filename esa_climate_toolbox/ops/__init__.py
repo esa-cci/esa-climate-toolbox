@@ -83,6 +83,8 @@ from .normalize import normalize
 from .outliers import detect_outliers
 from .plot import plot
 from .plot import plot_categorical
+from .plot import plot_categorical_continuous
+from .plot import plot_fire_jd
 from .plot import plot_contour
 from .plot import plot_hist
 from .plot import plot_line
@@ -147,6 +149,8 @@ __all__ = [
     # .plot
     'plot',
     'plot_categorical',
+    'plot_categorical_continuous',
+    'plot_fire_jd',
     'plot_contour',
     'plot_hist',
     'plot_line',

@@ -1,4 +1,10 @@
-## Changes in 1.6.1 (in development)
+## Changes in 1.7 (in development)
+
+### Operations
+* Added operation `plot_categorical_continuous` to plot data that combines categorical/flag values
+  and data on a continuous scale-
+* Added operation `plot_fire_jd`, which is uses the newly added `plot_categorical_continuous` 
+  operation on the variable JD (Julian Day) contained in some Fire datasets.
 
 ### Enhancements
   * Added colour scheme `CategoricalContinuousColorScheme` for data where one part stands for 

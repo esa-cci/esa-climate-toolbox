@@ -52,13 +52,13 @@ If a file path is given, the plot is saved.
 Supported formats: eps, jpeg, jpg, pdf, pgf, png, ps, raw, rgba, svg, svgz, tif, tiff
 
 """
-
 import matplotlib
 import matplotlib.colors
 
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
+import calendar
 import cartopy.crs as ccrs
 import json
 import numpy as np
@@ -491,23 +491,39 @@ def plot_categorical(ds: xr.Dataset,
 @op_input('title')
 @op_input('color_scheme_name', value_set=COLOR_SCHEME_REGISTRY.get_color_scheme_names())
 @op_input('color_map_name', nullable=True)
-@op_input('color_scheme_values', nullable=True)
-@op_input('color_scheme_colors', nullable=True)
-@op_input('color_scheme_labels', nullable=True)
+@op_input('cat_range_values', nullable=True)
+@op_input('cat_range_colors', nullable=True)
+@op_input('cat_range_labels', nullable=True)
+@op_input('continuous_color_map_name', default_value="viridis")
+@op_input('continuous_values', nullable=True, data_type=List[int])
+@op_input('range_extent', default_value=-1, data_type=int)
+@op_input('label_shift', default_value=0, data_type=int)
+@op_input('labels_space', default_value=5, data_type=int)
 @op_input('show_labels', default_value=True)
 @op_input('properties', data_type=DictLike)
 @op_input('file', file_open_mode='w', file_filters=[PLOT_FILE_FILTER])
-def plot_fire_jd(ds: xr.Dataset,
-                 month: Union[int, str],
-                 var: str="JD",
-                 indexers: DictLike.TYPE = None,
-                 title: str = None,
-                 show_labels: bool = True,
-                 properties: DictLike.TYPE = None,
-                 file: str = None) -> Figure:
+def plot_categorical_continuous(ds: xr.Dataset,
+                                var: VarName.TYPE,
+                                indexers: DictLike.TYPE = None,
+                                title: str = None,
+                                color_scheme_name: str = None,
+                                color_map_name: str = None,
+                                cat_range_values: List[int | float] = None,
+                                cat_range_colors: List[str] = None,
+                                cat_range_labels: List[str] = None,
+                                continuous_color_map_name: str = "viridis",
+                                continuous_values: List[int] = None,
+                                range_extent: int = -1,
+                                label_shift: int = 0,
+                                labels_space: int = 5,
+                                show_labels: bool = True,
+                                properties: DictLike.TYPE = None,
+                                file: str = None) -> Figure:
     """
     Create a plot of a variable given by dataset *ds* and variable name *var*
-    with a color scheme specific for categorical data.
+    with a color scheme specific for data that consists of a part with categorical
+    data (e.g., flags) and a part with data that shall be encoded with a continuous
+    color map.
 
     :param ds: the dataset containing the variable to plot
     :param var: the variable's name
@@ -521,15 +537,137 @@ def plot_fire_jd(ds: xr.Dataset,
         Must be provided if parameter 'color_classes' is not set.
     :param color_map_name: Name under which a new color map shall be considered.
         Only considered when color_scheme_name is not set.
-    :param color_scheme_values: List of values within the variable that shall have
+    :param cat_range_values: List of values within the variable that shall have
         a color assigned to them.
         Must be provided if parameter 'color_scheme_name' is not set.
-    :param color_scheme_colors: List of colors within the variable that shall have
+    :param cat_range_colors: List of colors within the variable that shall have
         a color assigned to them. Only considered if color_scheme_values is set.
         If not given, colors will be assigned at random.
-    :param color_scheme_labels: List of colors within the variable that shall have
+    :param cat_range_labels: List of colors within the variable that shall have
         a color assigned to them. Only considered if color_scheme_values is set.
+    :param continuous_color_map_name: Name of the color map to be used to display
+        the values in the continuous part of the variable value range.
+    :param continuous_values: A list of values which shall be encoded with the
+        continuous color map.
+    :param range_extent: The extent of the value range the continuous color map shall
+        cover. Use to make values from different plots comparable.
+    :param label_shift: Shifts the labels of the continuous values from their actual
+        value by subtracting the passed shift.
+    :param labels_space: Indicates how often a value in the continuous part of the
+        range shall be labeled in the legend. Considered when show_labels is True.
     :param show_labels: Whether the labels should be included in the axis
+    :param properties: optional plot properties for Python matplotlib,
+           e.g. "bins=512, range=(-1.5, +1.5), label='Sea Surface Temperature'"
+           For full reference refer to
+           https://matplotlib.org/api/lines_api.html and
+           https://matplotlib.org/devdocs/api/_as_gen/matplotlib.patches.Patch.html#matplotlib.patches.Patch
+    :param file: path to a file in which to save the plot
+    :return: a matplotlib figure object or None if in IPython mode
+    """
+    var_name = VarName.convert(var)
+    if not var_name:
+        raise ValidationError("Missing name for 'var'")
+    var = ds[var_name]
+
+    if not color_scheme_name and not cat_range_values:
+        raise ValidationError(
+            "Either parameter 'color_scheme_name' or 'color_scheme_values' must be set."
+        )
+
+    indexers = DictLike.convert(indexers) or {}
+    properties = DictLike.convert(properties) or {}
+
+    figsize = properties.pop("figsize") if "figsize" in properties else (8, 4)
+    figure = plt.figure(figsize=figsize)
+
+    ax = figure.add_subplot(111)
+
+    dim_names = GridMapping.from_dataset(ds).xy_dim_names
+    remaining_dims = []
+    if dim_names[0] not in indexers:
+        remaining_dims.append(dim_names[0])
+    if dim_names[1] not in indexers:
+        remaining_dims.append(dim_names[1])
+
+    var_data = get_var_data(var, indexers, remaining_dims=remaining_dims)
+
+    if cat_range_values:
+        if color_scheme_name and COLOR_SCHEME_REGISTRY.has_color_scheme(color_scheme_name):
+            raise ValidationError(
+                f"Color scheme '{color_scheme_name}' already exists. Please either deregister "
+                f"the color scheme or choose another name."
+            )
+        color_scheme_name = COLOR_SCHEME_REGISTRY.register_categorical_continuous_color_scheme(
+            cat_range_values, color_scheme_name, color_map_name, continuous_color_map_name,
+            cat_range_colors, cat_range_labels
+        )
+
+    color_scheme = COLOR_SCHEME_REGISTRY.get_color_scheme(color_scheme_name)
+
+    if not continuous_values:
+        cont_var_data = var_data.where(~var_data.isin(color_scheme.base_values))
+        vmin = np.nanmin(cont_var_data)
+        vmax = np.nanmax(cont_var_data)
+        continuous_values = list(range(vmin, vmax + 1))
+
+    color_scheme.set_continuous_values(continuous_values, range_extent, label_shift, labels_space)
+
+    if not show_labels:
+        _ = var_data.plot(ax=ax, cmap=color_scheme.cmap, norm=color_scheme.norm, **properties)
+    else:
+        da_plot = var_data.plot(ax=ax, cmap=color_scheme.cmap, norm=color_scheme.norm, add_colorbar=False, **properties)
+        cbar = plt.colorbar(da_plot, ticks=color_scheme.tick_values)
+        cbar.ax.set_yticklabels(color_scheme.labels)
+
+    if title:
+        ax.set_title(title)
+
+    figure.tight_layout()
+
+    if file:
+        figure.savefig(file)
+
+    return figure if not in_notebook() else None
+
+
+@op(tags=['plot'], res_pattern='plot_{index}')
+@op_input('month', any_of=list(range(13)) + list(calendar.month_name)[1:], data_type=Union[int, str])
+@op_input('var', value_set_source='ds', data_type=VarName)
+@op_input('indexers', data_type=DictLike)
+@op_input('title')
+@op_input('show_labels', default_value=True)
+@op_input('adjust_labels', default_value=True)
+@op_input('labels_space', default_value=5)
+@op_input('properties', data_type=DictLike)
+@op_input('file', file_open_mode='w', file_filters=[PLOT_FILE_FILTER])
+def plot_fire_jd(ds: xr.Dataset,
+                 month: Union[int, str] = "January",
+                 var: str="JD",
+                 indexers: DictLike.TYPE = None,
+                 title: str = None,
+                 show_labels: bool = True,
+                 adjust_labels: bool = True,
+                 labels_space: int = 5,
+                 properties: DictLike.TYPE = None,
+                 file: str = None) -> Figure:
+    """
+    Create a plot of the JD (Julian Day) variable given by a FIRE dataset *ds*.
+    This operation expects a dataset covering the temporal extent of twelve months
+    of a year.
+
+    :param ds: the dataset containing the variable to plot
+    :param month: the month to be displayed, either given as integer between 1 and 12 or by name.
+        Default is "January".
+    :param var: the variable's name
+    :param indexers: Optional indexers into data array of *var*. The *indexers* is a
+        dictionary or a comma-separated string of key-value pairs that maps the
+        variable's dimension names to constant labels. e.g. "layer=4".
+    :param title: an optional title
+    :param show_labels: Whether the labels should be included in the axis
+    :param adjust_labels: Whether the labels should show the values transformed to the days of the month,
+        i.e., starting with 1. Otherwise, the day of year is shown. Default is True.
+    :param labels_space: Indicates how often a value in the continuous part of the
+        range shall be labeled in the legend. Considered when show_labels is True.
     :param properties: optional plot properties for Python matplotlib,
            e.g. "bins=512, range=(-1.5, +1.5), label='Sea Surface Temperature'"
            For full reference refer to
@@ -540,122 +678,50 @@ def plot_fire_jd(ds: xr.Dataset,
     """
 
     if isinstance(month, str):
-        month = pd.to_datetime(month, format="%B").month
+        try:
+            month = pd.to_datetime(month, format="%B").month
+        except ValueError:
+            try:
+                month = pd.to_datetime(month, format="%b").month
+            except ValueError as ve:
+                raise ValidationError(
+                    f"Invalid month '{month}'. Use an integer in [1, 12] or a month name."
+                ) from ve
 
-    base_category_colors = [
-        "#1e90ff",  # dodger blue
-        "#91a3b0",  # cadet grey
-        "#000000",  # black
-    ]
-    base_category_labels = [
-        "Non-burnable",
-        "Not observed",
-        "Unburnt"
-    ]
-    base_category_values = [-2, -1, 0]
-
-    cont_cmap = plt.colormaps["Reds"]
-    cont_colors = cont_cmap(np.linspace(0.2, 1, num=31))
-    colors = base_category_colors + cont_colors.tolist()
-
-    labels = [""] * 31
-    for i in range(5, 31, 5):
-        labels[i] = i
-    labels = base_category_labels + labels
+    if not isinstance(month, int) or month < 1 or month > 12:
+        raise ValidationError(
+            f"Parameter 'month' must be a month name or an integer in [1, 12]., was '{month}'"
+        )
 
     timestep = ds.time[month-1].values
     timestamp = pd.Timestamp(timestep)
-
-    days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-    vmin = 1 + sum(days_per_month[:month - 1])
-    vmax = sum(days_per_month[:month])
-    month_values = base_category_values + list(range(vmin, vmax))
-
-    month_colors = colors[:3 + days_per_month[month - 1]]
-    month_labels = labels[:3 + days_per_month[month - 1]]
-
-    if indexers is None:
-        indexers = {}
+    indexers = DictLike.convert(indexers) or {}
     indexers["time"] = timestep
+
+    month_start = pd.Timestamp(year=timestamp.year, month=month, day=1)
+    month_end = month_start + pd.offsets.MonthEnd(0)
+    vmin = month_start.dayofyear
+    vmax = month_end.dayofyear
+
+    cont_values = list(range(vmin, vmax + 1))
 
     if title is None:
         month_name = timestamp.month_name()
         year = timestamp.year
         title = f"First day in {month_name} {year} in which a fire was detected"
 
-    return plot_categorical(
+    label_shift = (vmin - 1) if adjust_labels else 0
+
+    return plot_categorical_continuous(
         ds,
-        var=var,
-        indexers=indexers,
-        title=title,
-        color_scheme_values=month_values,
-        color_scheme_colors=month_colors,
-        color_scheme_labels=month_labels,
-        show_labels=show_labels,
-        properties=properties,
-        file=file
-    )
-
-
-@op(tags=['plot'], res_pattern='plot_{index}')
-@op_input('var', value_set_source='ds', data_type=VarName)
-@op_input('indexers', data_type=DictLike)
-@op_input('title')
-@op_input('color_scheme_name', value_set=COLOR_SCHEME_REGISTRY.get_color_scheme_names())
-@op_input('color_map_name', nullable=True)
-@op_input('color_scheme_values', nullable=True)
-@op_input('color_scheme_colors', nullable=True)
-@op_input('color_scheme_labels', nullable=True)
-@op_input('show_labels', default_value=True)
-@op_input('properties', data_type=DictLike)
-@op_input('file', file_open_mode='w', file_filters=[PLOT_FILE_FILTER])
-def plot_lc(ds: xr.Dataset,
-            var: str="",
-            indexers: DictLike.TYPE = None,
-            title: str = "Land Cover Class",
-            show_labels: bool = True,
-            properties: DictLike.TYPE = None,
-            file: str = None) -> Figure:
-    """
-    Create a plot of a variable given by dataset *ds* and variable name *var*
-    with a color scheme specific for categorical data.
-
-    :param ds: the dataset containing the variable to plot
-    :param var: the variable's name
-    :param indexers: Optional indexers into data array of *var*. The *indexers* is a
-        dictionary or a comma-separated string of key-value pairs that maps the
-        variable's dimension names to constant labels. e.g. "layer=4".
-    :param title: an optional title
-    :param color_scheme_name: Name of a predefined categorical map for land cover.
-        Must be either 'land_cover_cci', 'land_cover_fire_cci',
-         or 'highres_land_cover_cci'.
-        Must be provided if parameter 'color_classes' is not set.
-    :param color_map_name: Name under which a new color map shall be considered.
-        Only considered when color_scheme_name is not set.
-    :param color_scheme_values: List of values within the variable that shall have
-        a color assigned to them.
-        Must be provided if parameter 'color_scheme_name' is not set.
-    :param color_scheme_colors: List of colors within the variable that shall have
-        a color assigned to them. Only considered if color_scheme_values is set.
-        If not given, colors will be assigned at random.
-    :param color_scheme_labels: List of colors within the variable that shall have
-        a color assigned to them. Only considered if color_scheme_values is set.
-    :param show_labels: Whether the labels should be included in the axis
-    :param properties: optional plot properties for Python matplotlib,
-           e.g. "bins=512, range=(-1.5, +1.5), label='Sea Surface Temperature'"
-           For full reference refer to
-           https://matplotlib.org/api/lines_api.html and
-           https://matplotlib.org/devdocs/api/_as_gen/matplotlib.patches.Patch.html#matplotlib.patches.Patch
-    :param file: path to a file in which to save the plot
-    :return: a matplotlib figure object or None if in IPython mode
-    """
-    return plot_categorical(
-        ds,
-        var="lccs_class",
-        indexers=indexers,
-        title=title,
-        color_scheme_name="land_cover_cci",
+        var,
+        indexers,
+        title,
+        "fire_jd_cci",
+        continuous_values=cont_values,
+        range_extent=31,
+        label_shift=label_shift,
+        labels_space=labels_space,
         show_labels=show_labels,
         properties=properties,
         file=file
