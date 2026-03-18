@@ -1,3 +1,5 @@
+## Changes in 1.7.1 (in development)
+
 ## Changes in 1.7
 
 ### Operations
