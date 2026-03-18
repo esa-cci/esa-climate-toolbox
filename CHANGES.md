@@ -1,4 +1,4 @@
-## Changes in 1.7 (in development)
+## Changes in 1.7
 
 ### Operations
 * Added operation `plot_categorical_continuous` to plot data that combines categorical/flag values
