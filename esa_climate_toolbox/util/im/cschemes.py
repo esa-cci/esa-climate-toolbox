@@ -240,14 +240,12 @@ class CategoricalContinuousColorScheme(CategoricalColorScheme):
             cont_labels[i] = str(cont_values[i] - label_shift)
         ccs_labels = self.labels + cont_labels
 
-        self._cmap = None
         color_map_name = f"{self._cmap_name_base}_{random_string()}"
         color_scheme_name = f"{self.color_scheme_name}_{random_string()}"
         while color_map_name in matplotlib.colormaps:
             rs = random_string()
             color_map_name = f"{self._cmap_name_base}_{rs}"
             color_scheme_name = f"{self.color_scheme_name}_{rs}"
-        self._color_map_name = color_map_name
         ccs = CategoricalColorScheme(
             color_scheme_name, color_map_name, ccs_values, ccs_colors, ccs_labels
         )
