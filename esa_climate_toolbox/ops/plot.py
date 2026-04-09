@@ -605,19 +605,23 @@ def plot_categorical_continuous(ds: xr.Dataset,
     color_scheme = COLOR_SCHEME_REGISTRY.get_color_scheme(color_scheme_name)
 
     if not continuous_values:
-        cont_var_data = var_data.where(~var_data.isin(color_scheme.base_values))
+        cont_var_data = var_data.where(~var_data.isin(list(color_scheme.values)))
         vmin = np.nanmin(cont_var_data)
         vmax = np.nanmax(cont_var_data)
         continuous_values = list(range(vmin, vmax + 1))
 
-    color_scheme.set_continuous_values(continuous_values, range_extent, label_shift, labels_space)
+    specific_color_scheme = color_scheme.get_extended_color_scheme(
+        continuous_values, range_extent, label_shift, labels_space
+    )
 
     if not show_labels:
-        _ = var_data.plot(ax=ax, cmap=color_scheme.cmap, norm=color_scheme.norm, **properties)
+        _ = var_data.plot(ax=ax, cmap=specific_color_scheme.cmap, norm=specific_color_scheme.norm, **properties)
     else:
-        da_plot = var_data.plot(ax=ax, cmap=color_scheme.cmap, norm=color_scheme.norm, add_colorbar=False, **properties)
-        cbar = plt.colorbar(da_plot, ticks=color_scheme.tick_values)
-        cbar.ax.set_yticklabels(color_scheme.labels)
+        da_plot = var_data.plot(
+            ax=ax, cmap=specific_color_scheme.cmap, norm=specific_color_scheme.norm, add_colorbar=False, **properties
+        )
+        cbar = plt.colorbar(da_plot, ticks=specific_color_scheme.tick_values)
+        cbar.ax.set_yticklabels(specific_color_scheme.labels)
 
     if title:
         ax.set_title(title)
