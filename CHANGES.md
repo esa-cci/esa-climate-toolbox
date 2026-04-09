@@ -4,6 +4,7 @@
   * Deprecated method `set_continuous_values` of colour scheme `CategoricalContinuousColorScheme` 
     and added method `get_extended_color_scheme` to prevent modification of the colour scheme
     after its creation.
+  * Added missing file to allow using functionality from module `regions.py`.
 
 ## Changes in 1.7
 

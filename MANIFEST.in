@@ -1,6 +1,5 @@
-include esa_climate_toolbox/ds/data/excluded_data_sources
-include esa_climate_toolbox/ds/data/dataset_states.json
 include esa_climate_toolbox/ds/data/stores.yml
-include esa_climate_toolbox/ds/data/kc_refs.json
+include esa_climate_toolbox/functions/country_data/countries.geojson
+include esa_climate_toolbox/functions/country_data/README.md
 include esa_climate_toolbox/util/im/data/categorical_colorschemes.yml
 include esa_climate_toolbox/util/im/data/categorical_continuous_colorschemes.yml
