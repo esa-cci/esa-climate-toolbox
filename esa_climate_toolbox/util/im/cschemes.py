@@ -355,9 +355,9 @@ class ColorSchemeRegistry:
             while self.has_color_scheme(color_scheme_name):
                 color_scheme_name = self.random_cscheme_name()
         if color_map_name_base is None:
-            color_map_name = self.random_cmap_name()
-            while color_map_name in matplotlib.colormaps:
-                color_map_name = self.random_cmap_name()
+            color_map_name_base = self.random_cmap_name()
+            while color_map_name_base in matplotlib.colormaps:
+                color_map_name_base = self.random_cmap_name()
         cm_entries = []
         for i, cm_value in enumerate(cm_values):
             cm_entry = dict()
