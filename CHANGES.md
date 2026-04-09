@@ -1,5 +1,10 @@
 ## Changes in 1.7.1 (in development)
 
+### Enhancements
+  * Deprecated method `set_continuous_values` of colour scheme `CategoricalContinuousColorScheme` 
+    and added method `get_extended_color_scheme` to prevent modification of the colour scheme
+    after its creation.
+
 ## Changes in 1.7
 
 ### Operations
