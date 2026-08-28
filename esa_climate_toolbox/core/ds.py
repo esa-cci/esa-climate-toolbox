@@ -429,8 +429,8 @@ def open_data(dataset_id: str,
     data_type = None
     potential_data_types = data_store.get_data_types_for_data(dataset_id)
     for potential_data_type in potential_data_types:
+        data_type = potential_data_type
         if xcube_store.DATASET_TYPE.is_super_type_of(potential_data_type):
-            data_type = potential_data_type
             break
     if data_type is None:
         raise ValidationError(f"Could not open '{dataset_id}' as dataset.")
