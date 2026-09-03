@@ -1,5 +1,11 @@
 ## Changes in 1.7.1 (in development)
 
+### Operations
+  * Added operation `dataset_to_datatree` to split a dataset into hierarchical
+    bounding-box subsets defined by polygon features.
+  * Added operation `dataset_to_lakes_datatree` to split a dataset into a data tree based on
+    lakes as provided by the LAKES CCI project.
+
 ### Enhancements
   * Deprecated method `set_continuous_values` of colour scheme `CategoricalContinuousColorScheme` 
     and added method `get_extended_color_scheme` to prevent modification of the colour scheme
@@ -345,4 +351,3 @@ serve data from the ESA CCI Toolbox
 
 * Added registrations of `esa-cdc` and  `esa-climate-data-centre` to access 
   data store with data from ESA Climate Data Centre
-

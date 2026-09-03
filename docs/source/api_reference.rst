@@ -169,6 +169,15 @@ Data Frame Operations
 
 .. autofunction:: esa_climate_toolbox.ops.to_dataset
 
+.. _data_tree_operations:
+
+Data Tree Operations
+--------------------
+
+.. autofunction:: esa_climate_toolbox.ops.dataset_to_datatree
+
+.. autofunction:: esa_climate_toolbox.ops.dataset_to_lakes_datatree
+
 .. _gapfilling:
 
 Gap Filling

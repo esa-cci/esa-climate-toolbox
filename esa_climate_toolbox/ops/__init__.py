@@ -76,6 +76,8 @@ from .data_frame import find_closest
 from .data_frame import query
 from .data_frame import to_dataframe
 from .data_frame import to_dataset
+from .data_tree import dataset_to_datatree
+from .data_tree import dataset_to_lakes_datatree
 from .gapfilling import gapfill
 from .normalize import adjust_spatial_attrs
 from .normalize import adjust_temporal_attrs
@@ -138,6 +140,9 @@ __all__ = [
     'query',
     'to_dataframe',
     'to_dataset',
+    # data tree
+    'dataset_to_datatree',
+    'dataset_to_lakes_datatree',
     # gapfill
     'gapfill',
     # .normalize
