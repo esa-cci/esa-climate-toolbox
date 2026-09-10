@@ -26,6 +26,7 @@ from scipy import ndimage
 from typing import Union
 
 import dask.array as da
+from dask_image import ndfilters
 import numpy as np
 import pandas as pd
 import xarray as xr
@@ -145,27 +146,32 @@ def agb_change(
     difference_agb_lower_bound = difference_agb - difference_agb_sd
     difference_agb_upper_bound = difference_agb + difference_agb_sd
 
-    agb_prob = xr.DataArray(data=da.full(difference_agb.shape, 3, dtype=np.int16), dims=difference_agb.dims)
-    agb_prob = agb_prob.where(difference_agb >= reference_agb_lower_bound, 2)
-    agb_prob = agb_prob.where(difference_agb <= reference_agb_upper_bound, 4)
-    agb_prob = agb_prob.where(difference_agb_lower_bound <= reference_agb_upper_bound, 5)
-    agb_prob = agb_prob.where(difference_agb_upper_bound >= reference_agb_lower_bound, 1)
-    agb_prob = agb_prob.where((difference_agb != 0) * (reference_agb != 0), 0)
+    agb_prob = xr.full_like(reference_agb, 3, dtype=np.int16)
+    agb_prob = agb_prob.where(~(difference_agb < reference_agb_lower_bound), 2)
+    agb_prob = agb_prob.where(~(difference_agb > reference_agb_upper_bound), 4)
+    agb_prob = agb_prob.where(~(difference_agb_lower_bound > reference_agb_upper_bound), 5)
+    agb_prob = agb_prob.where(~(difference_agb_upper_bound < reference_agb_lower_bound), 1)
+    agb_prob = agb_prob.where(~((difference_agb == 0) & (reference_agb == 0)), 0)
 
     # Accounting for the fact that forests cannot grow more than its potential
     # If it happens, re-label to no significant change
     annual_increment = 10    # Highest value of AGB increment for the natural forest
                              # and also including most plantations (IPCC guidelines)
     year_diff = pd.Timestamp(difference).year - pd.Timestamp(reference).year
-    agb_prob = agb_prob.where(agb_diff <= (year_diff * annual_increment), 3)
+    agb_prob = agb_prob.where(~(agb_diff > (year_diff * annual_increment)), 3)
 
     # Filtering using a plain median filter.
     # First: create a bitmap of 0 and 1 (change no change) to re-label potential/significant
     # changes to no changes if isolated
-    mask = xr.DataArray(data=da.ones(difference_agb.shape, dtype=np.int16), dims=difference_agb.dims)
+    mask = xr.ones_like(reference_agb, dtype=np.int16)
     mask = mask.where(agb_prob != 3, 2)
     mask = mask.where(agb_prob != 0, 0)
-    mask = ndimage.median_filter(mask, size=3).astype(np.int16)
+
+    if isinstance(mask.data, da.Array):
+        mask_filtered = ndfilters.median_filter(mask.data, size=3)
+    else:
+        mask_filtered = ndimage.median_filter(mask.data, size=3)
+    mask = xr.DataArray(mask_filtered, coords=mask.coords, dims=mask.dims)
 
     agb_prob_ref = agb_prob.where(mask != 2, 3)
     agb_prob_ref = agb_prob_ref.where(agb_prob != 0, 0)
