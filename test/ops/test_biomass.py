@@ -6,7 +6,7 @@ import numpy as np
 import xarray as xr
 
 from esa_climate_toolbox.core.types import ValidationError
-from esa_climate_toolbox.ops import agb_change_op
+from esa_climate_toolbox.ops import agb_change
 
 
 class BiomassTestCase(TestCase):
@@ -29,7 +29,7 @@ class BiomassTestCase(TestCase):
 
     def test_biomass_change_op_wrong_reference(self):
         with self.assertRaises(ValidationError) as error:
-            agb_change_op(
+            agb_change(
                 self.biomass_ds,
                 reference=2005,
                 difference=2015,
@@ -39,7 +39,7 @@ class BiomassTestCase(TestCase):
 
     def test_biomass_change_op_wrong_difference(self):
         with self.assertRaises(ValidationError) as error:
-            agb_change_op(
+            agb_change(
                 self.biomass_ds,
                 reference=2015,
                 difference= 2025,
@@ -48,7 +48,7 @@ class BiomassTestCase(TestCase):
 
     def test_biomass_change_op_missing_agb_name(self):
         with self.assertRaises(ValidationError) as error:
-            agb_change_op(
+            agb_change(
                 self.biomass_ds,
                 reference=2013,
                 difference= 2015,
@@ -58,7 +58,7 @@ class BiomassTestCase(TestCase):
 
     def test_biomass_change_op_missing_agb_sd_name(self):
         with self.assertRaises(ValidationError) as error:
-            agb_change_op(
+            agb_change(
                 self.biomass_ds,
                 reference=2013,
                 difference= 2015,
@@ -67,7 +67,7 @@ class BiomassTestCase(TestCase):
         self.assertIn("Variable 'wrong' not in dataset", str(error.exception))
 
     def test_biomass_change_op(self):
-        agb_ds = agb_change_op(
+        agb_ds = agb_change(
             self.biomass_ds,
             reference=2013,
             difference= 2015
