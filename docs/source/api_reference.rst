@@ -128,6 +128,13 @@ Arithmetics
 
 .. autofunction:: esa_climate_toolbox.ops.diff
 
+.. _biomass:
+
+Biomass
+-------
+
+.. autofunction:: esa_climate_toolbox.ops.agb_change
+
 .. _coregistration:
 
 Coregistration

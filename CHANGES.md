@@ -5,6 +5,7 @@
     bounding-box subsets defined by polygon features.
   * Added operation `dataset_to_lakes_datatree` to split a dataset into a data tree based on
     lakes as provided by the LAKES CCI project.
+  * Added operation `agb_change` to determine change between two time steps of a biomass dataset
 
 ### Enhancements
   * Deprecated method `set_continuous_values` of colour scheme `CategoricalContinuousColorScheme` 

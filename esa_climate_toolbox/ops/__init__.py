@@ -63,6 +63,7 @@ from .anomaly import anomaly_external
 from .anomaly import anomaly_internal
 from .arithmetics import arithmetics
 from .arithmetics import diff
+from .biomass import agb_change
 from .coregistration import coregister
 from .correlation import pairwise_var_correlation
 from .correlation import pixelwise_group_correlation
@@ -124,6 +125,8 @@ __all__ = [
     # arithmetics
     'arithmetics',
     'diff',
+    # biomass
+    'agb_change',
     # .coregistration
     'coregister',
     # .correlation
