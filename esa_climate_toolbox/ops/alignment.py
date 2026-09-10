@@ -32,8 +32,6 @@ import warnings
 
 import bisect
 import pandas as pd
-import numpy as np
-from typing import Optional, Tuple
 import xarray as xr
 
 from xcube.core.resampling import resample_in_time
@@ -42,91 +40,15 @@ from esa_climate_toolbox.core.op import op
 from esa_climate_toolbox.core.op import op_input
 from esa_climate_toolbox.core.op import op_return
 from esa_climate_toolbox.core.types import ValidationError
+from esa_climate_toolbox.util.time import determine_frequency
+from esa_climate_toolbox.util.time import find_time_bounds
+from esa_climate_toolbox.util.time import half_offset
+from esa_climate_toolbox.util.time import offset
 
 
 DOWNSAMPLING_METHODS = ['count', 'first', 'last', 'max', 'min', 'mean', 'median', 'std', 'sum', 'var']
 INTERPOLATION_KINDS = ["linear", "nearest", "zero", "slinear", "quadratic", "cubic"]
 RESAMPLING_METHODS = DOWNSAMPLING_METHODS + INTERPOLATION_KINDS
-
-def _determine_frequency(ds):
-    index = ds.time.to_index()
-    freq = pd.infer_freq(index)
-    if freq is not None:
-        return freq
-    period_candidates = ["Y", "Q", "M"]
-    for period_candidate in period_candidates:
-        period_index = index.to_period(period_candidate)
-        diffs = np.diff(period_index)
-        num_units = diffs[0].freqstr.replace(diffs[0].name, "")
-        if num_units == "0":
-            continue
-        for diff in diffs:
-            if diff != diffs[0]:
-                diffs = None
-                break
-        if diffs is not None:
-            break
-    if diffs is None:
-        return None
-    num_units = diff.freqstr.replace(diff.name, "")
-    num_units = 1 if num_units == "" else int(num_units)
-    return f"{num_units}{period_candidate}S"
-
-def _half_offset(freq: str):
-    return _offset(freq, half=True)
-
-def _offset(freq: str, half: bool=False):
-    sub_freq = freq[:-1] if freq.endswith("S") else freq
-    sub_freq = sub_freq.split("-")[0]
-    _base_offsets = {
-        "h": (60, "min"),
-        "H": (60, "min"),
-        "D": (24, "H"),
-        "W": (168, "H"),
-        "M": (30, "D"),
-        "Q": (90, "D"),
-        "Y": (364, "D")
-    }
-    if len(sub_freq) == 1:
-        num_units = 1
-    else:
-        num_units = int(sub_freq[:-1])
-    offsets, offset_units = _base_offsets.get(sub_freq[-1])
-    num_offset_units = num_units * offsets
-    num_offset_units = int(num_offset_units / 2) if half else num_offset_units
-    return f"{num_offset_units}{offset_units}"
-
-
-def _find_time_bounds(ds: xr.Dataset, freq: str = None) -> Tuple[xr.Dataset, Optional[str]]:
-    default_time_bounds_name = "time_bnds"
-    time_bounds_names = [default_time_bounds_name, "time_bounds"]
-    for time_bounds_name in time_bounds_names:
-        if time_bounds_name in ds.data_vars or time_bounds_name in ds.coords:
-            return ds, time_bounds_name
-    if freq is None:
-        freq = _determine_frequency(ds)
-        if freq is None:
-            return ds, None
-    if "MS" in freq or "QS" in freq or "YS" in freq:
-        index = ds.time.to_index()
-        period = index.to_period(freq[:-1])
-        time_bounds = xr.DataArray(
-            name=default_time_bounds_name,
-            data=np.array([period.start_time.values, period.end_time.values]).transpose(),
-            dims=("time", "bnds")
-        )
-    else:
-        time_delta = ds.time[1] - ds.time[0]
-        start_times = ds.time - time_delta // 2
-        end_times = ds.time + time_delta // 2
-        time_bounds = xr.DataArray(
-            name=default_time_bounds_name,
-            data=np.array([start_times, end_times]).transpose(),
-            dims=("time", "bnds")
-        )
-    ds = ds.assign({default_time_bounds_name: time_bounds})
-    return ds, default_time_bounds_name
-
 
 @op(tags=['temporal', 'alignment'], version='1.0')
 @op_input('method', value_set=RESAMPLING_METHODS, default_value="mean")
@@ -165,12 +87,12 @@ def temporal_alignment(
             "Running the normalize operation may help."
         )
     # check whether primary has a regular time
-    primary_freq = _determine_frequency(ds_primary)
-    replica_freq = _determine_frequency(ds_replica)
+    primary_freq = determine_frequency(ds_primary)
+    replica_freq = determine_frequency(ds_replica)
     downsampling = ds_primary.time[1] - ds_primary.time[0] > ds_replica.time[1] - ds_replica.time[0]
     interp_kind = None
     if downsampling:
-        offset_for_adjusting = _half_offset(primary_freq)
+        offset_for_adjusting = half_offset(primary_freq)
         if method not in DOWNSAMPLING_METHODS:
             warnings.warn(f"Selected method for resampling was '{method}', "
                           f"but apparently the data must be sampled down to a "
@@ -178,7 +100,7 @@ def temporal_alignment(
                           f"The use of one of the following is recommended: "
                           f"{', '.join(DOWNSAMPLING_METHODS)}.")
     else:
-        offset_for_adjusting = _half_offset(replica_freq)
+        offset_for_adjusting = half_offset(replica_freq)
         if method not in INTERPOLATION_KINDS:
             warnings.warn(f"Selected method for resampling was '{method}', "
                           f"but apparently the data must be sampled up to a "
@@ -194,13 +116,13 @@ def temporal_alignment(
             'can not perform temporal alignment.'
         )
 
-    ds_primary, prim_time_bounds = _find_time_bounds(ds_primary, primary_freq)
+    ds_primary, prim_time_bounds = find_time_bounds(ds_primary, primary_freq)
     if prim_time_bounds is None:
         raise ValidationError(
             'Could not determine bounds of primary dataset, '
             'cannot perform temporal alignment.'
         )
-    ds_replica, repl_time_bounds = _find_time_bounds(ds_replica)
+    ds_replica, repl_time_bounds = find_time_bounds(ds_replica)
 
     bounds_start = ds_primary[prim_time_bounds].values[0][0]
     bounds_end = ds_primary[prim_time_bounds].values[-1][1]
@@ -223,7 +145,7 @@ def temporal_alignment(
         method= "mean"
 
     if primary_freq.endswith("S") or "W-" in primary_freq:
-        offset_in_days = _offset(primary_freq)
+        offset_in_days = offset(primary_freq)
         adjusted_start_time = ds_primary.time.values[0] - pd.Timedelta(offset_in_days)
     elif primary_freq.endswith("h"):
         if repl_time_bounds is None:
@@ -260,7 +182,7 @@ def temporal_alignment(
     ds = ds.dropna(dim="time")
 
     if downsampling or len(ds.time) is not non_dropped_time_length:
-        ds = ds.assign(time=ds.time.values + pd.Timedelta(_half_offset(primary_freq)))
+        ds = ds.assign(time=ds.time.values + pd.Timedelta(half_offset(primary_freq)))
 
     ds = ds.reindex(time=ds_primary.time, method="nearest", tolerance=offset_for_adjusting)
     var_renamings = {var_name: "_".join(var_name.split("_")[0]) for var_name in ds.data_vars.keys()}

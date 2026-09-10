@@ -611,7 +611,7 @@ class TestTemporalAlignment(TestCase):
              [[0, 0.5], [1, 1.5]]]
         )
 
-    def test_2day_to_9hour_overlap_at_primary_beginning(self):
+    def test_2day_to_10hour_overlap_at_primary_beginning(self):
         primary_ds = get_test_dataset(
             time_periods=10, time_freq="10H", time_start="2015-07-25T19:00:00", var_name="p")
         replica_ds = get_test_dataset(
@@ -635,7 +635,7 @@ class TestTemporalAlignment(TestCase):
              [[np.nan, np.nan], [np.nan, np.nan]]]
         )
 
-    def test_2day_to_9hour_full_overlap(self):
+    def test_2day_to_10hour_full_overlap(self):
         primary_ds = get_test_dataset(
             time_periods=10, time_freq="10H", time_start="2015-07-25T19:00:00", var_name="p")
         replica_ds = get_test_dataset(
@@ -659,7 +659,7 @@ class TestTemporalAlignment(TestCase):
              [[6, 6.5], [7, 7.5]]]
         )
 
-    def test_2day_to_9hour_at_primary_end(self):
+    def test_2day_to_10hour_at_primary_end(self):
         primary_ds = get_test_dataset(
             time_periods=10, time_freq="10H", time_start="2015-07-19T19:00:00", var_name="p")
         replica_ds = get_test_dataset(
