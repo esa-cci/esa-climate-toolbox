@@ -13,6 +13,9 @@
     after its creation.
   * Added missing file to allow using functionality from module `regions.py`.
 
+### Notebooks
+  * Added User Notebooks on Biomass
+
 ## Changes in 1.7
 
 ### Operations
