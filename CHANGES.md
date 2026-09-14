@@ -1,4 +1,4 @@
-## Changes in 1.7.1 (in development)
+## Changes in 1.7.1
 
 ### Operations
   * Added operation `dataset_to_datatree` to split a dataset into hierarchical
