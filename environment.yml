@@ -1,4 +1,4 @@
-name: ect
+name: cci-meta-ccidev
 channels:
   - conda-forge
 dependencies:
@@ -20,7 +20,7 @@ dependencies:
   - simplekml
   - six
   - xarray
-  - xcube >= 1.8.0
+  - xcube >= 1.12.0
   - xcube-cci >= 0.13
   - zarr <3  # until we can ensure zarr 3 compatibility
   # Test libs
