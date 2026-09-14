@@ -80,6 +80,20 @@ class TestDiff(TestCase):
     Test taking the difference between two datasets
     """
 
+    def test_diff_with_distant_scalar_reference_time(self):
+        """A scalar climatology time 300 years earlier must not overflow."""
+        times = np.array(['2000-01-01', '2001-01-01'], dtype='datetime64[ns]')
+        ds = xr.Dataset({'value': ('time', [2., 3.])}, coords={'time': times})
+        ref = xr.Dataset(
+            {'value': 1.},
+            coords={'time': np.datetime64('1700-01-01', 'ns')},
+        )
+        expected = xr.Dataset(
+            {'value': ('time', [1., 2.])}, coords={'time': times}
+        )
+
+        xr.testing.assert_equal(diff(ds, ref), expected)
+
     def test_diff(self):
         # Test nominal
         dataset = xr.Dataset({

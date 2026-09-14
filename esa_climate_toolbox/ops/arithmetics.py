@@ -123,20 +123,18 @@ def diff(ds: xr.Dataset,
     :param monitor: a progress monitor.
     :return: The difference dataset
     """
-    try:
-        # Times do not intersect
-        if 0 == len(ds.time - ds2.time) and \
-                len(ds.time) == len(ds2.time):  # Times are the same length
-            # If the datasets don't intersect in time dimension, a naive difference
-            # would return empty data variables. Hence, the time coordinate has to
-            # be dropped beforehand
-            ds = ds.drop_vars('time')
-            ds2 = ds2.drop_vars('time')
-            return ds - ds2
-    except AttributeError:
-        # It is likely that the one operand is a lat/lon array that can be
-        # broadcast against the other operand
-        pass
+    if (
+        "time" in ds.indexes
+        and "time" in ds2.indexes
+        and ds.sizes["time"] == ds2.sizes["time"]
+        and ds.indexes["time"].intersection(ds2.indexes["time"]).empty
+    ):
+        # If the datasets don't intersect in time dimension, a naive difference
+        # would return empty data variables. Hence, the time coordinate has to
+        # be dropped beforehand
+        ds = ds.drop_vars('time')
+        ds2 = ds2.drop_vars('time')
+        return ds - ds2
 
     try:
         if 1 == len(ds2.time):
