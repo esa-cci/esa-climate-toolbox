@@ -1,4 +1,4 @@
-## Changes in 1.7.2 (in development)
+## Changes in 1.7.2
 
 ### Operations
   * In operation `agb_change`, frequencies of one year are assumed for datasets with irregular time steps
