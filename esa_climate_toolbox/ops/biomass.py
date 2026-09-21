@@ -65,6 +65,7 @@ _AGB_DIFF_QF_ATTRS = {
         "non significant change", "potential gain", "significant gain"
     ]
 }
+_DEFAULT_FREQUENCY = "1Y"
 
 
 @op(tags=['biomass'], version='1.0')
@@ -101,10 +102,12 @@ def agb_change(
         ds, _ = open_data(ds)
     ds = DatasetLike.convert(ds)
 
+    ds_frequency = None
     try:
         ds_frequency = determine_frequency(ds)
     except ValueError:
-        ds_frequency = "1Y"
+        pass
+    ds_frequency = ds_frequency or _DEFAULT_FREQUENCY
     half_ds_frequency = half_offset(ds_frequency)
 
     if isinstance(reference, int):
