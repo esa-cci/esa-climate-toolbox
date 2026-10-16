@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
+import rioxarray  # noqa: F401 - registers the xarray rio accessor
 import xarray as xr
 
 from xcube.core.gridmapping import GridMapping
@@ -129,6 +130,7 @@ def output_animation(array: xr.DataArray, output_folder: str = "animation", img_
                          f"found '{img_format}'.")
     os.makedirs(output_folder, exist_ok=True)
     for i in range(len(array.time)):
-        timestamp = pd.Timestamp(array.time.values[i]).strftime("%Y-%m-%dT%H:%M:%S")
+        timestamp = pd.Timestamp(array.time.values[i]).strftime("%Y-%m-%dT%H-%M-%S")
         sub_array = array.isel(time=i).squeeze()
-        output_array_as_image(sub_array, f"{output_folder}/{timestamp}.{img_format}", out_format=img_format)
+        filepath = os.path.join(output_folder, f"{timestamp}.{img_format}")
+        output_array_as_image(sub_array, filepath, out_format=img_format)
