@@ -149,23 +149,19 @@ class OutputAnimationTest(unittest.TestCase):
                          f"found 'jpeg'.", f"{ve.exception}")
 
     def test_output_png(self):
-        out_path = "test_output_animation/a/"
-        # self.assertFalse(os.path.exists(out_path))
+        out_path = "test_output_animation/png/"
         output_animation(self._cube.a, output_folder=out_path)
         self.assertTrue(os.path.exists(out_path))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-01T12:00:00.png"))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-02T12:00:00.png"))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-03T12:00:00.png"))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-04T12:00:00.png"))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-05T12:00:00.png"))
+        self.assertEqual(
+            {f"2010-01-{day:02d}T12-00-00.png" for day in range(1, 6)},
+            set(os.listdir(out_path)),
+        )
 
     def test_output_gtiff(self):
-        out_path = "test_output_animation/a/"
-        # self.assertFalse(os.path.exists(out_path))
+        out_path = "test_output_animation/gtiff/"
         output_animation(self._cube.a, output_folder=out_path, img_format="gtiff")
         self.assertTrue(os.path.exists(out_path))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-01T12:00:00.gtiff"))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-02T12:00:00.gtiff"))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-03T12:00:00.gtiff"))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-04T12:00:00.gtiff"))
-        self.assertTrue(os.path.exists(f"{out_path}2010-01-05T12:00:00.gtiff"))
+        self.assertEqual(
+            {f"2010-01-{day:02d}T12-00-00.gtiff" for day in range(1, 6)},
+            set(os.listdir(out_path)),
+        )
