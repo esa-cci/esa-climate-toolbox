@@ -90,7 +90,8 @@ def run_subprocess(
         started_handler(process)
 
     def _read_line(fp, handler):
-        while process.returncode is None:
+        # Ensure output is read until EOF, even after the process exits.
+        while True:
             line = fp.readline()
             if handler:
                 # noinspection PyBroadException
