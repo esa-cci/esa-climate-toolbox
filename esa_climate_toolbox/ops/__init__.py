@@ -59,6 +59,7 @@ from .aggregate import statistics
 from .aggregate import temporal_aggregation
 from .alignment import temporal_alignment
 from .animate import animate_map
+from .animate import export_animated_gif
 from .anomaly import anomaly_external
 from .anomaly import anomaly_internal
 from .arithmetics import arithmetics
@@ -117,6 +118,7 @@ __all__ = [
     'temporal_aggregation',
     # animation
     'animate_map',
+    'export_animated_gif',
     # alignment
     'temporal_alignment',
     # anomaly

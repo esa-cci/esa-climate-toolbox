@@ -1,5 +1,8 @@
 ## Changes in 1.7.3 (in development)
 
+### Operations
+  * Added `export_animated_gif` to export a data cube as animated gif.
+
 ## Changes in 1.7.2
 
 ### Operations
