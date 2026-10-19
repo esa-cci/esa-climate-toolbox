@@ -37,6 +37,7 @@ dependencies = [
     "numba>0.35",
     "numpy>=2",
     "pandas<3",
+    "pillow>=9",
     "pyproj",
     "python-dateutil",
     "shapely",
