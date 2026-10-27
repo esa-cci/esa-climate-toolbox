@@ -3,9 +3,11 @@ Tests for aggregation operations
 """
 from unittest import TestCase
 
+import geopandas as gpd
 import numpy as np
 import pandas as pd
 import xarray as xr
+from shapely.geometry import box
 
 from xcube.core.new import new_cube
 
@@ -377,8 +379,8 @@ class TestReduce(TestCase):
         ds = adjust_temporal_attrs(ds)
 
         ex = xr.Dataset({
-            'first': (['lat', 'lon'], np.ones([45, 90])),
-            'second': (['lat', 'lon'], np.ones([45, 90])),
+            'first': 1.0,
+            'second': 1.0,
             'lat': np.linspace(-88, 88, 45),
             'lon': np.linspace(-178, 178, 90),
             'time': pd.date_range('2000-01-01', '2000-12-31')})
@@ -386,7 +388,7 @@ class TestReduce(TestCase):
         m = ConsoleMonitor()
         actual = reduce(ds, monitor=m)
 
-        self.assertTrue(actual.broadcast_equals(ex))
+        xr.testing.assert_allclose(actual, ex)
 
         actual = reduce(ds, dim=['lat', 'time', 'there_is_no_spoon'], monitor=m)
         ex = xr.Dataset({
@@ -396,7 +398,7 @@ class TestReduce(TestCase):
             'lon': np.linspace(-178, 178, 90),
             'time': pd.date_range('2000-01-01', '2000-12-31')})
 
-        self.assertTrue(actual.broadcast_equals(ex))
+        xr.testing.assert_allclose(actual, ex)
 
 
 class TestStatistics(TestCase):
