@@ -55,7 +55,9 @@ def ect_init():
 
 from .aggregate import climatology
 from .aggregate import reduce
+from .aggregate import reduce_datatree
 from .aggregate import statistics
+from .aggregate import statistics_datatree
 from .aggregate import temporal_aggregation
 from .alignment import temporal_alignment
 from .animate import animate_map
@@ -113,7 +115,9 @@ __all__ = [
     # aggregation
     'climatology',
     'reduce',
+    'reduce_datatree',
     'statistics',
+    'statistics_datatree',
     'temporal_aggregation',
     # animation
     'animate_map',

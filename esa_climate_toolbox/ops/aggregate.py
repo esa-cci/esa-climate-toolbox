@@ -1,5 +1,5 @@
 # The MIT License (MIT)
-# Copyright (c) 2024 ESA Climate Change Initiative
+# Copyright (c) 2024-2026 ESA Climate Change Initiative
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,17 @@
 Description
 ===========
 
-This module provides operations to create climatologies and other temporal aggregations
+This module provides operations to create climatologies and other aggregations
 
 Components
 ==========
 """
 
 from datetime import timezone
+from collections.abc import Sequence
 
 import dask.array as da
+import geopandas as gpd
 import numpy as np
 import pandas as pd
 from typing import List
@@ -50,6 +52,7 @@ from esa_climate_toolbox.core.types import ValidationError
 from esa_climate_toolbox.core.types import VarNamesLike
 from esa_climate_toolbox.ops.normalize import adjust_temporal_attrs
 from esa_climate_toolbox.ops.select import select_var
+from esa_climate_toolbox.ops._datatree_aggregate import aggregate_datatree
 from esa_climate_toolbox.util.monitor import Monitor
 
 
@@ -355,6 +358,165 @@ def temporal_aggregation(ds: DatasetLike.TYPE,
         dataset = agg_function(ds.resample(time=period))
 
     return adjust_temporal_attrs(dataset)
+
+
+@op(tags=['aggregate', 'datatree'], version='1.0')
+@op_input('tree', data_type=xr.DataTree)
+@op_input('var', data_type=VarNamesLike)
+@op_input('dim', data_type=DimNamesLike)
+@op_input('method', value_set=['mean', 'min', 'max', 'sum', 'median'])
+@op_input('aggregate_nodes', data_type=bool, default_value=True)
+@op_input('output_format', value_set=['datatree', 'vector_data_cube', 'dataframe'])
+@op_input('vector_data', data_type=gpd.GeoDataFrame, nullable=True)
+@op_input('vector_path', data_type=str, nullable=True)
+@op_return()
+def reduce_datatree(
+        tree: xr.DataTree,
+        var: VarNamesLike.TYPE = None,
+        dim: DimNamesLike.TYPE = None,
+        method: str = 'mean',
+        apply_spatial_weighting: bool = True,
+        nodes: Sequence[str] | None = None,
+        aggregate_nodes: bool = True,
+        output_format: str = 'datatree',
+        vector_data: gpd.GeoDataFrame | None = None,
+        vector_path: str | None = None,
+        node_column: str = 'path',
+        monitor: Monitor = Monitor.NONE,
+) -> xr.DataTree | xr.Dataset | pd.DataFrame:
+    """Reduce the selected DataTree as a whole or reduce its leaves separately.
+
+    Without vector input, output geometry is the spherical centroid of all
+    pixels valid in at least one selected spatial variable at any time or level.
+    Each spatial pixel counts once. Statistics use each variable's own valid
+    observations. DataFrame output also includes this geometry.
+
+    :param tree: Input tree with spatial datasets using ``lat``/``lon``.
+    :param var: Variables which to reduce; None selects all data variables.
+    :param dim: Dimensions along which to reduce; None selects all variable dimensions.
+    :param method: Reduction method,
+        must be one of ``mean``, ``m̀in``, ``max``, ``sum``, ``median``.
+    :param apply_spatial_weighting: Whether to apply spatial weighting to cancel
+        the effects of grid cells closer to the equator cover more area than
+        grid cells closer to the poles. Only applicable for datasets with a
+        latitude column named 'lat'. Has no effect for methods 'median', 'min',
+        and 'max'. Default is True.
+    :param nodes: Paths of dataset leaves to process, with or without a leading
+        slash, e.g. 'lake_2' or '/lake_2'. For nested leaves include the parent
+        groups, e.g. 'Europe/lake_2'. None selects all leaves.
+        Unselected nodes are excluded from the result. Ancestor groups of
+        selected leaves are retained but not reduced.
+    :param aggregate_nodes: If True (default), reduce across selected datasets
+        as well as the dimensions specified by dim, producing a shared result.
+        All spatial dimensions must be reduced. Remaining coordinates are
+        aligned by their union; absent observations do not contribute.
+        Overlapping pixels in different nodes count as separate observations.
+        Means use the number of valid observations per variable and remaining
+        coordinate, or their weight sums when spatial weighting is enabled.
+        Other statistics must combine observations according to their method,
+        rather than averaging per-node statistics. If False, reduce each
+        dataset independently and retain its identity.
+        The exact median pools individual values and may require substantial
+        memory. Other methods combine reduced per-node quantities lazily.
+    :param output_format: ``datatree`` stores the shared result at the root
+        when aggregate_nodes=True; otherwise it preserves the selected leaves
+        and their ancestor groups. The following per-node conversion formats require
+        aggregate_nodes=False:
+        ``vector_data_cube`` produces an xarray Dataset with feature and time
+        dimensions and feature geometries; requires only time to remain in
+        each result variable. ``dataframe`` produces one row per
+        selected node and one column per result variable; applicable when all
+        dimensions have been reduced.
+        Full node paths identify features/rows. With vector input, the frame
+        is a GeoDataFrame. Output format does not determine aggregation scope.
+    :param vector_data: Optional polygons with a declared CRS, used both for
+        spatial masking and output geometries. Supply either this or
+        vector_path, or neither. Pixels are selected by their centres.
+    :param vector_path: Optional vector file to read instead of vector_data.
+    :param node_column: Name of the column in vector_data or the vector file
+        containing full DataTree node paths, e.g. '/lake_1'. The column values
+        associate each selected dataset node with exactly one geometry,
+        independently of vector row order. Only considered when vector_data
+        or vector_path is provided; ignored otherwise. Defaults to 'path'.
+    :param monitor: Progress monitor.
+    :return: Reduced DataTree, vector data cube, or (Geo)DataFrame.
+    """
+    return aggregate_datatree(
+        tree, var, dim, [method], apply_spatial_weighting, nodes, aggregate_nodes,
+        output_format, vector_data, vector_path, node_column, monitor,
+    )
+
+
+@op(tags=['aggregate', 'statistics', 'datatree'], version='1.0')
+@op_input('tree', data_type=xr.DataTree)
+@op_input('var', data_type=VarNamesLike)
+@op_input('dim', data_type=DimNamesLike)
+@op_input('methods', any_of=['count', 'mean', 'median', 'sum', 'std', 'min', 'max'])
+@op_input('aggregate_nodes', data_type=bool, default_value=True)
+@op_input('output_format', value_set=['datatree', 'vector_data_cube', 'dataframe'])
+@op_input('vector_data', data_type=gpd.GeoDataFrame, nullable=True)
+@op_input('vector_path', data_type=str, nullable=True)
+@op_return()
+def statistics_datatree(
+        tree: xr.DataTree,
+        var: VarNamesLike.TYPE = None,
+        apply_spatial_weighting: bool = True,
+        dim: DimNamesLike.TYPE = None,
+        methods: Union[str, List[str]] = 'mean',
+        nodes: Sequence[str] | None = None,
+        aggregate_nodes: bool = True,
+        output_format: str = 'datatree',
+        vector_data: gpd.GeoDataFrame | None = None,
+        vector_path: str | None = None,
+        node_column: str = 'path',
+        monitor: Monitor = Monitor.NONE,
+) -> xr.DataTree | xr.Dataset | pd.DataFrame:
+    """Compute statistics over the selected tree or its individual leaves.
+
+    Tree selection, masking, geometry and output-format parameters have the
+    same meaning as in ``reduce_datatree``. Selected output variables are named
+    ``<variable>_<method>``. Output conversion uses these statistic variables,
+    rather than unreduced input variables. By default, statistics describe all
+    selected datasets together; aggregate_nodes=False keeps results separate.
+
+    Without vector input, output geometry uses the union of pixels valid in
+    any selected spatial variable at any time or level, as in ``reduce_datatree``.
+    Each spatial pixel counts once; statistics retain per-variable validity.
+
+    :param tree: Input DataTree.
+    :param var: Variables to analyse; None selects all data variables.
+    :param apply_spatial_weighting: Use cosine-latitude weights for spatial
+        mean, sum and standard deviation; otherwise valid pixels weigh equally.
+    :param dim: Dimensions to reduce; None selects all variable dimensions.
+    :param methods: One or more of count, mean, median, sum, std, min and max.
+        Count counts valid observations, including valid zero values.
+    :param nodes: Leaf paths with or without a leading slash, e.g. 'lake_2'
+        or '/lake_2'. Include parent groups for nested leaves, e.g.
+        'Europe/lake_2'. None selects all leaves. Unselected nodes are excluded
+        from the result; ancestor groups of selected leaves are retained.
+    :param aggregate_nodes: Aggregate across selected datasets (default True),
+        with the validity/weighting semantics of ``reduce_datatree``. Count and
+        sum combine additively, min/max take extrema, and std/median describe
+        the pooled observations, not averages of per-node std/median values.
+        Spatial dimensions must be reduced; remaining coordinates use their
+        union. Overlapping observations are counted for each contributing node.
+        Exact median computation may require substantial memory.
+    :param output_format: datatree, vector_data_cube or dataframe.
+    :param vector_data: Optional masking polygons and output geometries.
+    :param vector_path: Optional vector file instead of vector_data.
+    :param node_column: Name of the column in vector_data or the vector file
+        containing full DataTree node paths, e.g. '/lake_1'. The column values
+        associate each selected dataset node with exactly one geometry,
+        independently of vector row order. Only considered when vector_data
+        or vector_path is provided; ignored otherwise. Defaults to 'path'.
+    :param monitor: Progress monitor.
+    :return: Statistics DataTree, vector data cube, or (Geo)DataFrame.
+    """
+    methods = [methods] if isinstance(methods, str) else list(methods)
+    return aggregate_datatree(
+        tree, var, dim, methods, apply_spatial_weighting, nodes, aggregate_nodes,
+        output_format, vector_data, vector_path, node_column, monitor, statistics=True,
+    )
 
 
 @op(tags=['aggregate'], version='1.1')

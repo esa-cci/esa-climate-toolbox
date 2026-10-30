@@ -1,5 +1,10 @@
 ## Changes in 1.7.3 (in development)
 
+### Operations
+  * Added operations `reduce_datatree` and `statistics_datatree` to create averages and statistics 
+    of the single datasets of a datatree. Results may be provided on the level of the single 
+    datasets of a datatree, or combined to vectordatacubes or dataframes.
+    
 ## Changes in 1.7.2
 
 ### Operations
