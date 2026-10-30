@@ -16,12 +16,13 @@ dependencies:
   - pandas <3
   - pyproj
   - python-dateutil
-  - shapely
+  - shapely >= 2
   - simplekml
   - six
   - xarray
   - xcube >= 1.12.0
   - xcube-cci >= 0.13
+  - xvec
   - zarr <3  # until we can ensure zarr 3 compatibility
   # Test libs
   - pytest

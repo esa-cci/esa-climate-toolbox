@@ -94,6 +94,10 @@ Aggregation
 
 .. autofunction:: esa_climate_toolbox.ops.statistics
 
+.. autofunction:: esa_climate_toolbox.ops.reduce_datatree
+
+.. autofunction:: esa_climate_toolbox.ops.statistics_datatree
+
 .. autofunction:: esa_climate_toolbox.ops.temporal_aggregation
 
 .. _alignment:

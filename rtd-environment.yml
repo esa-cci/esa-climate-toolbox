@@ -16,11 +16,12 @@ dependencies:
   - pandas
   - pyproj
   - python-dateutil
-  - shapely
+  - shapely >= 2
   - six
   - xarray
   - xcube >= 1.8.0
   - xcube-cci >= 0.11.1
+  - xvec
   - zarr <3  # until we can ensure zarr 3 compatibility
   # For Jupyterlab
   - jupyterlab
