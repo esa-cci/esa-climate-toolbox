@@ -21,21 +21,29 @@
 
 """Shared implementation of DataTree reductions and their output conversions."""
 
+from pathlib import PurePosixPath
+from collections.abc import Mapping, Sequence
+
+import dask.array as da
 import geopandas as gpd
 import numpy as np
 import pandas as pd
 import shapely
 import xarray as xr
 from shapely.geometry import Point
+from shapely.geometry.base import BaseGeometry
 
 from esa_climate_toolbox.core.types import DimNamesLike, VarNamesLike, ValidationError
+from esa_climate_toolbox.util.monitor import Monitor
 
 
-def _dimensions(variable, dim):
+def _dimensions(variable: xr.DataArray, dim: Sequence[str] | None) -> list[str]:
     return list(variable.dims) if dim is None else [d for d in dim if d in variable.dims]
 
 
-def _weights(variable, dim, spatial_weighting):
+def _weights(
+    variable: xr.DataArray, dim: Sequence[str], spatial_weighting: bool
+) -> xr.DataArray | None:
     if spatial_weighting and 'lat' in dim:
         if 'lat' not in variable.coords or variable.lat.dims != ('lat',):
             raise ValidationError("Spatial weighting requires a one-dimensional 'lat' coordinate.")
@@ -46,27 +54,31 @@ def _weights(variable, dim, spatial_weighting):
     return None
 
 
-def _reduce_variable(variable, dim, method, spatial_weighting):
+def _reduce_variable(
+    variable: xr.DataArray, dim: Sequence[str], method: str, spatial_weighting: bool
+) -> xr.DataArray:
     if method == 'count':
         return variable.notnull().sum(dim=dim)
     weights = (_weights(variable, dim, spatial_weighting)
                if method in ('mean', 'sum', 'std') else None)
-    if weights is not None and method in ('mean', 'sum', 'std'):
+    if weights is not None:
         return getattr(variable.weighted(weights), method)(dim=dim, keep_attrs=True)
     # Dask's exact median requires each reduction axis to occupy one chunk.
-    if method == 'median' and variable.chunks is not None:
-        variable = variable.chunk({d: -1 for d in dim})
     if method == 'median':
+        if variable.chunks is not None:
+            variable = variable.chunk({d: -1 for d in dim})
         return variable.reduce(_nanmedian, dim=dim, keep_attrs=True)
     return getattr(variable, method)(dim=dim, skipna=True, keep_attrs=True)
 
 
-def _nanmedian(data, axis=None):
+def _nanmedian(
+    data: np.ndarray | da.Array, axis: int | tuple[int, ...] | None = None,
+) -> np.ndarray | np.generic | da.Array:
     # Xarray passes axis=None when all axes are reduced; Dask requires explicit axes.
     return np.nanmedian(data, axis=tuple(range(data.ndim)) if axis is None else axis)
 
 
-def _combine(parts, method):
+def _combine(parts: Sequence[xr.DataArray], method: str) -> xr.DataArray:
     """Align only the remaining coordinates, never the original spatial grids."""
     axis = '_aggregate_node'
     while any(axis in part.dims or axis in part.coords for part in parts):
@@ -75,7 +87,57 @@ def _combine(parts, method):
     return getattr(combined, method)(dim=axis, skipna=True)
 
 
-def _pool_variable(variables, dim, methods, spatial_weighting):
+def _pool_moments(
+    variables: Sequence[xr.DataArray], dims: Sequence[Sequence[str]],
+    spatial_weighting: bool, with_std: bool
+) -> dict[str, xr.DataArray]:
+    parts = []
+    for variable, ds_dim in zip(variables, dims):
+        weight = _weights(variable, ds_dim, spatial_weighting)
+        weight = xr.ones_like(variable) if weight is None else weight.broadcast_like(variable)
+        weight = weight.where(variable.notnull(), 0)
+        mass = weight.sum(dim=ds_dim)
+        total = (variable * weight).sum(dim=ds_dim, skipna=True)
+        part = {'mass': mass, 'total': total}
+        if with_std:
+            part['mean'] = total / mass.where(mass != 0)
+            part['moment'] = (weight * (variable - part['mean']) ** 2).sum(dim=ds_dim, skipna=True)
+        parts.append(part)
+    total_mass = _combine([part['mass'] for part in parts], 'sum')
+    total = _combine([part['total'] for part in parts], 'sum')
+    denominator = total_mass.where(total_mass != 0)
+    mean = total / denominator
+    results = {'mean': mean, 'sum': total}
+    if with_std:
+        moment = _combine([part['moment'] + part['mass'] * (part['mean'] - mean) ** 2
+                           for part in parts], 'sum')
+        results['std'] = np.sqrt(moment / denominator)
+    return results
+
+
+def _pool_median(
+    variables: Sequence[xr.DataArray], dims: Sequence[Sequence[str]]
+) -> xr.DataArray:
+    axis = '_aggregate_sample'
+    while any(axis in variable.dims or axis in variable.coords for variable in variables):
+        axis += '_'
+    samples = []
+    for variable, ds_dim in zip(variables, dims):
+        sample = variable.reset_coords(drop=True)
+        sample = sample.drop_vars([d for d in ds_dim if d in sample.coords])
+        # Avoid constructing a potentially huge spatial/time MultiIndex.
+        samples.append(sample.stack({axis: ds_dim}, create_index=False)
+                       if ds_dim else sample.expand_dims(axis))
+    pooled = xr.concat(samples, dim=axis, join='outer')
+    if pooled.chunks is not None:
+        pooled = pooled.chunk({axis: -1})
+    return pooled.reduce(_nanmedian, dim=axis)
+
+
+def _pool_variable(
+    variables: Sequence[xr.DataArray], dim: Sequence[str] | None,
+    methods: Sequence[str], spatial_weighting: bool
+) -> dict[str, xr.DataArray]:
     dims = [_dimensions(variable, dim) for variable in variables]
     remaining = [set(variable.dims) - set(ds_dim)
                  for variable, ds_dim in zip(variables, dims)]
@@ -83,53 +145,13 @@ def _pool_variable(variables, dim, methods, spatial_weighting):
         raise ValidationError('Aggregation across nodes requires reducing both spatial dimensions lat/lon.')
     if any(rest != remaining[0] for rest in remaining[1:]):
         raise ValidationError('Variables must have matching remaining dimensions across nodes.')
-
-    results = {}
-    if any(method in methods for method in ('mean', 'sum', 'std')):
-        totals, masses, means, moments = [], [], [], []
-        for variable, ds_dim in zip(variables, dims):
-            weight = _weights(variable, ds_dim, spatial_weighting)
-            weight = xr.ones_like(variable) if weight is None else weight.broadcast_like(variable)
-            weight = weight.where(variable.notnull(), 0)
-            mass = weight.sum(dim=ds_dim)
-            total = (variable * weight).sum(dim=ds_dim, skipna=True)
-            mean = total / mass.where(mass != 0)
-            masses.append(mass)
-            totals.append(total)
-            means.append(mean)
-            if 'std' in methods:
-                moments.append((weight * (variable - mean) ** 2).sum(dim=ds_dim, skipna=True))
-        total_mass = _combine(masses, 'sum')
-        total = _combine(totals, 'sum')
-        mean = total / total_mass.where(total_mass != 0)
-        results.update(mean=mean, sum=total)
-        if 'std' in methods:
-            # Parallel variance formula includes variation between node means.
-            moment = _combine([
-                m2 + mass * (local_mean - mean) ** 2
-                for m2, mass, local_mean in zip(moments, masses, means)
-            ], 'sum')
-            results['std'] = np.sqrt(moment / total_mass.where(total_mass != 0))
-
+    results = (_pool_moments(variables, dims, spatial_weighting, 'std' in methods)
+               if set(methods) & {'mean', 'sum', 'std'} else {})
     for method in methods:
         if method in results:
             continue
         if method == 'median':
-            axis = '_aggregate_sample'
-            while any(axis in variable.dims or axis in variable.coords for variable in variables):
-                axis += '_'
-            samples = []
-            for variable, ds_dim in zip(variables, dims):
-                sample = variable.reset_coords(drop=True)
-                sample = sample.drop_vars([d for d in ds_dim if d in sample.coords])
-                # Avoid constructing a potentially huge spatial/time MultiIndex.
-                sample = (sample.stack({axis: ds_dim}, create_index=False)
-                          if ds_dim else sample.expand_dims(axis))
-                samples.append(sample)
-            pooled = xr.concat(samples, dim=axis, join='outer')
-            if pooled.chunks is not None:
-                pooled = pooled.chunk({axis: -1})
-            results[method] = pooled.reduce(_nanmedian, dim=axis)
+            results[method] = _pool_median(variables, dims)
         else:
             parts = [_reduce_variable(variable, ds_dim, method, False)
                      for variable, ds_dim in zip(variables, dims)]
@@ -137,7 +159,10 @@ def _pool_variable(variables, dim, methods, spatial_weighting):
     return {method: results[method].assign_attrs(variables[0].attrs) for method in methods}
 
 
-def _vector_regions(vector_data, vector_path, node_column, paths):
+def _vector_regions(
+    vector_data: gpd.GeoDataFrame | None, vector_path: str | None,
+    node_column: str, paths: list[str]
+) -> gpd.GeoDataFrame | None:
     if vector_data is not None and vector_path is not None:
         raise ValidationError('Supply either vector_data or vector_path, not both.')
     if vector_path is not None:
@@ -159,7 +184,7 @@ def _vector_regions(vector_data, vector_path, node_column, paths):
     return regions.loc[paths]
 
 
-def _masked_dataset(ds, geometry):
+def _masked_dataset(ds: xr.Dataset, geometry: BaseGeometry) -> xr.Dataset:
     if any(dim not in ds.coords or ds[dim].dims != (dim,) for dim in ('lat', 'lon')):
         raise ValidationError('Vector masking requires one-dimensional lat/lon coordinates.')
     lon, lat = np.meshgrid(ds.lon.values, ds.lat.values)
@@ -172,7 +197,7 @@ def _masked_dataset(ds, geometry):
     return result
 
 
-def _centroid(ds, names):
+def _centroid(ds: xr.Dataset, names: Sequence[str]) -> Point:
     valid = None
     for name in names:
         variable = ds[name]
@@ -197,15 +222,10 @@ def _centroid(ds, names):
                  float(np.rad2deg(np.arctan2(z, np.hypot(x, y)))))
 
 
-def aggregate_datatree(tree, var, dim, methods, spatial_weighting, nodes,
-                       aggregate_nodes, output_format, vector_data, vector_path,
-                       node_column, monitor, statistics=False):
-    if output_format not in ('datatree', 'vector_data_cube', 'dataframe'):
-        raise ValidationError(f'Unknown output_format {output_format!r}.')
-    if not methods or set(methods) - {'mean', 'sum', 'min', 'max', 'median', 'count', 'std'}:
-        raise ValidationError('Select at least one supported aggregation method.')
-    if aggregate_nodes and output_format != 'datatree':
-        raise ValidationError('Per-node output formats require aggregate_nodes=False.')
+def _select_datasets(
+    tree: xr.DataTree, var: str | list[str] | None, dim: str | list[str] | None,
+    nodes: Sequence[str] | None
+) -> tuple[dict[str, xr.Dataset], list[str], list[str] | None]:
     leaves = {node.path: node.to_dataset() for node in tree.leaves if node.has_data}
     paths = list(leaves) if nodes is None else list(nodes)
     if any(not isinstance(path, str) for path in paths):
@@ -227,57 +247,99 @@ def aggregate_datatree(tree, var, dim, methods, spatial_weighting, nodes,
         available = set().union(*(set(leaves[path][name].dims) for path in paths for name in names))
         if set(dims) - available:
             raise ValidationError(f'Unknown dimensions: {sorted(set(dims) - available)}.')
-    regions = _vector_regions(vector_data, vector_path, node_column, paths)
-    geometry_output = output_format != 'datatree'
+    return {path: leaves[path] for path in paths}, names, dims
 
-    selected, result = {}, {}
-    with monitor.starting('Aggregate DataTree', total_work=len(paths) + 1):
+
+def _reduce_dataset(
+    ds: xr.Dataset, names: Sequence[str], dim: Sequence[str] | None,
+    methods: Sequence[str], spatial_weighting: bool, statistics: bool
+) -> xr.Dataset:
+    variables = {}
+    for name in names:
+        ds_dim = _dimensions(ds[name], dim)
+        for method in methods:
+            output_name = f'{name}_{method}' if statistics else name
+            variables[output_name] = _reduce_variable(ds[name], ds_dim, method, spatial_weighting)
+    return xr.Dataset(variables)
+
+
+def _pool_datasets(
+    datasets: Mapping[str, xr.Dataset], names: Sequence[str], dim: Sequence[str] | None,
+    methods: Sequence[str], spatial_weighting: bool, statistics: bool
+) -> xr.Dataset:
+    variables = {}
+    for name in names:
+        pooled = _pool_variable([ds[name] for ds in datasets.values()], dim, methods, spatial_weighting)
+        for method, value in pooled.items():
+            variables[f'{name}_{method}' if statistics else name] = value
+    return xr.Dataset(variables)
+
+
+def _tree_output(
+    tree: xr.DataTree, datasets: Mapping[str, xr.Dataset],
+    results: Mapping[str, xr.Dataset], prune: bool
+) -> xr.DataTree:
+    output = tree.copy()
+    if prune:
+        keep = {'/'} | set(results)
+        for path in results:
+            keep.update(str(parent) for parent in PurePosixPath(path).parents)
+        for node in reversed(tuple(output.subtree)):
+            if node.path not in keep:
+                node.orphan()
+    for path, result in results.items():
+        output[path].dataset = datasets[path].assign(result)
+    return output
+
+
+def aggregate_datatree(
+    tree: xr.DataTree,
+    var: str | list[str] | None,
+    dim: str | list[str] | None,
+    methods: Sequence[str],
+    spatial_weighting: bool,
+    nodes: Sequence[str] | None,
+    aggregate_nodes: bool,
+    output_format: str,
+    vector_data: gpd.GeoDataFrame | None,
+    vector_path: str | None,
+    node_column: str,
+    monitor: Monitor,
+    statistics: bool = False
+) -> xr.DataTree | xr.Dataset | gpd.GeoDataFrame:
+    if output_format not in ('datatree', 'vector_data_cube', 'dataframe'):
+        raise ValidationError(f'Unknown output_format {output_format!r}.')
+    if not methods or set(methods) - {'mean', 'sum', 'min', 'max', 'median', 'count', 'std'}:
+        raise ValidationError('Select at least one supported aggregation method.')
+    if aggregate_nodes and output_format != 'datatree':
+        raise ValidationError('Per-node output formats require aggregate_nodes=False.')
+    source, names, dims = _select_datasets(tree, var, dim, nodes)
+    regions = _vector_regions(vector_data, vector_path, node_column, list(source))
+
+    with monitor.starting('Aggregate DataTree', total_work=len(source) + 1):
         masking = regions.to_crs('EPSG:4326') if regions is not None else None
-        for path in paths:
-            selected[path] = (_masked_dataset(leaves[path], masking.geometry.loc[path])
-                              if masking is not None else leaves[path])
+        datasets = {}
+        for path, ds in source.items():
+            datasets[path] = _masked_dataset(ds, masking.geometry.loc[path]) if masking is not None else ds
             monitor.progress(1)
         if aggregate_nodes:
-            variables = {}
-            for name in names:
-                pooled = _pool_variable([selected[path][name] for path in paths],
-                                        dims, methods, spatial_weighting)
-                for method, value in pooled.items():
-                    variables[f'{name}_{method}' if statistics else name] = value
-            output = xr.DataTree(xr.Dataset(variables, attrs=tree.attrs))
+            pooled = _pool_datasets(datasets, names, dims, methods, spatial_weighting, statistics)
+            output = xr.DataTree(pooled.assign_attrs(tree.attrs))
         else:
-            for path, ds in selected.items():
-                local = ds.copy()
-                converted = {}
-                for name in names:
-                    ds_dim = _dimensions(ds[name], dims)
-                    for method in methods:
-                        output_name = f'{name}_{method}' if statistics else name
-                        value = _reduce_variable(ds[name], ds_dim, method, spatial_weighting)
-                        local[output_name] = value
-                        converted[output_name] = value
-                result[path] = xr.Dataset(converted)
-                selected[path] = local
-            if not geometry_output:
-                output = tree.copy()
-                if nodes is not None:
-                    keep = {'/'}
-                    for path in paths:
-                        components = path.strip('/').split('/')
-                        keep.update('/' + '/'.join(components[:i])
-                                    for i in range(1, len(components) + 1))
-                    for node in reversed(tuple(output.subtree)):
-                        if node.path not in keep:
-                            node.orphan()
-                for path in paths:
-                    output[path].dataset = selected[path]
+            results = {path: _reduce_dataset(ds, names, dims, methods, spatial_weighting, statistics)
+                       for path, ds in datasets.items()}
+            if output_format == 'datatree':
+                output = _tree_output(tree, datasets, results, prune=nodes is not None)
             else:
-                output = _convert_output(result, leaves, regions, names, output_format)
+                output = _convert_output(results, source, regions, names, output_format)
         monitor.progress(1)
     return output
 
 
-def _convert_output(results, source, regions, names, output_format):
+def _convert_output(
+    results: Mapping[str, xr.Dataset], source: Mapping[str, xr.Dataset],
+    regions: gpd.GeoDataFrame | None, names: Sequence[str], output_format: str
+) -> xr.Dataset | gpd.GeoDataFrame:
     for ds in results.values():
         for variable in ds.data_vars.values():
             if output_format == 'dataframe' and variable.ndim:
