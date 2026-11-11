@@ -110,6 +110,8 @@ Animation
 
 .. autofunction:: esa_climate_toolbox.ops.animate_map
 
+.. autofunction:: esa_climate_toolbox.ops.export_animated_gif
+
 .. _anomaly_detection:
 
 Anomalies

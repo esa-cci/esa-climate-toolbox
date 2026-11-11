@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 
 from esa_climate_toolbox.ops.animate import animate_map
+from esa_climate_toolbox.ops import export_animated_gif
 
 _counter = itertools.count()
 ON_WIN = sys.platform == 'win32'
@@ -35,6 +36,45 @@ def create_tmp_file(name, ext):
         except OSError:
             if not ON_WIN:
                 raise
+
+
+@unittest.skipIf(condition=os.environ.get('ECT_DISABLE_PLOT_TESTS', None),
+                 reason="skipped if ECT_DISABLE_PLOT_TESTS=1")
+class TestExportAnimatedGif(TestCase):
+    def test_export_animated_gif(self):
+        values = np.arange(36, dtype=float).reshape(3, 3, 4)
+        values[0, 0, 0] = np.nan
+        values[1, 0, 0] = np.inf
+        values[2, :, :] = np.nan
+        dataset = xr.Dataset(
+            {'thickness': (('time', 'lat', 'lon'), values,
+                           {'long_name': 'Ice thickness', 'units': 'm'})},
+            coords={'time': pd.date_range('2020-01-01', periods=3),
+                    'lat': [50., 51., 52.], 'lon': [0., 1., 2., 3.]},
+        )
+        with create_tmp_file('animation', 'gif') as path:
+            result = export_animated_gif(dataset, var='thickness', file=path)
+            self.assertEqual(path, result)
+            self.assertTrue(os.path.isfile(path))
+            self.assertGreater(os.path.getsize(path), 0)
+
+    def test_export_projected_dask_cube(self):
+        import dask.array as da
+
+        dataset = xr.Dataset(
+            {'temperature': (('yc', 'time', 'xc'),
+                             da.from_array(np.arange(24).reshape(3, 2, 4),
+                                           chunks=(3, 1, 4)))},
+            coords={'time': pd.date_range('2020-01-01', periods=2),
+                    'yc': [25., 50., 75.], 'xc': [0., 25., 50., 75.]},
+        )
+        with create_tmp_file('projected', 'gif') as path:
+            result = export_animated_gif(dataset, var='temperature', file=path,
+                                         vmin=0., vmax=24., interval=1000)
+            self.assertEqual(path, result)
+            self.assertTrue(os.path.isfile(path))
+            self.assertGreater(os.path.getsize(path), 0)
+
 
 
 @unittest.skipIf(condition=os.environ.get('ECT_DISABLE_PLOT_TESTS', None),
